@@ -1,15 +1,18 @@
 import os
-from datetime import date
 import json
 import webbrowser
 from datetime import datetime, timedelta
 from threading import Timer
-import pandas as pd
-import pickle
 import dash
 import plotly.express as px
 from dash import dcc, html
 from dash.dependencies import Input, Output
+
+from src.utils.app_utils import (
+    create_and_load_file_path,
+    save_data_to_file,
+    load_data_from_file,
+)
 
 from src.data_processing.execute_requests import (
     execute_sensors_request,
@@ -18,14 +21,8 @@ from src.data_processing.execute_requests import (
     print_sensor_request_metrics,
 )
 
-from src.utils.app_utils import (
-    create_and_load_file_path,
-    save_data_to_file,
-    load_data_from_file,
-)
 
-
-def retrieve_app_data() -> list:
+def retrieve_missing_data_app_data() -> list:
     """
     Retrieves and formats application data for visualization in a missing data app.
 
@@ -177,7 +174,7 @@ def start_flask_app():
     last_n_days = api_config["api"]["endpoints"]["raw_sensor_data"]["params"][
         "last_n_days"
     ]
-    app_data = retrieve_app_data()
+    app_data = retrieve_missing_data_app_data()
     dashboard_app = create_dashboard(
         app_data, last_n_days
     )  # Assuming create_dashboard is appropriately defined
@@ -196,5 +193,5 @@ def start_flask_app():
 # Run missing dashboard app
 if __name__ == "__main__":
     if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-        retrieve_app_data()  # This will run only in the child process
+        retrieve_missing_data_app_data()  # This will run only in the child process
     start_flask_app()

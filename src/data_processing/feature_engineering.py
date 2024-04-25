@@ -150,6 +150,9 @@ def create_periodicity_features(df: pd.DataFrame) -> pd.DataFrame:
         - 'SinYear': Sine of the day of the year, assuming a period of 365 days.
         - 'CosYear': Cosine of the day of the year, assuming a period of 365 days.
     """
+    # Ensure DataFrame has a datetime index
+    if not isinstance(df.index, pd.DatetimeIndex):
+        raise ValueError("DataFrame index must be a DatetimeIndex.")
     # Ensure 'TimestampIndex' is in datetime format
     df.index = pd.to_datetime(df.index)
 
@@ -199,7 +202,7 @@ def create_anomaly_column(timeseries_array: np.ndarray, **kwargs) -> np.ndarray:
     return timeseries_array
 
 
-def extract_time_features(df):
+def extract_time_features(df: pd.DataFrame) -> pd.DataFrame:
     """
     Extracts time-related features from a 'Timestamp' column and then removes it.
 

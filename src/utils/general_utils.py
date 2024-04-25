@@ -82,3 +82,115 @@ def extract_values_from_filename(filename):
             extracted_values[key] = None
 
     return extracted_values
+
+
+def get_config_value(config_file, step_name, param_name):
+    """
+    Retrieves a specific parameter value from the specified config file.
+
+    Args:
+        config_file (str): Path to the config file.
+        step_name (str): Name of the step in the config file.
+        param_name (str): Name of the parameter to retrieve.
+
+    Returns:
+        The value of the specified parameter.
+
+    Raises:
+        ValueError: If the specified parameter is not found in the config file.
+    """
+    config = load_config(config_file)
+    for step in config["dataloader_steps"]:
+        if step["name"] == step_name:
+            if param_name in step["kwargs"]:
+                return step["kwargs"][param_name]
+    raise ValueError(f"Could not find {param_name} in the provided config file.")
+
+
+def get_window_size_from_config():
+    """
+    Retrieves the window_size value from the dataloader_config.json file.
+
+    Args:
+        config_file (str): Path to the dataloader_config.json file.
+
+    Returns:
+        int: The value of window_size specified in the config file.
+    """
+    config_file = "configs/dataloader_config.json"
+    config = load_config(config_file)
+
+    for step in config["dataloader_steps"]:
+        if step["name"] == "src.training.dataloader.sliding_windows":
+            window_size = step["kwargs"]["window_size"]
+            return window_size
+
+    raise ValueError("Could not find window_size in the provided config file.")
+
+
+def get_window_size_from_config():
+    """
+    Retrieves the window_size value from the dataloader_config.json file.
+
+    Returns:
+        int: The value of window_size specified in the config file.
+
+    Raises:
+        ValueError: If the window_size parameter is not found in the config file.
+    """
+    return get_config_value(
+        "configs/dataloader_config.json",
+        "src.training.dataloader.sliding_windows",
+        "window_size",
+    )
+
+
+def get_horizon_from_config():
+    """
+    Retrieves the horizon value from the dataloader_config.json file.
+
+    Returns:
+        int: The value of horizon specified in the config file.
+
+    Raises:
+        ValueError: If the horizon parameter is not found in the config file.
+    """
+    return get_config_value(
+        "configs/dataloader_config.json",
+        "src.training.dataloader.sliding_windows",
+        "horizon",
+    )
+
+
+def get_stride_from_config():
+    """
+    Retrieves the stride value from the dataloader_config.json file.
+
+    Returns:
+        int: The value of stride specified in the config file.
+
+    Raises:
+        ValueError: If the stride parameter is not found in the config file.
+    """
+    return get_config_value(
+        "configs/dataloader_config.json",
+        "src.training.dataloader.sliding_windows",
+        "stride",
+    )
+
+
+def get_batch_size_from_config():
+    """
+    Retrieves the batch_size value from the dataloader_config.json file.
+
+    Returns:
+        int: The value of batch_size specified in the config file.
+
+    Raises:
+        ValueError: If the batch_size parameter is not found in the config file.
+    """
+    return get_config_value(
+        "configs/dataloader_config.json",
+        "src.training.dataloader.create_dataloaders",
+        "batch_size",
+    )

@@ -1,8 +1,57 @@
 import os
+from typing import List
+import pandas as pd
 import torch
 import torch.nn as nn
+from torch.utils.data import DataLoader
 from src.models.model_definitions import LinearModel
 from src.utils.general_utils import load_config
+
+
+def safe_tensor_to_numpy(tensor):
+    """
+    Safely converts a tensor to a numpy array.
+
+    Parameters:
+    - tensor: A PyTorch tensor.
+
+    Returns:
+    - A numpy array converted from the input tensor.
+    """
+    try:
+        return tensor.detach().cpu().numpy()
+    except AttributeError as e:
+        raise ValueError("Input is not a tensor.") from e
+
+
+def validate_dataloader(dataloader):
+    """Ensures the dataloader is initialized and not empty."""
+    if not isinstance(dataloader, DataLoader):
+        raise TypeError(
+            "The dataloader must be an instance of torch.utils.data.DataLoader."
+        )
+    if len(dataloader) == 0:
+        raise ValueError(
+            "The dataloader is empty. Please provide a dataloader with data."
+        )
+
+
+def get_config(kwargs, key, default_value):
+    """
+    Safely retrieves a configuration value from kwargs with a default.
+    Validates type or value range if necessary.
+    """
+    value = kwargs.get(key, default_value)
+    # Add specific validations if necessary, e.g., check type or value range
+    return value
+
+
+def validate_model_and_criterion(model, criterion):
+    """Validates that model and criterion are initialized."""
+    if model is None:
+        raise ValueError("Model is not initialized.")
+    if criterion is None:
+        raise ValueError("Criterion (loss function) is not initialized.")
 
 
 def check_mps_availability(**kwargs):
@@ -133,6 +182,10 @@ def create_criterion(**kwargs):
         raise ValueError(f"Unsupported criterion: {criterion_name}")
 
     return criterion
+
+
+def create_performance_metrics_df(metric_dict: dict) -> pd.DataFrame:
+    return None
 
 
 ###### NEEDS UPDATING #######

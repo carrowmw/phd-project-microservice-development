@@ -4,7 +4,7 @@
             "name": "src.training.train.train",
             "execute_step": true,
             "kwargs": {
-                "epochs": 2,
+                "epochs": 5,
                 "device": "mps",
                 "optimiser": "adam",
                 "lr": 0.01,

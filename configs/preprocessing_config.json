@@ -1,6 +1,6 @@
 {
     "kwargs": {
-        "completeness_threshold": 0.5
+        "completeness_threshold": 1.0
     },
     "preprocessing_steps": [
         {
@@ -11,13 +11,18 @@
             }
         },
         {
-            "name": "src.data_processing.preprocessing.remove_incomplete_days",
+            "name": "src.data_processing.preprocessing.get_consecutive_sequences",
             "execute_step": true,
             "kwargs": {}
         },
         {
+            "name": "src.data_processing.preprocessing.remove_incomplete_days",
+            "execute_step": false,
+            "kwargs": {}
+        },
+        {
             "name": "src.data_processing.preprocessing.find_longest_consecutive_sequence",
-            "execute_step": true,
+            "execute_step": false,
             "kwargs": {
                 "max_length_limit": 300
             }

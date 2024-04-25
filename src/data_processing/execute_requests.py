@@ -2,7 +2,7 @@
 This module provides functions to extract dataframes from the API requests.
 """
 
-import json
+from typing import List
 import concurrent.futures
 import pandas as pd
 
@@ -280,7 +280,7 @@ def execute_sensors_request() -> pd.DataFrame:
     return sensors_df
 
 
-def execute_raw_sensor_data_request(sensors_df: pd.DataFrame) -> list:
+def execute_raw_sensor_data_request(sensors_df: pd.DataFrame) -> List[pd.DataFrame]:
     """
     Executes requests for raw sensor data in parallel for a given set of sensors and
     returns the results.
@@ -319,8 +319,30 @@ def execute_raw_sensor_data_request(sensors_df: pd.DataFrame) -> list:
         print(df.head())  # Print the first few rows of each sensor's raw data DataFrame
     ```
     """
-    with open("configs/api_config.json", "r", encoding="utf-8") as config_file:
-        api_config = json.load(config_file)
+    api_config_file_path = "configs/api_config.json"
+    api_config = load_config(api_config_file_path)
+    series_of_sensor_names = sensors_df["Sensor Name"]
+    raw_sensor_data_params = api_config["api"]["endpoints"]["raw_sensor_data"]["params"]
+
+    dfs = get_all_sensor_data_parallel(raw_sensor_data_params, series_of_sensor_names)
+    print_sensor_request_metrics(dfs, series_of_sensor_names)
+    return dfs
+
+
+def execute_periodic_raw_sensor_data_request(sensors_df: pd.DataFrame) -> list:
+    api_config_file_path = "configs/api_config.json"
+    api_config = load_config(api_config_file_path)
+    training_loader_config_path = "configs/training_loader_config.json"
+    training_loader_config = load_config(training_loader_config_path)
+
+    window_size = training_loader_config["feature_engineering_steps"]["kwargs"][
+        "window_size"
+    ]
+    print(f"Window Size = {window_size}")
+    assert (
+        window_size >= 96
+    ), "Window_size too short for API request"  # this is because the api can only request a minimum of a single day worth of data
+
     series_of_sensor_names = sensors_df["Sensor Name"]
     raw_sensor_data_params = api_config["api"]["endpoints"]["raw_sensor_data"]["params"]
 

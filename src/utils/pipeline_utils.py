@@ -47,6 +47,7 @@ def process_data(df, config_path):
     for key in [
         "preprocessing_steps",
         "feature_engineering_steps",
+        "dataloader_steps",
         "model_steps",
         "training_steps",
     ]:

@@ -9,54 +9,11 @@ from src.utils.training_utils import (
     create_optimiser,
     map_model_to_mps,
     map_tensor_to_mps,
+    safe_tensor_to_numpy,
+    validate_dataloader,
+    validate_model_and_criterion,
 )
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-
-
-def safe_tensor_to_numpy(tensor):
-    """
-    Safely converts a tensor to a numpy array.
-
-    Parameters:
-    - tensor: A PyTorch tensor.
-
-    Returns:
-    - A numpy array converted from the input tensor.
-    """
-    try:
-        return tensor.detach().cpu().numpy()
-    except AttributeError as e:
-        raise ValueError("Input is not a tensor.") from e
-
-
-def validate_dataloader(dataloader):
-    """Ensures the dataloader is initialized and not empty."""
-    if not isinstance(dataloader, DataLoader):
-        raise TypeError(
-            "The dataloader must be an instance of torch.utils.data.DataLoader."
-        )
-    if len(dataloader) == 0:
-        raise ValueError(
-            "The dataloader is empty. Please provide a dataloader with data."
-        )
-
-
-def get_config(kwargs, key, default_value):
-    """
-    Safely retrieves a configuration value from kwargs with a default.
-    Validates type or value range if necessary.
-    """
-    value = kwargs.get(key, default_value)
-    # Add specific validations if necessary, e.g., check type or value range
-    return value
-
-
-def validate_model_and_criterion(model, criterion):
-    """Validates that model and criterion are initialized."""
-    if model is None:
-        raise ValueError("Model is not initialized.")
-    if criterion is None:
-        raise ValueError("Criterion (loss function) is not initialized.")
 
 
 def evaluate_model(model, dataloader, criterion, **kwargs):
@@ -107,26 +64,26 @@ def evaluate_model(model, dataloader, criterion, **kwargs):
 
 
 def train(
-    pipeline: Tuple[nn.Module, DataLoader, DataLoader],
+    pipeline: Tuple[nn.Module, DataLoader, DataLoader, DataLoader],
     **kwargs,
-):
+) -> nn.Module:
     """
     Train and evaluate the neural network model.
 
     Args:
         model (nn.Module): The neural network model to train.
         train_dataloader (DataLoader): DataLoader for the training data.
-        test_dataloader (DataLoader): DataLoader for the test data.
+        val_dataloader (DataLoader): DataLoader for the val data.
         **kwargs: Keyword arguments for configurations like epochs, criterion_config, and
         optimiser_config.
 
     Prints:
         Loss and metric information for each epoch.
     """
-    model, train_dataloader, test_dataloader = pipeline[0], pipeline[1], pipeline[2]
+    (model, train_dataloader, val_dataloader) = pipeline
     # Config setup and error handling
     validate_dataloader(train_dataloader)
-    validate_dataloader(test_dataloader)
+    validate_dataloader(val_dataloader)
     criterion = create_criterion(**kwargs.get("criterion_config", {}))
     validate_model_and_criterion(model, criterion)
     optimiser = create_optimiser(
@@ -139,6 +96,9 @@ def train(
     )
     epochs = kwargs.get("epochs")
     map_model_to_mps(model, **kwargs)  # Map model to MPS if available
+
+    train_performance_metric_list = []
+    val_performance_metric_list = []
 
     # Model training
     for epoch in range(epochs):
@@ -159,18 +119,41 @@ def train(
 
         scheduler.step()
 
-        # Evaluate model performance on both training and test datasets
+        # Evaluate model performance on both training and val datasets
         train_loss, train_mae, train_rmse, _ = evaluate_model(
             model, train_dataloader, criterion
         )
-        test_loss, test_mae, test_rmse, _ = evaluate_model(
-            model, test_dataloader, criterion
+        val_loss, val_mae, val_rmse, val_r2 = evaluate_model(
+            model, val_dataloader, criterion
         )
 
-        # Print training and evaluation results for the current epoch
+        train_metrics_dict = {
+            "Epoch": int(epoch + 1),
+            "Train loss": np.round(train_loss, 3),
+            "Train MAE": np.round(train_mae, 3),
+            "Train RMSE": np.round(train_rmse, 3),
+        }
+        if epoch == 0:
+            print(
+                f"Train Length: {len(train_dataloader)} | Val Length: {len(val_dataloader)}"
+            )
+        # Print key value pairs
         print(
-            f"Epoch {epoch+1}: Train Loss: {train_loss:.4f}, Train MAE: {train_mae:.4f}, Train RMSE: {train_rmse:.4f}"
+            " | ".join([f"{key}: {value}" for key, value in train_metrics_dict.items()])
         )
+        train_performance_metric_list.append(train_metrics_dict)
+
+        val_metrics_dict = {
+            "Epoch": int(epoch + 1),
+            "Val loss": np.round(val_loss, 3),
+            "Val MAE": np.round(val_mae, 3),
+            "Val RMSE": np.round(val_rmse, 3),
+            "Val R2": np.round(val_r2, 3),
+        }
+        # Print key value pairs
         print(
-            f"Test Loss: {test_loss:.4f}, Test MAE: {test_mae:.4f}, Test RMSE: {test_rmse:.4f}"
+            " | ".join([f"{key}: {value}" for key, value in val_metrics_dict.items()])
         )
+        val_performance_metric_list.append(val_metrics_dict)
+
+    return model, train_performance_metric_list, val_performance_metric_list

@@ -1,6 +1,11 @@
 import pandas as pd
+from typing import List
 from datetime import datetime, timedelta
-from src.utils.general_utils import load_config
+from src.utils.general_utils import (
+    load_config,
+    get_window_size_from_config,
+    get_horizon_from_config,
+)
 
 
 def remove_directionality_feature(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
@@ -90,7 +95,7 @@ def remove_incomplete_days(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
     return complete_days_df
 
 
-def check_completeness(df: pd.DataFrame):
+def check_daily_completeness(df: pd.DataFrame):
     """
     Check if data completeness for each day in a sequence meets the threshold, based on configuration settings.
 
@@ -128,7 +133,7 @@ def check_completeness(df: pd.DataFrame):
     return True
 
 
-def find_longest_consecutive_sequence(df: pd.DataFrame, **kwargs):
+def find_longest_consecutive_sequence(df: pd.DataFrame, max_length_limit):
     """
     Finds the longest sequence of consecutive days in the DataFrame `df` where
     the data completeness meets or exceeds a specified threshold, with an option
@@ -150,7 +155,6 @@ def find_longest_consecutive_sequence(df: pd.DataFrame, **kwargs):
     preprocessing_config = load_config("configs/preprocessing_config.json")
     completeness_threshold = preprocessing_config["kwargs"]["completeness_threshold"]
 
-    max_length_limit = kwargs.get("max_length_limit")
     max_daily_records = compute_max_daily_records(df)
     if pd.isna(max_daily_records):
         print(
@@ -205,3 +209,83 @@ def remove_specified_fields(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
 
     print(f"Removed columns: {columns_to_drop}")
     return df
+
+
+def find_consecutive_sequences(df: pd.DataFrame) -> List[pd.DataFrame]:
+    """
+    Finds all consecutive sequences in the input DataFrame that are longer than the specified window size.
+
+    Parameters:
+    - df (pd.DataFrame): The input DataFrame containing the time series data.
+    - window_size (int): The minimum length of a valid sequence.
+
+    Returns:
+    - List[pd.DataFrame]: A list of DataFrames, each representing a consecutive sequence longer than the window size.
+    """
+    window_size = get_window_size_from_config()
+    horizon = get_horizon_from_config()
+    min_time_delta = pd.Timedelta(df["Timestamp"].diff().min())
+
+    sequences = []
+    current_sequence = pd.DataFrame()
+
+    for idx, row in df.iterrows():
+        if (
+            len(current_sequence) == 0
+            or pd.Timedelta(row["Timestamp"] - current_sequence.iloc[-1]["Timestamp"])
+            == min_time_delta
+        ):
+            current_sequence = pd.concat(
+                [current_sequence, pd.DataFrame(row).T], ignore_index=True
+            )
+        else:
+            if len(current_sequence) > window_size + horizon:
+                sequences.append(current_sequence)
+            current_sequence = pd.DataFrame(row).T
+
+    if len(current_sequence) > window_size:
+        sequences.append(current_sequence)
+
+    return sequences
+
+
+def assign_sequence_numbers(sequences: List[pd.DataFrame]) -> pd.DataFrame:
+    """
+    Assigns sequence numbers to each consecutive sequence.
+
+    Parameters:
+    - sequences (List[pd.DataFrame]): A list of DataFrames, each representing a consecutive sequence.
+
+    Returns:
+    - pd.DataFrame: A DataFrame containing all the sequences with assigned sequence numbers.
+    """
+    result_df = pd.DataFrame()
+
+    for i, seq in enumerate(sequences, start=1):
+        seq["sequence"] = i
+        result_df = pd.concat([result_df, seq], ignore_index=True)
+
+    # Explicitly infer the dtype of the resulting DataFrame
+    result_df = result_df.infer_objects()
+
+    return result_df
+
+
+def get_consecutive_sequences(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Finds all consecutive sequences in the input DataFrame that are longer than the specified window size
+    in the configuration and assigns sequence numbers to each sequence.
+
+    Parameters:
+    - df (pd.DataFrame): The input DataFrame containing the time series data.
+
+    Returns:
+    - pd.DataFrame: A DataFrame containing all the consecutive sequences longer than the window size,
+                    with assigned sequence numbers.
+    """
+
+    sequences = find_consecutive_sequences(df)
+    result_df = assign_sequence_numbers(sequences)
+    if len(sequences) != 0:
+        result_df = result_df.set_index("Timestamp", drop=False)
+    return result_df

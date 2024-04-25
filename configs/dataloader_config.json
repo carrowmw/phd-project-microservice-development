@@ -4,18 +4,18 @@
         "target_feature_index": 0,
         "model_type": "lstm"
     },
-    "feature_engineering_steps": [
+    "dataloader_steps": [
         {
-            "name": "src.training.training_loader.sliding_windows",
+            "name": "src.training.dataloader.sliding_windows",
             "kwargs": {
-                "window_size": 96,
-                "horizon": 24,
+                "window_size": 16,
+                "horizon": 16,
                 "stride": 1,
                 "print_shapes": true
             }
         },
         {
-            "name": "src.training.training_loader.prepare_dataloaders",
+            "name": "src.training.dataloader.create_dataloaders",
             "kwargs": {
                 "batch_size": 64,
                 "shuffle": false,
@@ -23,7 +23,7 @@
             }
         },
         {
-            "name": "src.training.training_loader.load_model_and_dataloaders",
+            "name": "src.training.dataloader.add_model_to_dataloaders",
             "kwargs": {}
         }
     ]
