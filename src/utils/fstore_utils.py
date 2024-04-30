@@ -1,14 +1,7 @@
-from typing import List
-import os
 from datetime import date
 import pickle
 import pandas as pd
 
-from src.data_processing.execute_requests import (
-    execute_raw_sensor_data_request,
-    execute_sensors_request,
-    print_sensor_request_metrics,
-)
 from src.utils.general_utils import load_config
 from src.utils.polygon_utils import create_wkb_polygon
 from src.utils.general_utils import (
@@ -16,6 +9,16 @@ from src.utils.general_utils import (
     get_horizon_from_config,
     get_stride_from_config,
     get_batch_size_from_config,
+    get_model_type_from_config,
+)
+
+from src.utils.pipeline_types import (
+    RawDataItem,
+    PreprocessedItem,
+    EngineeredItem,
+    DataLoaderItem,
+    TrainedModelItem,
+    EvaluationItem,
 )
 
 
@@ -34,7 +37,8 @@ def create_raw_file_path_from_config() -> str:
     ]
     coords = api_config["api"]["coords"]
     bbox = create_wkb_polygon(coords[0], coords[1], coords[2], coords[3])
-    file_path = f"data/raw/{today}_Last_{last_n_days}_Days_{bbox[:-16]}.pkl"
+    bbox = bbox[-16:]
+    file_path = f"data/raw/{today}_Last_{last_n_days}_Days_{bbox}.pkl"
     return file_path
 
 
@@ -65,32 +69,17 @@ def create_dataloaders_file_path_from_config() -> str:
         "data/processed/training_data/sensor_data_WindowSize_10_Horizon_5_Stride_3_BatchSize_32.pkl"
     """
     raw_file_path = (
-        create_raw_file_path_from_config().rstrip(".pkl").replace("raw", "loaders")
+        create_raw_file_path_from_config().rstrip(".pkl").replace("raw", "dataloaders")
     )
     window_size = get_window_size_from_config()
     horizon = get_horizon_from_config()
     stride = get_stride_from_config()
     batch_size = get_batch_size_from_config()
+    model_type = get_model_type_from_config()
 
-    processed_file_path = f"{raw_file_path}_WindowSize_{window_size}_Horizon_{horizon}_Stride_{stride}_BatchSize_{batch_size}.pkl"
+    processed_file_path = f"{raw_file_path}_WindowSize_{window_size}_Horizon_{horizon}_Stride_{stride}_BatchSize_{batch_size}_Model_{model_type}.pkl"
 
     return processed_file_path
-
-
-def download_raw_data() -> List[pd.DataFrame]:
-    """
-    Downloads raw sensor data from the API.
-
-    Returns:
-        List[pd.DataFrame]: The raw sensor data.
-    """
-    # Assuming execute_sensors_request() and execute_raw_sensor_data_request() are defined elsewhere
-    sensors_df = execute_sensors_request()
-    series_of_sensor_names = sensors_df["Sensor Name"]
-    raw_dfs = execute_raw_sensor_data_request(sensors_df)
-    print_sensor_request_metrics(raw_dfs, series_of_sensor_names)
-
-    return raw_dfs
 
 
 def load_data(file_path, data_type):
@@ -112,29 +101,38 @@ def load_data(file_path, data_type):
     return data
 
 
-def load_raw_data() -> List[pd.DataFrame]:
+def load_raw_data() -> RawDataItem:
     file_path = create_raw_file_path_from_config()
     return load_data(file_path, "raw")
 
 
-def load_preprocessed_data() -> List[pd.DataFrame]:
+def load_preprocessed_data() -> PreprocessedItem:
     file_path = create_raw_file_path_from_config().replace("raw", "preprocessed")
     return load_data(file_path, "preprocessed")
 
 
-def load_engineered_data() -> List[pd.DataFrame]:
+def load_engineered_data() -> EngineeredItem:
     file_path = create_raw_file_path_from_config().replace("raw", "engineered")
     return load_data(file_path, "engineered")
 
 
-def load_dataloaders() -> List[pd.DataFrame]:
+def load_dataloaders() -> DataLoaderItem:
     file_path = create_dataloaders_file_path_from_config()
     return load_data(file_path, "dataloaders")
 
 
-# def load_trained_models() -> List[pd.DataFrame]:
-#     file_path = create_models_file_path_from_config()
-#     return load_data(file_path, "dataloaders")
+def load_trained_models() -> TrainedModelItem:
+    file_path = create_dataloaders_file_path_from_config().replace(
+        "dataloaders", "trained_models"
+    )
+    return load_data(file_path, "trained_models")
+
+
+def load_evaluation() -> EvaluationItem:
+    file_path = create_dataloaders_file_path_from_config().replace(
+        "dataloaders", "evaluation"
+    )
+    return load_data(file_path, "evaluation")
 
 
 def save_data(data, file_path, data_type):

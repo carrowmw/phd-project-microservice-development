@@ -151,6 +151,8 @@ def add_model_to_dataloaders(
     model_type = dataloader_config["kwargs"]["model_type"]
     if model_type.lower() == "lstm":
         model_type = "LSTM" + "Model"
+    elif model_type.lower() == "lstmautoencoder":
+        model_type = "LSTMAutoencoder" + "Model"
     elif model_type.lower() == "randomforest":
         model_type = "RandomForest" + "Model"
     else:

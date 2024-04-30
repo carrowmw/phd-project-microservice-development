@@ -1,6 +1,7 @@
 import os
 import torch
 from src.pipeline import (
+    download_raw_data,
     preprocess_raw_data,
     apply_feature_engineering,
     load_data,
@@ -9,15 +10,16 @@ from src.pipeline import (
 from src.utils.fstore_utils import (
     create_raw_file_path_from_config,
     create_dataloaders_file_path_from_config,
-    download_raw_data,
     load_raw_data,
     load_preprocessed_data,
     load_engineered_data,
     load_dataloaders,
+    load_trained_models,
     save_raw_data,
     save_preprocessed_data,
     save_engineered_data,
     save_dataloaders,
+    save_trained_models,
 )
 
 
@@ -73,14 +75,16 @@ def run_pipeline():
         save_dataloaders(data_loaders_list, data_loaders_path)
 
     # Checkpoint 5: Check if trained models exist
-    trained_models_path = "models/trained/models.pkl"
+    trained_models_path = create_dataloaders_file_path_from_config().replace(
+        "dataloaders", "trained_models"
+    )
     if os.path.exists(trained_models_path):
         print("Trained models found. Skipping training step.")
-        # trained_models_and_metrics_list = load_trained_models()
+        trained_models_and_metrics_list = load_trained_models()
     else:
         print("Trained models not found. Running training step.")
         trained_models_and_metrics_list = train_model(data_loaders_list)
-        # save_trained_models(trained_models_and_metrics_list, trained_models_path)
+        save_trained_models(trained_models_and_metrics_list, trained_models_path)
 
     # # Checkpoint 6: Run evaluation
     # print("Running evaluation step.")

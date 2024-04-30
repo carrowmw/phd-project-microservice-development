@@ -16,6 +16,7 @@ from src.api import (
 
 from src.utils.polygon_utils import create_wkb_polygon
 from src.utils.general_utils import load_config
+from src.utils.pipeline_types import RawDataItem
 
 
 def json_to_dataframe(json_data):

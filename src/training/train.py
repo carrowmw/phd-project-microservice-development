@@ -14,6 +14,7 @@ from src.utils.training_utils import (
     validate_model_and_criterion,
 )
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from src.utils.pipeline_types import DataLoaderItem, TrainedModelItem
 
 
 def evaluate_model(model, dataloader, criterion, **kwargs):
@@ -64,9 +65,9 @@ def evaluate_model(model, dataloader, criterion, **kwargs):
 
 
 def train(
-    pipeline: Tuple[nn.Module, DataLoader, DataLoader, DataLoader],
+    pipeline: DataLoaderItem,
     **kwargs,
-) -> nn.Module:
+) -> TrainedModelItem:
     """
     Train and evaluate the neural network model.
 

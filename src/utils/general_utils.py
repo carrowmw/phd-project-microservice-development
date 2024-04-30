@@ -107,7 +107,7 @@ def get_config_value(config_file, step_name, param_name):
     raise ValueError(f"Could not find {param_name} in the provided config file.")
 
 
-def get_window_size_from_config():
+def get_model_type_from_config():
     """
     Retrieves the window_size value from the dataloader_config.json file.
 
@@ -119,13 +119,10 @@ def get_window_size_from_config():
     """
     config_file = "configs/dataloader_config.json"
     config = load_config(config_file)
-
-    for step in config["dataloader_steps"]:
-        if step["name"] == "src.training.dataloader.sliding_windows":
-            window_size = step["kwargs"]["window_size"]
-            return window_size
-
-    raise ValueError("Could not find window_size in the provided config file.")
+    model_type = config["kwargs"]["model_type"]
+    if model_type is None:
+        raise ValueError("Could not find model_type in the provided config file.")
+    return model_type
 
 
 def get_window_size_from_config():

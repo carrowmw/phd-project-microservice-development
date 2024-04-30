@@ -8,7 +8,7 @@
         {
             "name": "src.training.dataloader.sliding_windows",
             "kwargs": {
-                "window_size": 16,
+                "window_size": 48,
                 "horizon": 16,
                 "stride": 1,
                 "print_shapes": true

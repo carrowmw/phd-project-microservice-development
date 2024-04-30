@@ -12,7 +12,7 @@
         },
         {
             "name": "src.data_processing.feature_engineering.extract_time_features",
-            "execute_step": true,
+            "execute_step": false,
             "kwargs": {}
         },
         {
