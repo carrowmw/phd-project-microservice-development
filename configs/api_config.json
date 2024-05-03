@@ -24,15 +24,15 @@
             "raw_sensor_data": {
                 "url": "sensors/{sensor_name}/data/json",
                 "params": {
-                    "last_n_days": 300
+                    "last_n_days": 200
                 }
             }
         },
         "coords": [
-            -1.61602,
-            54.97397,
-            -1.61426,
-            54.97482
+            -1.61368,
+            54.97429,
+            -1.61162,
+            54.97740
         ]
     }
 }

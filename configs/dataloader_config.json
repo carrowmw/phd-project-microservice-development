@@ -4,12 +4,12 @@
         "target_feature_index": 0,
         "model_type": "lstm"
     },
-    "dataloader_steps": [
+    "steps": [
         {
             "name": "src.training.dataloader.sliding_windows",
             "kwargs": {
-                "window_size": 48,
-                "horizon": 16,
+                "window_size": 4,
+                "horizon": 4,
                 "stride": 1,
                 "print_shapes": true
             }

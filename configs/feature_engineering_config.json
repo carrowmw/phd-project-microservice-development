@@ -1,5 +1,5 @@
 {
-    "feature_engineering_steps": [
+    "steps": [
         {
             "name": "src.data_processing.feature_engineering.add_term_dates_feature",
             "execute_step": false,

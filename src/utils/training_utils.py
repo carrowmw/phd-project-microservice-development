@@ -1,11 +1,10 @@
 import os
-from typing import List
+import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from src.models.model_definitions import LinearModel
-from src.utils.general_utils import load_config
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 
 def safe_tensor_to_numpy(tensor):
@@ -209,32 +208,31 @@ def save_model_state(
     torch.save(model.state_dict(), model_path)
 
 
-##### NEEDS UPDATING ######
-def save_outputs_to_csv(performance_df, weights_df, runtime_dict):
+def compute_performance_metrics(predictions, targets):
     """
-    Save the metrics and weights dataframes to CSV.
-    :param performance_df: dataframe containing performance metrics
-    :param weights_df: dataframe containing model weights
-    :param runtime_dict: dictionary containing runtimes
+    Compute common performance metrics for regression.
+
+    Parameters:
+        - predictions (torch.Tensor): The predicted values.
+        - targets (torch.Tensor): The true target values.
+
+    Returns:
+        dict: A dictionary containing the following metrics:
+            - MAE (float): Mean Absolute Error.
+            - MSE (float): Mean Squared Error.
+            - rmse (float): Root Mean Squared Error.
+            - R^2 (float): R squared or Coefficient of Determination.
+
+    Note:
+        The function assumes the predictions and targets are torch tensors.
+        They are then flattened and detached before computation.
     """
-    performance_df.to_csv(
-        "performance_metrics_mm.csv",
-        mode="a",
-        index=False,
-        header=not os.path.exists("performance_metrics_mm.csv"),
-    )
-    weights_df.to_csv(
-        "weights_mm.csv",
-        mode="a",
-        index=False,
-        header=not os.path.exists("weights_mm.csv"),
-    )
-    runtime_df = pd.DataFrame(
-        list(runtime_dict.items()), columns=["Parameters", "Runtime (s)"]
-    )
-    runtime_df.to_csv(
-        "runtime_mm.csv",
-        mode="w",
-        index=False,
-        header=not os.path.exists("runtime_mm.csv"),
-    )
+    predictions_flat_np = predictions.flatten()
+    targets_flat_np = targets.flatten()
+
+    return {
+        "MAE": mean_absolute_error(targets_flat_np, predictions_flat_np),
+        "MSE": mean_squared_error(targets_flat_np, predictions_flat_np),
+        "rmse": np.sqrt(mean_absolute_error(targets_flat_np, predictions_flat_np)),
+        "R^2": r2_score(targets_flat_np, predictions_flat_np),
+    }

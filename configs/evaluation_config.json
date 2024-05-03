@@ -1,0 +1,11 @@
+{
+    "steps": [
+        {
+            "name": "src.training.evaluation.test_model",
+            "execute_step": true,
+            "kwargs": {
+                "device": "mps"
+            }
+        }
+    ]
+}

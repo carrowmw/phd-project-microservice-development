@@ -128,7 +128,7 @@ def load_trained_models() -> TrainedModelItem:
     return load_data(file_path, "trained_models")
 
 
-def load_evaluation() -> EvaluationItem:
+def load_evaluation_metrics() -> EvaluationItem:
     file_path = create_dataloaders_file_path_from_config().replace(
         "dataloaders", "evaluation"
     )
@@ -167,3 +167,7 @@ def save_dataloaders(data, file_path):
 
 def save_trained_models(data, file_path):
     save_data(data, file_path, "trained models")
+
+
+def save_evaluation_metrics(data, file_path):
+    save_data(data, file_path, "evaluation metrics")

@@ -1,7 +1,7 @@
 {
-    "training_steps": [
+    "steps": [
         {
-            "name": "src.training.train.train",
+            "name": "src.training.training.train",
             "execute_step": true,
             "kwargs": {
                 "epochs": 5,

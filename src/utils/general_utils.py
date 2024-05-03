@@ -100,7 +100,7 @@ def get_config_value(config_file, step_name, param_name):
         ValueError: If the specified parameter is not found in the config file.
     """
     config = load_config(config_file)
-    for step in config["dataloader_steps"]:
+    for step in config["steps"]:
         if step["name"] == step_name:
             if param_name in step["kwargs"]:
                 return step["kwargs"][param_name]

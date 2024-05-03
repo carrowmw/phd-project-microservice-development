@@ -2,7 +2,7 @@
     "kwargs": {
         "completeness_threshold": 1.0
     },
-    "preprocessing_steps": [
+    "steps": [
         {
             "name": "src.data_processing.preprocessing.remove_directionality_feature",
             "execute_step": true,
