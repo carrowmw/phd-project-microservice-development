@@ -11,13 +11,13 @@ dash-core-components==2.0.0
 dash-html-components==2.0.0
 dash-table==5.0.0
 exceptiongroup==1.2.1
-filelock==3.15.3
+filelock==3.15.4
 Flask==3.0.3
 fonttools==4.53.0
 fsspec==2024.6.0
 gunicorn==22.0.0
 idna==3.7
-importlib_metadata==7.2.0
+importlib_metadata==7.2.1
 iniconfig==2.0.0
 itsdangerous==2.2.0
 Jinja2==3.1.4
@@ -31,7 +31,7 @@ networkx==3.3
 numpy==2.0.0
 packaging==24.1
 pandas==2.2.2
--e git+ssh://git@github.com/carrowmw/phd-project.git@881879a297f46fb46b59d3a7f0c82ee12f773ab9#egg=phd_project
+-e git+https://github.com/carrowmw/phd-project.git@881879a297f46fb46b59d3a7f0c82ee12f773ab9#egg=phd_project
 pillow==10.3.0
 plotly==5.22.0
 pluggy==1.5.0
@@ -47,11 +47,11 @@ scipy==1.13.1
 shapely==2.0.4
 six==1.16.0
 sympy==1.12.1
-tenacity==8.4.1
+tenacity==8.4.2
 threadpoolctl==3.5.0
 tomli==2.0.1
 torch==2.3.1
-typing_extensions==4.12.2
+typing_extensions>=4.0.0
 tzdata==2024.1
 urllib3==2.2.2
 Werkzeug==3.0.3
