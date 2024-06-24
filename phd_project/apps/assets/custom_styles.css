@@ -1,0 +1,98 @@
+.graph-element {
+    height: calc(75vh);
+    width: 100%;
+    /* background-color: lightgrey; */
+    padding: 30px;
+    margin: 0;
+    /* border: 2px dashed lightgrey; */
+    display: block;
+}
+
+.graph-element.graph_a,
+.graph-element.graph_b,
+.graph-element.graph_c,
+.graph-element.graph_d,
+.graph-element.graph_e,
+.graph-element.graph_f {
+    height: calc(45vh);
+}
+
+.graph-element.map_overview,
+.graph-element.sensor_health {
+    height: calc(75vh);
+}
+
+.column-element {
+    height: 100%;
+    width: calc(50vw - auto);
+    /* border: 2px solid green; */
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.tab-element {
+    height: 97vh;
+    width: calc(50vw - auto);
+    /* border: 2px solid blue; */
+    padding: 0;
+    margin: 0;
+}
+
+.tabs-element {
+    height: 100%;
+    width: 100%;
+    /* border: 2px solid purple; */
+    padding: 0;
+    margin: 0;
+}
+
+.row-element {
+    height: 100%;
+    width: 100%;
+    /* border: 2px solid red; */
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.dropdown-element {
+    height: 2vh;
+    width: 30vw;
+    /* border: 2px solid orange; */
+    padding: auto;
+    margin: auto;
+}
+
+.container-element {
+    height: 100%;
+    width: 100%;
+    /* border: 2px solid yellow; */
+    padding: 0;
+    margin: 0;
+}
+
+.card-element {
+    height: 10vh;
+    width: 20vw;
+    /* border: 2px solid pink; */
+    align-items: left;
+    padding: auto;
+    margin: auto;
+}
+
+.card-text {
+    font-size: 1.1em;
+    text-align: center;
+    padding: auto;
+    margin: auto;
+}
+
+.card-title {
+    font-size: 1em;
+    text-align: center;
+    padding: auto;
+    margin: auto;
+}

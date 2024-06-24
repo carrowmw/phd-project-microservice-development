@@ -1,0 +1,11 @@
+{
+    "steps": [
+        {
+            "name": "phd_project.src.training.evaluation.test_model",
+            "execute_step": true,
+            "kwargs": {
+                "device": "mps"
+            }
+        }
+    ]
+}

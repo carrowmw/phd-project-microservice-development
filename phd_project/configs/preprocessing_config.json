@@ -1,0 +1,49 @@
+{
+    "kwargs": {
+        "completeness_threshold": 1.0,
+        "datetime_column": "Timestamp",
+        "value_column": "Value",
+        "min_df_length": 500
+    },
+    "steps": [
+        {
+            "name": "phd_project.src.data_processing.preprocessing.initialise_preprocessing_pipeline",
+            "execute_step": true,
+            "kwargs": {}
+        },
+        {
+            "name": "phd_project.src.data_processing.preprocessing.remove_directionality_feature",
+            "execute_step": true,
+            "kwargs": {
+                "features_to_include_on_aggregation": null
+            }
+        },
+        {
+            "name": "phd_project.src.data_processing.preprocessing.aggregate_on_datetime",
+            "execute_step": true,
+            "kwargs": {
+                "aggregation_frequency_mins": "15min"
+            }
+        },
+        {
+            "name": "phd_project.src.data_processing.preprocessing.get_consecutive_sequences",
+            "execute_step": true,
+            "kwargs": {}
+        },
+        {
+            "name": "phd_project.src.data_processing.preprocessing.remove_specified_fields",
+            "execute_step": true,
+            "kwargs": {
+                "columns_to_drop": [
+                    "Time_Difference",
+                    "Interval_Minutes"
+                ]
+            }
+        },
+        {
+            "name": "phd_project.src.data_processing.preprocessing.terminate_preprocessing_pipeline",
+            "execute_step": true,
+            "kwargs": {}
+        }
+    ]
+}

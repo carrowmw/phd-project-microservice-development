@@ -1,0 +1,30 @@
+{
+    "kwargs": {
+        "input_feature_indices": null,
+        "target_feature_index": 0,
+        "model_type": "lstm"
+    },
+    "steps": [
+        {
+            "name": "phd_project.src.training.dataloader.sliding_windows",
+            "kwargs": {
+                "window_size": 40,
+                "horizon": 4,
+                "stride": 1,
+                "print_shapes": true
+            }
+        },
+        {
+            "name": "phd_project.src.training.dataloader.create_dataloaders",
+            "kwargs": {
+                "batch_size": 64,
+                "shuffle": false,
+                "num_workers": 0
+            }
+        },
+        {
+            "name": "phd_project.src.training.dataloader.add_model_to_dataloaders",
+            "kwargs": {}
+        }
+    ]
+}

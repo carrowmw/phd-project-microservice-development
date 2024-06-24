@@ -1,0 +1,16 @@
+{
+    "steps": [
+        {
+            "name": "phd_project.src.training.training.train",
+            "execute_step": true,
+            "kwargs": {
+                "epochs": 5,
+                "device": "mps",
+                "optimiser": "adam",
+                "lr": 0.01,
+                "criterion": "mse",
+                "schedular_step_size": 0.001
+            }
+        }
+    ]
+}

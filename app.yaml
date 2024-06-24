@@ -1,0 +1,7 @@
+runtime: python39
+
+entrypoint: gunicorn -w 4 -b :$PORT phd_project/apps/sensor_dashboard:app
+
+handlers:
+- url: /.*
+  script: auto
