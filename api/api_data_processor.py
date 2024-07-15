@@ -14,7 +14,7 @@ from utils.config_helper import (
     get_min_df_length,
     get_min_df_length_to_window_size_ratio,
 )
-from utils.data_transformation_helper import json_to_dataframe
+from utils.data_helper import json_to_dataframe, RawDataItem
 
 from .api_client import APIClient
 
@@ -72,26 +72,26 @@ class APIDataProcessor:
         Processes the data for a specific sensor.
         """
         response = self.api_client.get_data(sensor_name)
-        print(f"Response: {response}")
-        if response and len(response["sensors"]) > 0:
+        # print(f"Response: {response}")
+        if response and len(response["sensors"][0]["data"]) > 0:
             data = response["sensors"][0]["data"]
-            # print(f"Data: {data}")
-            if data and len(data) > self.min_df_length:
+            if data:
                 self.print_api_response_information(sensor_name, index, total_sensors)
-                # print(f"Length of data: {len(data)}")
-                df = json_to_dataframe(data)
-                datetime_column = get_datetime_column, get_api_config()
-                df[datetime_column] = pd.to_datetime(df[datetime_column])
-
+                theme = list(data.keys())[0]
+                df = json_to_dataframe(data[theme])
+                datetime_column = get_datetime_column()
+                df[datetime_column] = pd.to_datetime(df[datetime_column], unit="ms")
+                if len(df) < self.min_df_length:
+                    self.print_api_response_information(
+                        sensor_name, index, total_sensors
+                    )
+                    print(
+                        f"Sensor found but less than specified min_df_length: {self.min_df_length}.",
+                        end="\n\n",
+                        flush=False,
+                    )
+                    return None
                 return sensor_name, df
-
-            self.print_api_response_information(sensor_name, index, total_sensors)
-            print(
-                f"Sensor found but less than specified min_df_length: {self.min_df_length}.",
-                end="\n\n",
-                flush=False,
-            )
-            return None
 
         self.print_api_response_information(sensor_name, index, total_sensors)
         print(
@@ -112,7 +112,7 @@ class APIDataProcessor:
         print(f"\n Count of Empty Sensors:     \n     {empty_sensor_count}")
         print(f"\n Count of Active Sensors:    \n     {active_sensor_count}")
 
-    def process_sensor_data_parallel(self, sensor_names: pd.Series) -> list:
+    def process_sensor_data_parallel(self, sensor_names: pd.Series) -> RawDataItem:
         """
         Processes the data for a specific sensor in parallel.
         """
@@ -133,7 +133,7 @@ class APIDataProcessor:
 
         return list_of_dataframes
 
-    def execute_data_request(self) -> list:
+    def execute_data_request(self) -> RawDataItem:
         assert (
             self.window_size * self.ratio <= self.min_df_length
         ), f"window_size must be less than {self.min_df_length/self.ratio} for the specified min_length_df value."

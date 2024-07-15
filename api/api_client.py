@@ -1,7 +1,7 @@
 # api/api_client.py
 
-from utils.config_helper import get_api_config
-from .utils.request_helpers import create_polygon_wkb
+from utils.config_helper import get_api_config, get_query_config
+from utils.config_helper import create_polygon_wkb
 from .utils.request_helpers import handle_api_response, make_api_request
 
 
@@ -11,10 +11,11 @@ class APIClient:
     """
 
     def __init__(self):
-        self.config = get_api_config()
-        self.base_url = self.config["base_url"]
-        self.endpoints = self.config["endpoints"]
-        self.default_timeout = self.config["kwargs"].get("timeout", 1000)
+        self.api_config = get_api_config()
+        self.query_config = get_query_config()
+        self.base_url = self.api_config["base_url"]
+        self.endpoints = self.api_config["endpoints"]
+        self.default_timeout = self.api_config["kwargs"].get("timeout", 1000)
 
     def get_request_endpoint(self, endpoint_key):
         """
@@ -26,11 +27,21 @@ class APIClient:
         """
         Retrieves the request parameters for a given endpoint, merging with any additional parameters.
         """
-        params = self.endpoints[endpoint_key].get("params", {}).copy()
-        if "coords" in params:
-            params.update({"polygon_wkb": create_polygon_wkb(params["coords"])})
-            params.pop("coords")
-        return params
+        api_params_list = self.endpoints[endpoint_key].get("params")
+        request_params = {
+            key: value
+            for (key, value) in self.query_config.items()
+            if key in api_params_list
+        }
+        if "polygon_wkb" in api_params_list:
+            request_params.update(
+                {
+                    "polygon_wkb": create_polygon_wkb(
+                        self.query_config["polygon_wkb"]["coords"]
+                    )
+                }
+            )
+        return request_params
 
     def get(self, endpoint_key, sensor_name=None, **kwargs):
         """
@@ -45,7 +56,6 @@ class APIClient:
         config_path = self.get_request_endpoint(endpoint_key)
         if sensor_name:
             config_path = config_path.format(sensor_name=sensor_name)
-
         params = self.get_request_parameters(endpoint_key, **kwargs)
         url = f"{self.base_url}{config_path}"
         response = make_api_request(

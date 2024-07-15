@@ -15,3 +15,5 @@ if __name__ == "__main__":
     # print(variables)
 
     data = processor.execute_data_request()
+
+    # print(data)
