@@ -7,6 +7,9 @@ DATA_DIR = BASE_DIR / "data"
 CONFIG_DIR = BASE_DIR / "config"
 MODEL_DIR = BASE_DIR / "models"
 LOG_DIR = BASE_DIR / "logs"
+PIPELINE_DIR = BASE_DIR / "pipeline"
+DASHBOARD_DIR = BASE_DIR / "dashboard"
+
 
 # Config files
 PIPELINE_CONFIG_PATH = CONFIG_DIR / "pipeline.json"
@@ -49,23 +52,49 @@ def get_query_config_path():
 
 # Data Directories
 
-APP_DIR = DATA_DIR / "app"
-PIPELINE_DIR = DATA_DIR / "pipeline"
-SENSOR_DIR = PIPELINE_DIR / "sensors"
-RAW_DATA_DIR = PIPELINE_DIR / "raw"
-PREPROCESSED_DATA_DIR = PIPELINE_DIR / "preprocessed"
-ENGINEERED_DATA_DIR = PIPELINE_DIR / "engineered"
-DATALOADER_DIR = PIPELINE_DIR / "dataloaders"
-TRAINED_MODEL_DIR = PIPELINE_DIR / "trained_models"
-EVALUATION_DIR = PIPELINE_DIR / "evaluation"
+DASHBOARD_DATA_DIR = DATA_DIR / "app"
+DAILY_RECORD_COUNTS_PATH = DASHBOARD_DATA_DIR / "daily_record_counts"
+COMPLETENESS_METRICS_PATH = DASHBOARD_DATA_DIR / "completeness_metrics"
+FRESHNESS_METRICS_PATH = DASHBOARD_DATA_DIR / "freshness_metrics"
+EVALUATION_PREDICTIONS_PATH = DASHBOARD_DATA_DIR / "evaluation_predictions"
+TRAINING_WINDOWS_PATH = DASHBOARD_DATA_DIR / "training_windows"
+
+PIPELINE_DATA_DIR = DATA_DIR / "pipeline"
+SENSOR_DIR = PIPELINE_DATA_DIR / "sensors"
+RAW_DATA_DIR = PIPELINE_DATA_DIR / "raw"
+PREPROCESSED_DATA_DIR = PIPELINE_DATA_DIR / "preprocessed"
+ENGINEERED_DATA_DIR = PIPELINE_DATA_DIR / "engineered"
+DATALOADER_DIR = PIPELINE_DATA_DIR / "dataloaders"
+TRAINED_MODEL_DIR = PIPELINE_DATA_DIR / "trained_models"
+EVALUATION_DIR = PIPELINE_DATA_DIR / "evaluation"
 
 
-def get_app_dir():
-    return APP_DIR
+def get_dashboard_data_dir():
+    return DASHBOARD_DATA_DIR
 
 
-def get_pipeline_dir():
-    return PIPELINE_DIR
+def get_daily_record_counts_path():
+    return DAILY_RECORD_COUNTS_PATH
+
+
+def get_completeness_metrics_path():
+    return COMPLETENESS_METRICS_PATH
+
+
+def get_freshness_metrics_path():
+    return FRESHNESS_METRICS_PATH
+
+
+def get_evaluation_predictions_path():
+    return EVALUATION_PREDICTIONS_PATH
+
+
+def get_training_windows_path():
+    return TRAINING_WINDOWS_PATH
+
+
+def get_pipeline_data_dir():
+    return PIPELINE_DATA_DIR
 
 
 def get_sensor_dir():
@@ -94,3 +123,11 @@ def get_trained_models_dir():
 
 def get_evaluation_dir():
     return EVALUATION_DIR
+
+
+# Dashboard Directories
+MAPBOX_TOKEN_PATH = DASHBOARD_DIR / "utils/.mapbox_token"
+
+
+def get_mapbox_access_token_path():
+    return MAPBOX_TOKEN_PATH

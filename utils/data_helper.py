@@ -1,6 +1,5 @@
 from typing import TypeAlias, Tuple, List, get_args, Callable
-import json
-import re
+import os
 import pickle
 from datetime import date
 import torch.nn as nn
@@ -19,7 +18,7 @@ from config.paths import (
     get_evaluation_dir,
 )
 from utils.config_helper import (
-    get_wkb_polygon,
+    get_polygon_wkb,
     get_last_n_days,
     load_config,
     get_window_size,
@@ -94,8 +93,35 @@ def save_data(data, file_path, data_type):
         data_type (str): The type of data being saved (e.g., "raw", "preprocessed", "engineered", "dataloaders").
     """
     print(f"\nSaving {data_type} data to local storage...\n")
+
+    # Create directory if it does not exist
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        print(f"Creating directory: {directory}")
+        os.makedirs(directory)
+
     with open(file_path, "wb") as f:
         pickle.dump(data, f)
+
+
+def find_tuple_by_first_element(tuples, search_string, n_tuples=1):
+    """
+    Finds a tuple in a list of tuples by the first element of the tuple.
+
+    Args:
+        tuples (list): A list of tuples.
+        search_string (str): The string to search for in the first element of the tuples.
+
+    Returns:
+        The tuple containing the search string if found, otherwise None.
+    """
+    for tuple_item in tuples:
+        if tuple_item[0] == search_string:
+            tupleitem = tuple_item[1 : n_tuples + 1]
+            if len(tupleitem) == 1:
+                return tupleitem[0]
+            return tupleitem
+    return None
 
 
 def json_to_dataframe(json_data):
@@ -120,7 +146,7 @@ def pipeline_input_data_filename() -> str:
     """
     today = date.today()
     last_n_days = get_last_n_days()
-    bbox = get_wkb_polygon()
+    bbox = get_polygon_wkb()
     bbox = bbox[-8:]
     file_path = f"{today}_Last_{last_n_days}_Days_{bbox}.pkl"
     return file_path
@@ -196,7 +222,7 @@ def load_trained_models() -> TrainedModelItem:
 
 def load_evaluation_metrics() -> EvaluationItem:
     file_path = create_file_path(get_evaluation_dir, pipeline_output_data_filename)
-    return load_data(file_path, "evaluation_metrics")
+    return load_data(file_path, "evaluation metrics")
 
 
 def save_sensor_list(data, file_path):

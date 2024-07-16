@@ -1,6 +1,7 @@
 # dashboard/data.py
 
 # Compare this snippet from apps/sensor_info.py:
+import os
 import random
 from datetime import datetime
 import numpy as np
@@ -12,15 +13,11 @@ from config.paths import (
     get_freshness_metrics_path,
     get_evaluation_predictions_path,
     get_training_windows_path,
-    add_root_to_path,
 )
 
-# pylint: disable=wrong-import-position
-add_root_to_path()
-
 from utils.data_helper import (
-    save_data_to_file,
-    load_data_from_file,
+    save_data,
+    load_data,
     find_tuple_by_first_element,
     create_file_path,
     pipeline_input_data_filename,
@@ -104,12 +101,13 @@ class CustomDashboardData:
         Read or compute data for the dashboard.
         """
         # print("CustomDashboardData.read_or_compute_app_data()")
-        app_data = load_data_from_file(file_path)
-        if app_data is not None:
-            return app_data
+        if os.path.exists(file_path):
+            app_data = load_data(file_path, "app data")
+            if app_data is not None:
+                return app_data
 
         app_data = func()
-        save_data_to_file(file_path, app_data)
+        save_data(app_data, file_path, "app data")
         return app_data
 
     def compute_daily_counts(self) -> list:
@@ -154,7 +152,7 @@ class CustomDashboardData:
             list: A list of dataframes containing the daily counts of records for each sensor.
         """
         file_path = create_file_path(
-            get_daily_record_counts_path(), pipeline_input_data_filename
+            get_daily_record_counts_path, pipeline_input_data_filename
         )
         print("CustomDashboardData.get_completeness_graph_data()")
         daily_counts = self.read_or_compute_app_data(
@@ -184,7 +182,7 @@ class CustomDashboardData:
             str: A string containing the data completeness metric.
         """
         file_path = create_file_path(
-            get_completeness_metrics_path(), pipeline_input_data_filename
+            get_completeness_metrics_path, pipeline_input_data_filename
         )
         print("CustomDashboardData.get_completeness_metrics()")
         completeness_metrics = self.read_or_compute_app_data(
@@ -240,7 +238,7 @@ class CustomDashboardData:
             str: A string containing the data freshness metric.
         """
         file_path = create_file_path(
-            get_freshness_metrics_path(), pipeline_input_data_filename
+            get_freshness_metrics_path, pipeline_input_data_filename
         )
         print("CustomDashboardData.get_freshness_metrics()")
         freshness_metrics = self.read_or_compute_app_data(
@@ -268,7 +266,7 @@ class CustomDashboardData:
             List: A list of tuples containing the sensor name, the evaluation metric, and the prediction.
         """
         file_path = create_file_path(
-            get_evaluation_predictions_path(), pipeline_output_data_filename
+            get_evaluation_predictions_path, pipeline_output_data_filename
         )
         print(file_path)
         print("CustomDashboardData.get_evaluation_predictions()")
@@ -324,9 +322,9 @@ class CustomDashboardData:
         """
         print("CustomDashboardData.get_training_windows()")
         file_path = create_file_path(
-            get_training_windows_path(), pipeline_output_data_filename
+            get_training_windows_path, pipeline_output_data_filename
         )
-        training_windows_data = load_data_from_file(file_path)
+        training_windows_data = load_data(file_path, "training windows data")
         if training_windows_data is not None:
             return training_windows_data
 
@@ -373,7 +371,7 @@ class CustomDashboardData:
             sensor_name = pipeline_object[0]
             app_data[3].append(sensor_name)
         print("Unbatching complete")
-        save_data_to_file(file_path, app_data)
+        save_data(app_data, file_path, "training windows data")
         print(f"Traning windows data saved to {file_path}.")
 
         return app_data

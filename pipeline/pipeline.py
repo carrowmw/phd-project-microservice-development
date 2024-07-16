@@ -52,6 +52,12 @@ class Pipeline:
     def __init__(self, experiment_name: str):
         # Initialize Experiment Tracker
         self.experiment_tracker = ExperimentTracker(experiment_name)
+        # Initialize logging
+        logging.basicConfig(
+            stream=sys.stdout,
+            level=logging.INFO,
+            format="%(asctime)s - %(levelname)s - %(message)s",
+        )
 
     def read_or_download_sensors(self) -> SensorListItem:
         """
@@ -90,7 +96,7 @@ class Pipeline:
 
         raw_dfs = load_or_process_data(
             None,
-            create_file_path("raw", pipeline_input_data_filename),
+            create_file_path(get_raw_data_dir, pipeline_input_data_filename),
             load_raw_data,
             process_raw_data,
             save_raw_data,
@@ -318,4 +324,17 @@ class Pipeline:
         for item in evaluation_metrics_list:
             check_type(item, EvaluationItem.__args__[0])
 
+        return evaluation_metrics_list
+
+    def run_pipeline(self):
+        """
+        Run the pipeline.
+        """
+        sensors_df = self.read_or_download_sensors()
+        raw_dfs = self.read_or_download_data()
+        preprocessed_dfs = self.preprocess_data(raw_dfs)
+        engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
+        dataloaders_list = self.load_data(engineered_dfs)
+        trained_models_list = self.train_model(dataloaders_list)
+        evaluation_metrics_list = self.evaluate_model(trained_models_list)
         return evaluation_metrics_list

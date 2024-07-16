@@ -1,14 +1,12 @@
 {
-    "kwargs": {
-        "coords": [
-            -1.6534,
-            54.9310,
-            -1.5487,
-            55.0209
-        ],
-        "theme": "People",
-        "last_n_days": 120,
-        "starttime": 20200101,
-        "endtime": 20200131
-    }
+    "coords": [
+        -1.6534,
+        54.9310,
+        -1.5487,
+        55.0209
+    ],
+    "theme": "People",
+    "last_n_days": 120,
+    "starttime": 20200101,
+    "endtime": 20200131
 }
