@@ -1,0 +1,124 @@
+{
+    "kwargs": {
+        "features_to_include_on_aggregation": null,
+        "aggregation_frequency_mins": "15min",
+        "columns_to_drop": [
+            "Time_Difference",
+            "Interval_Minutes"
+        ],
+        "completeness_threshold": 1.0,
+        "datetime_column": "Timestamp",
+        "value_column": "Value",
+        "min_df_length": 500,
+        "frequency": null,
+        "input_feature_indices": null,
+        "target_feature_index": 0,
+        "model_type": "lstm",
+        "window_size": 40,
+        "horizon": 4,
+        "stride": 1,
+        "batch_size": 64,
+        "shuffle": false,
+        "num_workers": 0,
+        "device": "mps",
+        "epochs": 5,
+        "optimiser": "adam",
+        "lr": 0.01,
+        "criterion": "mse",
+        "schedular_step_size": 0.001
+    },
+    "preprocessing": [
+        {
+            "name": "pipeline.stages.data_processing.preprocessing.initialise_preprocessing_pipeline",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.preprocessing.remove_directionality_feature",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.preprocessing.aggregate_on_datetime",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.preprocessing.get_consecutive_sequences",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.preprocessing.remove_specified_fields",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.preprocessing.terminate_preprocessing_pipeline",
+            "execute_step": true
+        }
+    ],
+    "feature_engineering": [
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.initialise_engineering_pipeline",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.add_term_dates_feature",
+            "execute_step": false
+        },
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.create_periodicity_features",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.extract_time_features",
+            "execute_step": false
+        },
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.datetime_to_float",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.scale_features",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.resample_frequency",
+            "execute_step": false
+        },
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.drop_datetime_column",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.drop_sequence_column",
+            "execute_step": false
+        },
+        {
+            "name": "pipeline.stages.data_processing.feature_engineering.terminate_engineering_pipeline",
+            "execute_step": true
+        }
+    ],
+    "dataloader": [
+        {
+            "name": "pipeline.stages.dataloader.sliding_windows",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.training.dataloader.create_dataloaders",
+            "execute_step": true
+        },
+        {
+            "name": "pipeline.stages.training.dataloader.add_model_to_dataloaders",
+            "execute_step": true
+        }
+    ],
+    "training": [
+        {
+            "name": "pipeline.stages.training.train",
+            "execute_step": true
+        }
+    ],
+    "evaluation": [
+        {
+            "name": "pipeline.stages.evaluation.test_model",
+            "execute_step": true
+        }
+    ]
+}

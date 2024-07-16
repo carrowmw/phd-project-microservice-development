@@ -2,10 +2,6 @@
 import concurrent.futures
 import pandas as pd
 
-from config.paths import add_root_to_path
-
-add_root_to_path()
-
 # pylint: disable=<C0413:wrong-import-position>
 from utils.config_helper import (
     get_datetime_column,
