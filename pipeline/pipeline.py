@@ -3,7 +3,7 @@ import sys
 import logging
 import pandas as pd
 import mlflow
-import mlflow.sklearn
+import mlflow.pytorch
 from config.paths import (
     get_pipeline_config_path,
     get_sensor_dir,
@@ -12,11 +12,16 @@ from config.paths import (
     get_engineered_data_dir,
     get_dataloader_dir,
     get_trained_models_dir,
-    get_evaluation_dir,
+    get_test_dir,
 )
 from api.api_data_processor import APIDataProcessor
-from experiments.tracker import ExperimentTracker
-from utils.pipeline_helper import process_data, load_or_process_data
+
+# from experiments.tracker import ExperimentTracker
+from utils.pipeline_helper import (
+    process_data,
+    load_or_process_data,
+    generate_random_string,
+)
 from utils.data_helper import (
     check_type,
     SensorListItem,
@@ -25,8 +30,9 @@ from utils.data_helper import (
     EngineeredItem,
     DataLoaderItem,
     TrainedModelItem,
-    EvaluationItem,
+    TestItem,
     pipeline_input_data_filename,
+    pipeline_processed_data_filename,
     pipeline_output_data_filename,
     create_file_path,
     load_sensor_list,
@@ -35,23 +41,26 @@ from utils.data_helper import (
     load_engineered_data,
     load_dataloaders,
     load_trained_models,
-    load_evaluation_metrics,
+    load_test_metrics,
     save_sensor_list,
     save_raw_data,
     save_preprocessed_data,
     save_engineered_data,
     save_dataloaders,
     save_trained_models,
-    save_evaluation_metrics,
+    save_test_metrics,
 )
-from utils.config_helper import get_window_size
+from utils.config_helper import get_window_size, get_horizon
 
 
 class Pipeline:
 
-    def __init__(self, experiment_name: str):
+    def __init__(self, experiment_name: str = None):
         # Initialize Experiment Tracker
-        self.experiment_tracker = ExperimentTracker(experiment_name)
+        if experiment_name is not None:
+            self.experiment_name = experiment_name
+        self.experiment_name = generate_random_string(12)
+        # self.experiment_tracker = ExperimentTracker(experiment_name)
         # Initialize logging
         logging.basicConfig(
             stream=sys.stdout,
@@ -136,7 +145,9 @@ class Pipeline:
 
         preprocessed_dfs = load_or_process_data(
             raw_dfs,
-            create_file_path(get_preprocessed_data_dir, pipeline_input_data_filename),
+            create_file_path(
+                get_preprocessed_data_dir, pipeline_processed_data_filename
+            ),
             load_preprocessed_data,
             process_preprocessed_data,
             save_preprocessed_data,
@@ -178,7 +189,7 @@ class Pipeline:
 
         engineered_dfs = load_or_process_data(
             preprocessed_dfs,
-            create_file_path(get_engineered_data_dir, pipeline_input_data_filename),
+            create_file_path(get_engineered_data_dir, pipeline_processed_data_filename),
             load_engineered_data,
             process_engineered_data,
             save_engineered_data,
@@ -198,10 +209,17 @@ class Pipeline:
         Load data into dataloaders.
         """
         window_size = get_window_size()
+        horizon = get_horizon()
 
         def process_dataloaders(dfs):
             print(f"\n\nLoading data for {len(dfs)} DataFrames...\n")
             logging.info("\n\nLoading data for %d DataFrames...\n", len(dfs))
+            print(
+                f"Generating sliding windows with window size {window_size} and horizon {horizon}..."
+            )
+            logging.info(
+                f"Generating sliding windows with window size {window_size} and horizon {horizon}..."
+            )
             list_of_dataloaders = []
             for i, df in enumerate(dfs, start=1):
                 if len(df[1]) > window_size * 10:
@@ -247,24 +265,51 @@ class Pipeline:
             print(f"\n\nTraining {len(loaders)} models...\n")
             logging.info("\n\nTraining %d models...\n", len(loaders))
             list_of_trained_models_and_metrics = []
-            for i, loader in enumerate(loaders, start=1):
-                print(f"\nTraining model {i}/{len(loaders)} - {loader[0]}")
-                logging.info(
-                    "\nTraining model %d/%d - %s", (i + 1), len(loaders), loader[0]
-                )
-                model, train_metrics, val_metrics = process_data(
-                    (loader[1], loader[2], loader[3]),
-                    stage="training",
-                    config_path=get_pipeline_config_path(),
-                )
-                list_of_trained_models_and_metrics.append(
-                    (loader[0], model, loader[4], train_metrics, val_metrics)
-                )
-                # Log model and metrics with MLflow
-                self.experiment_tracker.log_model(model, loader[0])
-                self.experiment_tracker.log_metrics(train_metrics, f"{loader[0]}_train")
-                self.experiment_tracker.log_metrics(val_metrics, f"{loader[0]}_val")
-            return list_of_trained_models_and_metrics
+
+            experiment_id = mlflow.create_experiment(self.experiment_name)
+            print(type(experiment_id))
+            print(experiment_id)
+            with mlflow.start_run(
+                run_name="PARENT_RUN",
+                experiment_id=experiment_id,
+                tags={"version": "v1", "priority": "P1"},
+                description="parent",
+            ) as parent_run:
+
+                for i, loader in enumerate(loaders, start=1):
+                    with mlflow.start_run(
+                        run_name=loader[0],
+                        experiment_id=experiment_id,
+                        nested=True,
+                    ) as child_run:
+
+                        print(f"\nTraining model {i}/{len(loaders)} - {loader[0]}")
+                        logging.info(
+                            "\nTraining model %d/%d - %s",
+                            (i + 1),
+                            len(loaders),
+                            loader[0],
+                        )
+
+                        model, train_metrics, val_metrics = process_data(
+                            (loader[1], loader[2], loader[3]),
+                            stage="training",
+                            config_path=get_pipeline_config_path(),
+                        )
+
+                        # print(f"Logging model {loader[0]} to MLflow...")
+                        # mlflow.pytorch.log_model(model, "models")
+
+                        # # Register the model
+                        # model_name = f"sensor_model_{loader[0]}"
+                        # model_uri = f"runs:/{child_run.info.run_id}/models/{loader[0]}"
+                        # mlflow.register_model(model_uri, model_name)
+
+                        list_of_trained_models_and_metrics.append(
+                            (loader[0], model, loader[4], train_metrics, val_metrics)
+                        )
+
+                return list_of_trained_models_and_metrics
 
         trained_models_and_metrics_list = load_or_process_data(
             dataloaders_list,
@@ -272,7 +317,7 @@ class Pipeline:
             load_trained_models,
             process_trained_models,
             save_trained_models,
-            "model training",
+            "training",
         )
 
         assert isinstance(
@@ -283,48 +328,47 @@ class Pipeline:
 
         return trained_models_and_metrics_list
 
-    def evaluate_model(self, trained_models_list) -> EvaluationItem:
+    def test_model(self, trained_models_list) -> TestItem:
         """
-        Evaluate models.
+        Test models.
         """
 
-        def process_evaluation_metrics(models):
-            print(f"\n\nEvaluating {len(models)} models…\n")
-            logging.info("\n\nEvaluating %d models…\n", len(models))
-            list_of_evaluation_metrics = []
+        def process_test_metrics(models):
+            print(f"\n\nTesting {len(models)} models…\n")
+            logging.info("\n\nTesting %d models…\n", len(models))
+            list_of_test_metrics = []
             for i, model in enumerate(models, start=1):
-                print(f"\nEvaluating model {i}/{len(models)} - {model[0]}")
+                print(f"\nTesting model {i}/{len(models)} - {model[0]}")
                 logging.info(
-                    "\nEvaluating model %d/%d - %s", (i + 1), len(models), model[0]
+                    "\nTesting model %d/%d - %s", (i + 1), len(models), model[0]
                 )
                 test_predictions, test_labels, test_metrics = process_data(
                     (model[1], model[2]),
-                    stage="None",
+                    stage="testing",
                     config_path=get_pipeline_config_path(),
                 )
-            list_of_evaluation_metrics.append(
-                (model[0], test_predictions, test_labels, test_metrics)
-            )
-            # Log evaluation metrics with MLflow
-            self.experiment_tracker.log_metrics(test_metrics, f"{model[0]}_test")
-            return list_of_evaluation_metrics
+                list_of_test_metrics.append(
+                    (model[0], test_predictions, test_labels, test_metrics)
+                )
 
-        evaluation_metrics_list = load_or_process_data(
+            return list_of_test_metrics
+
+        test_metrics_list = load_or_process_data(
             trained_models_list,
-            create_file_path(get_evaluation_dir, pipeline_output_data_filename),
-            load_evaluation_metrics,
-            process_evaluation_metrics,
-            save_evaluation_metrics,
-            "model evaluation",
+            create_file_path(get_test_dir, pipeline_output_data_filename),
+            load_test_metrics,
+            process_test_metrics,
+            save_test_metrics,
+            "testing",
         )
 
         assert isinstance(
-            evaluation_metrics_list, list
-        ), f"Expected evaluation_metrics_list to be a list, but got {type(evaluation_metrics_list)}"
-        for item in evaluation_metrics_list:
-            check_type(item, EvaluationItem.__args__[0])
+            test_metrics_list, list
+        ), f"Expected test_metrics_list to be a list, but got {type(test_metrics_list)}"
+        for item in test_metrics_list:
+            check_type(item, TestItem.__args__[0])
 
-        return evaluation_metrics_list
+        return test_metrics_list
 
     def run_pipeline(self):
         """
@@ -336,5 +380,5 @@ class Pipeline:
         engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
         dataloaders_list = self.load_data(engineered_dfs)
         trained_models_list = self.train_model(dataloaders_list)
-        evaluation_metrics_list = self.evaluate_model(trained_models_list)
-        return evaluation_metrics_list
+        test_metrics_list = self.test_model(trained_models_list)
+        return test_metrics_list

@@ -10,7 +10,7 @@ It contains the following functions:
 - `create_map_fig`: Creates a map showing sensor locations.
 - `create_missing_data_graph`: Creates a graph showing missing data.
 - `create_latest_data_graph`: Creates a graph showing the latest data.
-- `create_evaluation_graph`: Creates a graph showing evaluation predictions.
+- `create_test_graph`: Creates a graph showing test predictions.
 - `create_training_windows_graph`: Creates a graph showing training windows.
 """
 
@@ -21,15 +21,13 @@ import plotly.graph_objects as go
 
 from config.paths import get_mapbox_access_token_path
 
-from utils.config_helper import (
-    get_last_n_days,
-    get_horizon,
-)
-from utils.data_helper import find_tuple_by_first_element
+from utils.config_helper import get_n_days, get_query_agnostic_start_and_end_date
+from utils.data_helper import load_test_metrics, find_tuple_by_first_element
+
 from dashboard.data import CustomDashboardData
 from dashboard.utils.color_helper import (
     base_colors,
-    accent_colors,
+    category_colors,
     completeness_color_scale,
     freshness_color_scale,
     blended_color_scale,
@@ -50,12 +48,16 @@ class PipelineChartCreator:
         self.completeness_metrics = self.dashboard_data.get_completeness_metrics()
         self.freshness_metrics = self.dashboard_data.get_freshness_metrics()
         self.latest_sensor_data = self.dashboard_data.latest_data
-        self.evaluation_predictions = self.dashboard_data.get_evaluation_predictions()
+        self.test_predictions = self.dashboard_data.get_test_predictions()
+        self.train_metrics = self.dashboard_data.get_train_metrics()
         self.training_windows = self.dashboard_data.get_training_windows()
         self.sensor_info = self.dashboard_data.get_sensor_info()
         self.completeness_graph_data = self.dashboard_data.get_completeness_graph_data()
         self.first_sensor_in_list = self.dashboard_data.active_sensors[0]
-        self.last_n_days = get_last_n_days()
+        self.xmax, self.xmin = get_query_agnostic_start_and_end_date()
+        self.n_days = get_n_days()
+        self.test_dummy = load_test_metrics()
+        self.category_colors = list(category_colors.values())
 
     def no_data_fig(self, sensor_name):
         """
@@ -139,10 +141,6 @@ class PipelineChartCreator:
         if data is None:
             return self.no_data_fig(sensor_name)
 
-        today = datetime.now()
-        x_max = today.strftime("%Y-%m-%d")
-        x_min = (today - timedelta(days=self.last_n_days)).strftime("%Y-%m-%d")
-
         assert isinstance(
             data, pd.DataFrame
         ), f"Expected data to be a pd.DataFrame, but got {type(data)}"
@@ -165,7 +163,7 @@ class PipelineChartCreator:
             },
             xaxis=dict(
                 title="Date",
-                range=[x_min, x_max],  # Set the x-axis range
+                range=[self.xmin, self.xmax],  # Set the x-axis range
             ),
             yaxis=dict(title="Total Records", range=[0, 96]),
         )
@@ -219,20 +217,20 @@ class PipelineChartCreator:
 
         return latest_data_fig
 
-    def create_evaluation_graph(self, sensor_name=None) -> go.Figure:
+    def create_test_predictions_graph(self, sensor_name=None) -> go.Figure:
         """
-        Create a graph showing evaluation predictions.
+        Create a graph showing test predictions.
 
         Args:
             sensor_name (str): The name of the sensor to create the graph for.
 
         Returns:
-            Figure: A plotly figure containing the evaluation predictions graph.
+            Figure: A plotly figure containing the test predictions graph.
         """
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
         data = find_tuple_by_first_element(
-            self.evaluation_predictions, sensor_name, n_tuples=2
+            self.test_predictions, sensor_name, n_tuples=2
         )
         if data is None:
             return self.no_data_fig(sensor_name)
@@ -243,106 +241,145 @@ class PipelineChartCreator:
         predictions = [item[0] for item in data[0]]
         labels = [item[0] for item in data[1]]
 
-        evaluation_fig = go.Figure()
-        evaluation_fig.add_trace(
-            go.Scatter(
-                x=list(range(len(labels))),
-                y=predictions,
-                mode="lines+markers",
-                name="Predictions",
-            )
-        )
-        evaluation_fig.add_trace(
+        test_fig = go.Figure()
+        test_fig.add_trace(
             go.Scatter(
                 x=list(range(len(labels))),
                 y=labels,
-                mode="lines+markers",
+                mode="lines",
                 name="Labels",
+                line=dict(color=self.category_colors[0]),
+            )
+        )
+        test_fig.add_trace(
+            go.Scatter(
+                x=list(range(len(labels))),
+                y=predictions,
+                mode="lines",
+                name="Predictions",
+                line=dict(color=self.category_colors[1]),
             )
         )
 
-        evaluation_fig.update_layout(
+        test_fig.update_layout(
             title={
-                "text": "Evaluation Predictions",
+                "text": "Test Predictions",
                 "font": {"size": 20},
                 "x": 0.5,  # Center the title horizontally
             },
             xaxis=dict(
-                title="Labels",
+                title="Value",
             ),
             yaxis=dict(
-                title="Predictions",
+                title="Time",
+                # range=[0, 1],
             ),
         )
 
-        return evaluation_fig
+        return test_fig
 
-    def create_training_windows_graph(self, sensor_name=None):
+    def create_train_metrics_graph(self, sensor_name=None) -> go.Figure:
         """
-        Create a graph showing training windows.
+        Create a graph showing train metrics.
 
         Args:
             sensor_name (str): The name of the sensor to create the graph for.
 
         Returns:
-            Figure: A plotly figure containing the training windows graph.
+            Figure: A plotly figure containing the  train metrics graph.
         """
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        horizon = get_horizon()
-        data = self.training_windows
-        if data is None or sensor_name not in data[3]:
-            # Return a figure with a message indicating no data available
+        data = find_tuple_by_first_element(self.train_metrics, sensor_name, n_tuples=2)
+        if data is None:
             return self.no_data_fig(sensor_name)
         assert isinstance(
-            data, list
-        ), f"Expected data to be a list, but got {type(data)}"
+            data, tuple
+        ), f"Expected data to be a tuple, but got {type(data)}"
 
-        sensor_index = data[3].index(sensor_name)
+        training_metrics = data[0]
+        validation_metrics = data[1]
 
-        features = data[0][sensor_index]
-        labels = data[1][sensor_index]
-        eng_features_list = data[2][sensor_index]
-
-        current_index = 0
-        x_values = list(range(len(features[current_index])))
-        y_values = list(features[current_index])
-        label_value = labels[current_index]
-
-        figure = {
-            "data": [
-                go.Scatter(x=x_values, y=y_values, mode="lines", name="Input Feature"),
-                go.Scatter(
-                    x=[len(x_values) + horizon],
-                    y=label_value,
-                    mode="markers",
-                    name="Label",
-                ),
-            ],
-            "layout": {
-                "xaxis": {"title": "X-axis"},
-                "yaxis": {"title": "Y-axis"},
-            },
-        }
-
-        # Plot additional lines for each feature in eng_features_list
-        for i, eng_feature in enumerate(eng_features_list):
-            eng_y_values = eng_feature[current_index]
-            eng_x_values = list(range(len(eng_feature)))
-
-            line_color = f"rgba(128, 128, 128, {0.2 + i * 0.01})"
-
-            figure["data"].append(
-                go.Scatter(
-                    x=eng_x_values,
-                    y=eng_y_values,
-                    mode="lines",
-                    name=f"Engineered Feature {i+1}",
-                    line={"color": line_color},
-                )
+        test_fig = go.Figure()
+        test_fig.add_trace(
+            go.Scatter(
+                x=list(range(len(validation_metrics))),
+                y=[item["Val loss"] for item in validation_metrics],
+                mode="lines+markers",
+                name="Val loss",
+                line=dict(color=self.category_colors[0]),
             )
+        )
+        test_fig.add_trace(
+            go.Scatter(
+                x=list(range(len(validation_metrics))),
+                y=[item["Val MAE"] for item in validation_metrics],
+                mode="lines+markers",
+                name="Val MAE",
+                line=dict(color=self.category_colors[1]),
+            )
+        )
+        test_fig.add_trace(
+            go.Scatter(
+                x=list(range(len(validation_metrics))),
+                y=[item["Val RMSE"] for item in validation_metrics],
+                mode="lines+markers",
+                name="Val RMSE",
+                line=dict(color=self.category_colors[2]),
+            )
+        )
+        test_fig.add_trace(
+            go.Scatter(
+                x=list(range(len(validation_metrics))),
+                y=[item["Val R2"] for item in validation_metrics],
+                mode="lines+markers",
+                name="Val R2",
+                line=dict(color=self.category_colors[3]),
+            )
+        )
+        # test_fig.add_trace(
+        #     go.Scatter(
+        #         x=list(range(len(training_metrics))),
+        #         y=[item["Train loss"] for item in training_metrics],
+        #         mode="lines+markers",
+        #         name="Train loss",
+        #         line=dict(color=self.category_colors[4]),
+        #     )
+        # )
+        # test_fig.add_trace(
+        #     go.Scatter(
+        #         x=list(range(len(training_metrics))),
+        #         y=[item["Train MAE"] for item in training_metrics],
+        #         mode="lines+markers",
+        #         name="Train MAE",
+        #         line=dict(color=self.category_colors[5]),
+        #     )
+        # )
+        # test_fig.add_trace(
+        #     go.Scatter(
+        #         x=list(range(len(training_metrics))),
+        #         y=[item["Train RMSE"] for item in training_metrics],
+        #         mode="lines+markers",
+        #         name="Train RMSE",
+        #         line=dict(color=self.category_colors[6]),
+        #     )
+        # )
 
-        return figure
+        test_fig.update_layout(
+            title={
+                "text": "Train Metrics",
+                "font": {"size": 20},
+                "x": 0.5,  # Center the title horizontally
+            },
+            xaxis=dict(
+                title="Epoch",
+            ),
+            yaxis=dict(
+                title="Metric",
+            ),
+        )
+
+        return test_fig
 
 
 class SensorMapFigure:
@@ -413,7 +450,7 @@ class SensorMapCreator:
             name,
             self.completeness_values_to_floats(),
             completeness_color_scale(),
-            "Completeness",
+            "Completeness - Availability",
         )
         return fig
 

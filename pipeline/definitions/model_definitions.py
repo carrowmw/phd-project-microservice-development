@@ -28,14 +28,20 @@ class LinearModel(nn.Module):
       it gets reshaped to 2D.
     """
 
-    def __init__(self, input_size):
+    def __init__(self, feature_dim, output_dim=1):
         super(LinearModel, self).__init__()
-        self.linear = nn.Linear(input_size, 1)
+        self.linear = nn.Linear(feature_dim, output_dim)
 
     def forward(self, x):
+
         # If x is 3D (batch_size, sequence_len, num_features), we might need to reshape it
-        x = x.reshape(x.size(0), -1)
-        return self.linear(x)
+        # x = x.reshape(x.size(0), -1)
+
+        # Pass the input tensor through the linear layer
+        x = self.linear(x)
+
+        # Select the last output of the sequence as the final prediction
+        return x[:, -1, :]
 
 
 # class LSTMModel(nn.Module):

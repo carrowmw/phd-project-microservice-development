@@ -5,8 +5,9 @@
         -1.5487,
         55.0209
     ],
+    "query_date_format": "startend",
     "theme": "People",
-    "last_n_days": 120,
-    "starttime": 20200101,
-    "endtime": 20200131
+    "last_n_days": 720,
+    "starttime": 20210101,
+    "endtime": 20230719
 }

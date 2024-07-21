@@ -50,12 +50,6 @@ def sliding_windows(df: pd.DataFrame, **kwargs) -> Tuple[torch.tensor, torch.ten
     if "Sequence" not in df.columns:
         raise ValueError("'sequence' column not found in the DataFrame.")
 
-    print(
-        f"Generating sliding windows with window size {window_size} and horizon {horizon}..."
-    )
-    logging.info(
-        f"Generating sliding windows with window size {window_size} and horizon {horizon}..."
-    )
     # Drop the "Sequence" column from the DataFrame
     # df_without_sequence = df.drop(columns="sequence")
 
@@ -76,7 +70,7 @@ def sliding_windows(df: pd.DataFrame, **kwargs) -> Tuple[torch.tensor, torch.ten
 
         assert (
             len(sequence_data) > window_size
-        ), f"Number of records for sequence {sequence} is less than the window size."
+        ), f"Number of records for sequence {sequence} is less than the window size. Re-run the data preprocessing step."
 
         for i in range(0, len(sequence_data) - window_size - horizon + 1, stride):
             input_data = sequence_data.iloc[

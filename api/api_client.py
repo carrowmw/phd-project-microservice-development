@@ -34,7 +34,6 @@ class APIClient:
         }
         if "polygon_wkb" in api_params_list:
             request_params.update({"polygon_wkb": get_polygon_wkb()})
-        print(request_params)
         return request_params
 
     def get(self, endpoint_key, sensor_name=None, **kwargs):
@@ -48,12 +47,10 @@ class APIClient:
         :return: JSON response from the API.
         """
         config_path = self.get_request_endpoint(endpoint_key)
-        print(f"Config Path: {config_path}")
         if sensor_name:
             config_path = config_path.format(sensor_name=sensor_name)
         params = self.get_request_parameters(endpoint_key, **kwargs)
         url = f"{self.base_url}{config_path}"
-        print(f"URL: {url}")
         response = make_api_request(
             url, params=params, timeout=kwargs.get("timeout", self.default_timeout)
         )

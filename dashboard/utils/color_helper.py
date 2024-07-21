@@ -46,6 +46,15 @@ accent_colors = {
     "Yellow": "#fdc82f",
 }
 
+category_colors = {
+    "Mid Blue": "#0073bc",
+    "Red": "#da1a35",
+    "Yellow": "#fdc82f",
+    "Light Blue": "#8ed8f8",
+    "Teal": "#00a39b",
+    "Dark Blue": "#051435",
+}
+
 blue_tints = {
     "Blue Tint 1": "#92acca",
     "Blue Tint 2": "#aac7dc",
@@ -128,13 +137,6 @@ def plot_color_gradient(name, colorscale, legend_tick_text=None):
         tickvals = np.linspace(0, 1, 2)
         ticktext = [legend_tick_text, 0]
         name = "Freshness (Days)"
-
-    print("\n\n")
-    print(f"name: {name} | {type(name)}")
-    print(f"tickvals: {tickvals} | {type(tickvals)}")
-    print(f"ticktext: {ticktext} | {type(ticktext)}")
-    print(f"z: {min(np.round(z, 1))} - {max(np.round(z, 1))} | {type(z)}")
-    print(f"y values: {min(y)} - {max(y)} | {type(y)}")
 
     # Create a gradient heatmap
     fig = go.Figure(

@@ -5,10 +5,11 @@ This module contains functions for feature engineering, such as scaling, resampl
 import logging
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from utils.config_helper import (
     get_datetime_column,
     get_value_column,
+    get_scaler,
 )
 
 
@@ -190,7 +191,19 @@ def scale_features(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
     """
     print("CHECKPOINT: scale_features")
 
-    scaler = MinMaxScaler()
+    scaler = get_scaler()
+
+    if scaler.lower() == "standard":
+        scaler = StandardScaler()
+
+    elif scaler.lower() == "minmax":
+        scaler = MinMaxScaler()
+
+    else:
+        raise ValueError(
+            "Invalid scaler specified. Please choose 'standard' or 'minmax'."
+        )
+
     scaled_values = scaler.fit_transform(df)  # Apply scaler to df directly
     scaled_df = pd.DataFrame(scaled_values, index=df.index, columns=df.columns)
     check_engineering_pipeline(scaled_df)

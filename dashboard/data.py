@@ -11,7 +11,8 @@ from config.paths import (
     get_daily_record_counts_path,
     get_completeness_metrics_path,
     get_freshness_metrics_path,
-    get_evaluation_predictions_path,
+    get_test_predictions_path,
+    get_train_metrics_path,
     get_training_windows_path,
 )
 
@@ -28,10 +29,10 @@ from utils.data_helper import (
     load_engineered_data,
     load_dataloaders,
     load_trained_models,
-    load_evaluation_metrics,
+    load_test_metrics,
 )
 
-from utils.config_helper import get_datetime_column, get_last_n_days
+from utils.config_helper import get_datetime_column, get_n_days
 
 
 class CustomDashboardData:
@@ -53,7 +54,7 @@ class CustomDashboardData:
             self.engineered_data = load_engineered_data()
             self.dataloaders = load_dataloaders()
             self.trained_models = load_trained_models()
-            self.evaluation_metrics = load_evaluation_metrics()
+            self.test_metrics = load_test_metrics()
         except FileNotFoundError:
             print("Data not found. Please run the pipeline to generate the data.")
         except AttributeError:
@@ -63,7 +64,7 @@ class CustomDashboardData:
         self.sensors = load_sensor_list()
         self.active_sensors = [tuple[0] for tuple in self.data]
         self.datetime_column = get_datetime_column()
-        self.last_n_days = get_last_n_days()
+        self.n_days = get_n_days()
         self._initialised = True
         print("CustomDashboardData.__init__() completed.\n")
 
@@ -168,7 +169,7 @@ class CustomDashboardData:
             str: A string containing the data completeness metric.
         """
         completeness_metrics = [
-            (data[0], str(round(len(data[1]) / (self.last_n_days * 96) * 100, 2)) + "%")
+            (data[0], str(round(len(data[1]) / (self.n_days * 96) * 100, 2)) + "%")
             for data in self.data
         ]
 
@@ -246,34 +247,61 @@ class CustomDashboardData:
         )
         return freshness_metrics
 
-    def compute_evaluation_predictions(self):
+    def compute_test_predictions(self):
         """
-        Compute the evaluation predictions for the sensors.
+        Compute the test predictions for the sensors.
 
         Returns:
-            List: A list of tuples containing the sensor name, the evaluation metric, and the prediction.
+            List: A list of tuples containing the sensor name, the label, and the prediction.
         """
-        data = load_evaluation_metrics()
-        evaluation_predictions = [(tuple[0], tuple[1], tuple[2]) for tuple in data]
+        data = self.test_metrics
+        print("CustomDashboardData.compute_test_predictions()")
+        test_predictions = [(tuple[0], tuple[1], tuple[2]) for tuple in data]
+        return test_predictions
 
-        return evaluation_predictions
-
-    def get_evaluation_predictions(self):
+    def get_test_predictions(self):
         """
-        Get the evaluation data for the sensors.
+        Get the test data for the sensors.
 
         Returns:
-            List: A list of tuples containing the sensor name, the evaluation metric, and the prediction.
+            List: A list of tuples containing the sensor name, the label, and the prediction.
         """
         file_path = create_file_path(
-            get_evaluation_predictions_path, pipeline_output_data_filename
+            get_test_predictions_path, pipeline_output_data_filename
         )
-        print(file_path)
-        print("CustomDashboardData.get_evaluation_predictions()")
-        evaluation_predictions = self.read_or_compute_app_data(
-            file_path, self.compute_evaluation_predictions
+        print("CustomDashboardData.get_test_predictions()")
+        test_predictions = self.read_or_compute_app_data(
+            file_path, self.compute_test_predictions
         )
-        return evaluation_predictions
+        return test_predictions
+
+    def compute_train_metrics(self):
+        """
+        Compute the training metrics for the sensors.
+
+        Returns:
+            List: A list of tuples containing the sensor name and the training metrics.
+        """
+        data = self.trained_models
+        print("CustomDashboardData.compute_train_metrics()")
+        train_metrics = [(tuple[0], tuple[3], tuple[4]) for tuple in data]
+        return train_metrics
+
+    def get_train_metrics(self):
+        """
+        Get the training data for the sensors.
+
+        Returns:
+            List: A list of tuples containing the sensor name and the training metrics.
+        """
+        file_path = create_file_path(
+            get_train_metrics_path, pipeline_output_data_filename
+        )
+        print("CustomDashboardData.get_train_metrics()")
+        train_metrics = self.read_or_compute_app_data(
+            file_path, self.compute_train_metrics
+        )
+        return train_metrics
 
     def get_preprocessing_table(self, sensor_name=None):
         """
@@ -306,7 +334,10 @@ class CustomDashboardData:
         print("CustomDashboardData.get_engineering_table()")
         data = load_engineered_data()
         data = find_tuple_by_first_element(data, sensor_name)
-        assert data is not None, f"Expected data to be a pd.DataFrame, but got {data}"
+
+        if data is None:
+            return pd.DataFrame()
+
         if data.empty is True:
             return pd.DataFrame()
         data = data.reset_index()
@@ -324,9 +355,10 @@ class CustomDashboardData:
         file_path = create_file_path(
             get_training_windows_path, pipeline_output_data_filename
         )
-        training_windows_data = load_data(file_path, "training windows data")
-        if training_windows_data is not None:
-            return training_windows_data
+        if os.path.exists(file_path):
+            training_windows_data = load_data(file_path, "training windows data")
+            if training_windows_data is not None:
+                return training_windows_data
 
         training_windows_data = load_dataloaders()
 

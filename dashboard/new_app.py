@@ -70,6 +70,7 @@ class SensorDashboardApp:
             PipelineChartCreator().create_records_per_day_graph,
             self.app,
         )
+
         self.engineering_tab = TabTemplateSingleTable(
             "tabs",
             "sensor_map",
@@ -109,7 +110,17 @@ class SensorDashboardApp:
             "dataloader_viewer",
             self.app,
         )
-
+        self.model_performance_tab = TabTemplateDoubleGraph(
+            "tabs",
+            "sensor_map",
+            "Model Performance",
+            "model_performance_tab",
+            "model_performance_graph_a",
+            PipelineChartCreator().create_test_predictions_graph,
+            "model_performance_graph_b",
+            PipelineChartCreator().create_train_metrics_graph,
+            self.app,
+        )
         self.dummy_tab = TabTemplateDummy(
             "tabs",
             "Dummy",
@@ -169,6 +180,7 @@ class SensorDashboardApp:
                         self.preprocessing_tab.get_tab(),
                         self.engineering_tab.get_tab(),
                         self.dataloader_tab.get_tab(),
+                        self.model_performance_tab.get_tab(),
                         self.dummy_tab.get_tab(),
                     ],
                     className="tabs-element",
@@ -212,6 +224,7 @@ class SensorDashboardApp:
         self.preprocessing_tab.setup_callbacks()
         self.engineering_tab.setup_callbacks()
         self.dataloader_tab.setup_callbacks()
+        self.model_performance_tab.setup_callbacks()
 
 
 if __name__ == "__main__":

@@ -34,8 +34,8 @@ class DropdownTemplate:
         return dcc.Dropdown(
             id=self.dropdown_id,
             options=[
-                {"label": "Completeness", "value": "completeness"},
-                {"label": "Freshness", "value": "freshness"},
+                {"label": "Completeness - Availability", "value": "completeness"},
+                {"label": "Timeliness - Freshness", "value": "freshness"},
             ],
             value="completeness",
             className="dropdown-element",

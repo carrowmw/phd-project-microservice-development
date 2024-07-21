@@ -117,9 +117,10 @@ class TabTemplateDataLoaderViewer:
                 # Get the number of frames from the data
                 data = self.data.get_training_windows()
                 sensor_index = data[3].index(sensor_name)
-                features = data[0][sensor_index]
+                input_feature = data[0][sensor_index]
                 labels = data[1][sensor_index]
-                number_of_items = len(features)
+                eng_features = data[2][sensor_index]
+                number_of_items = len(input_feature)
 
                 if sensor_name != prev_sensor_name:
                     current_frame = 1
@@ -150,9 +151,8 @@ class TabTemplateDataLoaderViewer:
                 )
 
                 # Create the data for the current frame
-                x_values = list(range(len(features[current_index])))
-                print("x_values: ", x_values)
-                y_values = list(features[current_index])
+                x_values = list(range(len(input_feature[current_index])))
+                y_values = list(input_feature[current_index])
                 label_value = labels[current_index]
                 horizon = get_horizon()
 
@@ -171,9 +171,25 @@ class TabTemplateDataLoaderViewer:
                     ],
                     "layout": {
                         "xaxis": {"title": "X-axis"},
-                        "yaxis": {"title": "Y-axis", "range": [0, 1]},
+                        "yaxis": {"title": "Y-axis", "range": [-1.5, 6]},
                     },
                 }
+                # Plot additional lines for each feature in eng_features_list
+                for i, eng_feature in enumerate(eng_features):
+                    eng_x_values = list(range(len(eng_feature[current_index])))
+                    eng_y_values = list(eng_feature[current_index])
+
+                    line_color = f"rgba(128, 128, 128, {0.1 + i * 0.05})"
+
+                    fig["data"].append(
+                        go.Scatter(
+                            x=eng_x_values,
+                            y=eng_y_values,
+                            mode="lines",
+                            name=f"Engineered Feature {i+1}",
+                            line={"color": line_color},
+                        )
+                    )
                 # graph = self.graph(sensor_name, frame_counter)
                 return fig, new_frame_counter, sensor_name
             else:

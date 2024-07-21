@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta
 from shapely import Polygon
 from shapely.wkb import dumps
 from config.paths import (
@@ -46,6 +47,18 @@ def get_query_config():
     return load_config(query_config_path)
 
 
+def get_query_date_format():
+    """
+    Retrieves the date format from the query configuration.
+
+    Returns:
+        str: The date format.
+    """
+    query_config_path = get_query_config_path()
+    query_config = load_config(query_config_path)
+    return query_config.get("query_date_format", None)
+
+
 def get_last_n_days():
     """
     Retrieves the number of days from the query configuration.
@@ -56,6 +69,76 @@ def get_last_n_days():
     query_config_path = get_query_config_path()
     query_config = load_config(query_config_path)
     return query_config.get("last_n_days", None)
+
+
+def get_starttime():
+    """
+    Retrieves the start time from the query configuration.
+
+    Returns:
+        str: The start time.
+    """
+    query_config_path = get_query_config_path()
+    query_config = load_config(query_config_path)
+    return query_config.get("starttime", None)
+
+
+def get_endtime():
+    """
+    Retrieves the end time from the query configuration.
+
+    Returns:
+        str: The end time.
+    """
+    query_config_path = get_query_config_path()
+    query_config = load_config(query_config_path)
+    return query_config.get("endtime", None)
+
+
+def get_n_days():
+
+    query_date_format = get_query_date_format()
+    if query_date_format == "startend":
+        enddate = get_endtime()
+        startdate = get_starttime()
+        date_format = "%Y%m%d"
+        enddate = datetime.strptime(str(enddate), date_format)
+        startdate = datetime.strptime(str(startdate), date_format)
+        date_difference = enddate - startdate
+        n_days = int(date_difference.days)
+        print(f"TEST: n_days: {n_days, type(n_days)}")
+        return n_days
+    elif query_date_format == "last_n_days":
+        n_days = get_last_n_days()
+        return n_days
+    else:
+        raise ValueError(
+            f"query_date_format parameter set to {query_date_format}, it should be either 'startend' or 'last_n_days'"
+        )
+
+
+def get_query_agnostic_start_and_end_date():
+    """ """
+
+    query_date_format = get_query_date_format()
+
+    if query_date_format == "last_n_days":
+        last_n_days = get_last_n_days()
+        today = datetime.now()
+        x_min = (today - timedelta(days=last_n_days)).strftime("%Y-%m-%d")
+        x_max = today.strftime("%Y-%m-%d")
+        return x_min, x_max
+
+    elif query_date_format == "startend":
+        startdate = get_starttime()
+        enddate = get_endtime()
+        date_format = "%Y%m%d"
+        x_min = datetime.strptime(str(startdate), date_format)
+        x_max = datetime.strptime(str(enddate), date_format)
+        return x_min, x_max
+
+    else:
+        raise ValueError()
 
 
 def get_coords():
@@ -275,6 +358,18 @@ def get_frequency():
     pipeline_config_path = get_pipeline_config_path()
     pipeline_config = load_config(pipeline_config_path)
     return get_kwargs(pipeline_config, "frequency")
+
+
+def get_scaler():
+    """
+    Retrieves the scaler from the pipeline configuration.
+
+    Returns:
+        str: The scaler.
+    """
+    pipeline_config_path = get_pipeline_config_path()
+    pipeline_config = load_config(pipeline_config_path)
+    return get_kwargs(pipeline_config, "scaler")
 
 
 def get_input_feature_indices():

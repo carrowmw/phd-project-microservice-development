@@ -52,11 +52,12 @@ def get_query_config_path():
 
 # Data Directories
 
-DASHBOARD_DATA_DIR = DATA_DIR / "app"
+DASHBOARD_DATA_DIR = DATA_DIR / "app_data"
 DAILY_RECORD_COUNTS_PATH = DASHBOARD_DATA_DIR / "daily_record_counts"
 COMPLETENESS_METRICS_PATH = DASHBOARD_DATA_DIR / "completeness_metrics"
 FRESHNESS_METRICS_PATH = DASHBOARD_DATA_DIR / "freshness_metrics"
-EVALUATION_PREDICTIONS_PATH = DASHBOARD_DATA_DIR / "evaluation_predictions"
+TEST_PREDICTIONS_PATH = DASHBOARD_DATA_DIR / "test_predictions"
+TRAIN_METRICS_PATH = DASHBOARD_DATA_DIR / "train_metrics"
 TRAINING_WINDOWS_PATH = DASHBOARD_DATA_DIR / "training_windows"
 
 PIPELINE_DATA_DIR = DATA_DIR / "pipeline"
@@ -66,7 +67,7 @@ PREPROCESSED_DATA_DIR = PIPELINE_DATA_DIR / "preprocessed"
 ENGINEERED_DATA_DIR = PIPELINE_DATA_DIR / "engineered"
 DATALOADER_DIR = PIPELINE_DATA_DIR / "dataloaders"
 TRAINED_MODEL_DIR = PIPELINE_DATA_DIR / "trained_models"
-EVALUATION_DIR = PIPELINE_DATA_DIR / "evaluation"
+TEST_DIR = PIPELINE_DATA_DIR / "test_metrics"
 
 
 def get_dashboard_data_dir():
@@ -85,8 +86,12 @@ def get_freshness_metrics_path():
     return FRESHNESS_METRICS_PATH
 
 
-def get_evaluation_predictions_path():
-    return EVALUATION_PREDICTIONS_PATH
+def get_test_predictions_path():
+    return TEST_PREDICTIONS_PATH
+
+
+def get_train_metrics_path():
+    return TRAIN_METRICS_PATH
 
 
 def get_training_windows_path():
@@ -121,8 +126,8 @@ def get_trained_models_dir():
     return TRAINED_MODEL_DIR
 
 
-def get_evaluation_dir():
-    return EVALUATION_DIR
+def get_test_dir():
+    return TEST_DIR
 
 
 # Dashboard Directories

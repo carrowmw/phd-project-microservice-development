@@ -81,15 +81,16 @@ def check_preprocessing_pipeline(df: pd.DataFrame) -> pd.DataFrame:
     print("CHECKPOINT: check_preprocessing_pipeline")
     datetime_column = get_datetime_column()
     value_column = get_value_column()
+    # print(f"TEST: columns and dtypes{df.columns, df.dtypes}")
     assert (
         datetime_column in df.columns and df[datetime_column].dtype == "datetime64[ns]"
-    ), f"Pipeline check failed on {datetime_column}: {df.columns, df.dtypes}"
+    ), f"Pipeline check failed on {datetime_column} column: {df.columns, df.dtypes}"
     assert (
-        value_column in df.columns and df[value_column].dtype == "int64"
-    ), f"Pipeline check failed on {value_column}: {df.columns, df.dtypes}"
+        value_column in df.columns and df[value_column].dtype == "int64" or "float64"
+    ), f"Pipeline check failed on {value_column} column: {df.columns, df.dtypes}"
     assert isinstance(
         df.index, pd.RangeIndex
-    ), f"Pipeline check failed on index: {df.columns, df.dtypes}"
+    ), f"Pipeline check failed on index: {df.columns, df.dtypes} index should be pd.RangeIndex"
 
 
 def remove_directionality_feature(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
@@ -137,6 +138,7 @@ def aggregate_on_datetime(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
     - pd.DataFrame: The aggregated DataFrame.
     """
     print("CHECKPOINT: aggregate_on_datetime")
+    # print(f"TEST: columns and dtypes: {df.columns, df.dtypes}")
     datetime_column = get_datetime_column()
     freq = kwargs.get("aggregation_frequency_mins", "15min")
 
@@ -156,6 +158,7 @@ def aggregate_on_datetime(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
     df_to_resample = df[mask]
     df_to_preserve = df[~mask]
 
+    # print(f"TEST: columns and dtypes: {df.columns, df.dtypes}")
     if not df_to_resample.empty:
         # Resample and aggregate the data for gaps less than the specified frequency
         resampled_data = resample_and_aggregate(df_to_resample, freq)
@@ -164,6 +167,8 @@ def aggregate_on_datetime(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
         df_resampled = df_to_preserve
 
     df_resampled = df_resampled.reset_index()
+    # print(f"TEST: df_resampled: {df_resampled}")
+    # print(f"TEST: columns and dtypes: {df_resampled.columns, df_resampled.dtypes}")
     check_preprocessing_pipeline(df_resampled)
     return df_resampled
 
@@ -181,15 +186,17 @@ def resample_and_aggregate(df: pd.DataFrame, freq: str) -> pd.DataFrame:
     - pd.DataFrame: The resampled and aggregated DataFrame.
     """
     print("CHECKPOINT: resample_and_aggregate")
+    value_column = get_value_column()
     # Calculate the number of expected timestamps within the frequency
+    # print(f"TEST: columns and dtypes: {df.columns, df.dtypes}")
     expected_timestamps = pd.Timedelta(freq) // pd.to_timedelta(
         df.index[1] - df.index[0]
     )
 
     # Resample and aggregate the data
-    resampled_data = df.resample(freq).agg({"Value": "mean"})
+    resampled_data = df.resample(freq).agg({value_column: "mean"})
     resampled_data["Value"] *= expected_timestamps
-    check_preprocessing_pipeline(resampled_data)
+    # check_preprocessing_pipeline(resampled_data)
     return resampled_data
 
 

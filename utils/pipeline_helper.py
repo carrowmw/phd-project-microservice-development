@@ -1,6 +1,8 @@
 import os
 import importlib
 from functools import reduce
+import random
+import string
 
 from utils.config_helper import load_config
 
@@ -104,3 +106,11 @@ def apply_steps(df, steps_config):
         return func(df, **kwargs)
 
     return reduce(apply_step, steps_config, df)
+
+
+def generate_random_string(length):
+    # Define the possible characters to include in the string
+    characters = string.ascii_letters
+    # Generate a random string by choosing random characters from the set
+    random_string = "".join(random.choice(characters) for i in range(length))
+    return random_string

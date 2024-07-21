@@ -24,7 +24,8 @@
         "data": {
             "url": "sensors/{sensor_name}/data/json",
             "params": [
-                "last_n_days"
+                "starttime",
+                "endtime"
             ]
         }
     },

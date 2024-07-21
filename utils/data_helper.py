@@ -15,12 +15,11 @@ from config.paths import (
     get_engineered_data_dir,
     get_dataloader_dir,
     get_trained_models_dir,
-    get_evaluation_dir,
+    get_test_dir,
 )
 from utils.config_helper import (
     get_polygon_wkb,
-    get_last_n_days,
-    load_config,
+    get_query_agnostic_start_and_end_date,
     get_window_size,
     get_horizon,
     get_stride,
@@ -60,8 +59,8 @@ DataLoaderItem: TypeAlias = list[
 # Type alias for the model training stage
 TrainedModelItem: TypeAlias = list[Tuple[str, nn.Module, DataLoader, List, List]]
 
-# Type alias for the evaluation stage
-EvaluationItem: TypeAlias = list[Tuple[str, np.ndarray, np.ndarray, dict]]
+# Type alias for the test stage
+TestItem: TypeAlias = list[Tuple[str, np.ndarray, np.ndarray, dict]]
 
 
 def load_data(file_path, data_type):
@@ -111,6 +110,7 @@ def find_tuple_by_first_element(tuples, search_string, n_tuples=1):
     Args:
         tuples (list): A list of tuples.
         search_string (str): The string to search for in the first element of the tuples.
+        n_tuples (int): The number of elements in the tuple to return.
 
     Returns:
         The tuple containing the search string if found, otherwise None.
@@ -139,22 +139,21 @@ def json_to_dataframe(json_data):
 
 def pipeline_input_data_filename() -> str:
     """
-    Creates a file path for storing or retrieving sensor data based on the API configuration.
+    Creates a file path for storing or retrieving sensor data based on the query configuration.
 
     Returns:
         str: The file path for storing or retrieving the sensor data.
     """
-    today = date.today()
-    last_n_days = get_last_n_days()
+    startdate, enddate = get_query_agnostic_start_and_end_date()
     bbox = get_polygon_wkb()
     bbox = bbox[-8:]
-    file_path = f"{today}_Last_{last_n_days}_Days_{bbox}.pkl"
+    file_path = f"{startdate}_to_{enddate}_{bbox}.pkl"
     return file_path
 
 
-def pipeline_output_data_filename() -> str:
+def pipeline_processed_data_filename() -> str:
     """
-    Creates a file path for storing or retrieving sensor data based on the API configuration.
+    Creates a file path for storing or retrieving sensor data based on the query and pipeline configuration.
 
     Returns:
         str: The file path for storing or retrieving the sensor data.
@@ -163,11 +162,27 @@ def pipeline_output_data_filename() -> str:
     window_size = get_window_size()
     horizon = get_horizon()
     stride = get_stride()
+
+    file_path = (
+        f"{prefix}_WindowSize_{window_size}_Horizon_{horizon}_Stride_{stride}.pkl"
+    )
+
+    return file_path
+
+
+def pipeline_output_data_filename() -> str:
+    """
+    Creates a file path for storing or retrieving sensor data based on the query and pipeline configuration.
+
+    Returns:
+        str: The file path for storing or retrieving the sensor data.
+    """
+    prefix = pipeline_processed_data_filename().rstrip(".pkl")
     batch_size = get_batch_size()
     model_type = get_model_type()
     epochs = get_epochs()
 
-    file_path = f"{prefix}_WindowSize_{window_size}_Horizon_{horizon}_Stride_{stride}_BatchSize_{batch_size}_Model_{model_type}_Epoch_{epochs}.pkl"
+    file_path = f"{prefix}_BatchSize_{batch_size}_Model_{model_type}_Epoch_{epochs}.pkl"
 
     return file_path
 
@@ -200,13 +215,15 @@ def load_raw_data() -> RawDataItem:
 
 def load_preprocessed_data() -> PreprocessedItem:
     file_path = create_file_path(
-        get_preprocessed_data_dir, pipeline_input_data_filename
+        get_preprocessed_data_dir, pipeline_processed_data_filename
     )
     return load_data(file_path, "preprocessed")
 
 
 def load_engineered_data() -> EngineeredItem:
-    file_path = create_file_path(get_engineered_data_dir, pipeline_input_data_filename)
+    file_path = create_file_path(
+        get_engineered_data_dir, pipeline_processed_data_filename
+    )
     return load_data(file_path, "engineered")
 
 
@@ -220,9 +237,9 @@ def load_trained_models() -> TrainedModelItem:
     return load_data(file_path, "trained models")
 
 
-def load_evaluation_metrics() -> EvaluationItem:
-    file_path = create_file_path(get_evaluation_dir, pipeline_output_data_filename)
-    return load_data(file_path, "evaluation metrics")
+def load_test_metrics() -> TestItem:
+    file_path = create_file_path(get_test_dir, pipeline_output_data_filename)
+    return load_data(file_path, "test metrics")
 
 
 def save_sensor_list(data, file_path):
@@ -249,5 +266,5 @@ def save_trained_models(data, file_path):
     save_data(data, file_path, "trained models")
 
 
-def save_evaluation_metrics(data, file_path):
-    save_data(data, file_path, "evaluation_metrics")
+def save_test_metrics(data, file_path):
+    save_data(data, file_path, "test_metrics")
