@@ -1,8 +1,28 @@
+# Ignore data directories
 data/pipeline/
 data/app_data/
 data/artificial/
+
+# Ignore virtual environment
 .venv/
+
+# Ignore Python bytecode
 __pycache__/
 *.pyc
+
+# Ignore models and ML runs
 models/
 mlruns/
+
+# Ignore pickle files
+*.pkl
+
+# Ignore PNG files
+*.png
+
+# Ignore Jupyter notebooks
+*.ipynb
+
+# Ignore development directories
+dump/
+experiments/

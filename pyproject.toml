@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "phd-project"
+name = "phd_package"
 version = "0.1.0"
-description = "programme for building, testing, and deploying machine learning models fed on urban observatory data"
+description = "Package for building, testing, and deploying machine learning models fed on urban observatory data"
 authors = ["Carrow Morris-Wiltshire <carrow.m.w@gmail.com>"]
 license = "MIT"
 readme = "README.md"

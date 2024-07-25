@@ -1,0 +1,16 @@
+# Exclude all generated data files
+exclude *.pkl
+exclude *.png
+
+# Exclude Jupyter notebooks
+exclude *.ipynb
+
+# Exclude specific directories
+exclude data/app_data/*
+exclude data/pipeline/*
+exclude data/artificial/*
+exclude mlruns/*
+
+# Exclude development directories
+exclude dump/*
+exclude experiments/*
