@@ -5,63 +5,54 @@ read -p "Enter commit message for develop: " DEVELOP_COMMIT_MESSAGE
 read -p "Enter commit message for feature/api-update: " API_COMMIT_MESSAGE
 read -p "Enter commit message for feature/dashboard-update: " DASHBOARD_COMMIT_MESSAGE
 
-# Function to update .gitignore and remove ignored directories
-update_gitignore_and_remove_ignored() {
-    # Stash any uncommitted changes
-    git stash
+# Function to update branch with specific directories
+update_branch_with_specific_dirs() {
+    local branch_name=$1
+    local commit_message=$2
+    shift 2
+    local directories=("$@")
 
-    # Remove everything from the index
-    git rm -r --cached .
+    git checkout $branch_name
 
-    # Add all files back
-    git add .
+    # Remove everything from the branch
+    git rm -rf .
 
-    # Show what will be removed
-    echo "The following files/directories will be removed from the repository:"
-    git ls-files --ignored --exclude-standard
+    # Checkout specific directories from develop
+    for dir in "${directories[@]}"; do
+        git checkout develop -- $dir
+    done
+
+    # Show changes
+    echo "Changes for $branch_name:"
+    git status
 
     # Prompt for confirmation
-    read -p "Do you want to proceed? (y/n) " -n 1 -r
+    read -p "Do you want to proceed with these changes? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
-        # Remove ignored files from the repository
-        git ls-files --ignored --exclude-standard -z | xargs -0 git rm --cached
-
-        # Commit the changes
-        git commit -m "Update .gitignore and remove ignored directories"
+        git add .
+        git commit -m "$commit_message"
+        git push origin $branch_name
     else
-        echo "Operation cancelled."
-        # Restore the index
-        git reset
+        echo "Operation cancelled for $branch_name."
+        git reset --hard
     fi
-
-    # Restore stashed changes
-    git stash pop
 }
 
 # Develop branch
 git checkout develop
-update_gitignore_and_cache
 git add .
 git commit -m "$DEVELOP_COMMIT_MESSAGE"
 git push origin develop
 
 # Feature/api-update branch
-git checkout feature/api-update
-git merge develop --no-commit --no-ff
-update_gitignore_and_cache
-git add api/ config/api.json config/query.json utils/config_helper.py utils/data_helper.py config/paths.py
-git commit -m "$API_COMMIT_MESSAGE"
-git push origin feature/api-update
+update_branch_with_specific_dirs "feature/api-update" "$API_COMMIT_MESSAGE" \
+    "api" "config/api.json" "config/query.json" "utils/config_helper.py" "utils/data_helper.py" "config/paths.py"
 
 # Feature/dashboard-update branch
-git checkout feature/dashboard-update
-git merge develop --no-commit --no-ff
-update_gitignore_and_cache
-git add dashboard/ config/dashboard.json config/query.json utils/config_helper.py utils/data_helper.py config/paths.py
-git commit -m "$DASHBOARD_COMMIT_MESSAGE"
-git push origin feature/dashboard-update
+update_branch_with_specific_dirs "feature/dashboard-update" "$DASHBOARD_COMMIT_MESSAGE" \
+    "dashboard" "config/dashboard.json" "config/query.json" "utils/config_helper.py" "utils/data_helper.py" "config/paths.py"
 
 # Return to develop branch
 git checkout develop
