@@ -6,8 +6,8 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 
 
-from dashboard.data import CustomDashboardData
-from dashboard.graphs import PipelineChartCreator
+from ..data import CustomDashboardData
+from ..graphs import PipelineChartCreator
 
 
 class CardTemplate:

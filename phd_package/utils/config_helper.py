@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timedelta
 from shapely import Polygon
 from shapely.wkb import dumps
-from config.paths import (
+from ..config.paths import (
     get_pipeline_config_path,
     get_api_config_path,
     get_query_config_path,

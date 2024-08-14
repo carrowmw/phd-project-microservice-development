@@ -1,0 +1,21 @@
+site_name: PhD Project Documentation
+theme:
+  name: 'readthedocs'
+  hljs_languages:
+    - yaml
+    - python
+    - bash
+    - json
+    - markdown
+  color_mode: dark
+nav:
+  - Home: index.md
+  - API Module:
+    - API Module Overview: api_module/overview.md
+    - API Client: api_module/api_client.md
+    - API Data Processor: api_module/api_data_processor.md
+    - API Main: api_module/__main__.md
+  - Pipeline Module:
+    - Pipeline Module Overview: pipeline_module/overview.md
+    - Pipeline Main: pipeline_module/__main__.md
+    - Pipeline Generator: pipeline_module/pipeline.md

@@ -1,6 +1,10 @@
 # api/api_client.py
 
-from utils.config_helper import get_api_config, get_query_config, get_polygon_wkb
+from ..utils.config_helper import (
+    get_api_config,
+    get_query_config,
+    get_polygon_wkb,
+)
 from .utils.request_helpers import handle_api_response, make_api_request
 
 

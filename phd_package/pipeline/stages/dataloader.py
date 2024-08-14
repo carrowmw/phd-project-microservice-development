@@ -1,15 +1,15 @@
+# phd_package/pipeline/stages/dataloader.py
+
 from typing import Tuple
-import logging
 import numpy as np
 import torch
 import pandas as pd
 
 from torch.utils.data import DataLoader
 
-from pipeline.definitions.training_datasets import TimeSeriesDataset
-from pipeline.definitions import model_definitions
-from utils.config_helper import (
-    load_config,
+from ..definitions.training_datasets import TimeSeriesDataset
+from ..definitions import model_definitions
+from ...utils.config_helper import (
     get_input_feature_indices,
     get_target_feature_index,
     get_window_size,
@@ -96,7 +96,7 @@ def sliding_windows(df: pd.DataFrame, **kwargs) -> Tuple[torch.tensor, torch.ten
     return pipeline
 
 
-def create_dataloaders(
+def create_dataloader(
     pipeline: Tuple[torch.Tensor, torch.Tensor, int], **kwargs
 ) -> Tuple[DataLoader, DataLoader, DataLoader, int]:
     """
@@ -156,7 +156,7 @@ def create_dataloaders(
     return pipeline
 
 
-def add_model_to_dataloaders(
+def add_model_to_dataloader(
     pipeline: Tuple[DataLoader, DataLoader, DataLoader, int], **kwargs
 ) -> Tuple[torch.nn.Module, DataLoader, DataLoader, DataLoader]:
     feature_dim = pipeline[3]

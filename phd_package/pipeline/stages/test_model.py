@@ -1,3 +1,5 @@
+# phd_package/pipeline/stages/test_model.py
+
 """
 Module for evaluating trained models on test datasets and calculating performance metrics.
 """
@@ -9,8 +11,8 @@ import torch
 import mlflow
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-from utils.data_helper import TrainedModelItem, TestItem
-from pipeline.utils.training_helper import (
+from ...utils.data_helper import TrainedModelItem, TestItem
+from ..utils.training_helper import (
     validate_dataloader,
     create_criterion,
     map_tensor_to_mps,

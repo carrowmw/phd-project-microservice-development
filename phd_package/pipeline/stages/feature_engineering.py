@@ -1,3 +1,5 @@
+# phd_package/pipeline/stages/feature_engineering.py
+
 """
 This module contains functions for feature engineering, such as scaling, resampling, and adding new features to a DataFrame.
 """
@@ -6,7 +8,7 @@ import logging
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from utils.config_helper import (
+from ...utils.config_helper import (
     get_datetime_column,
     get_value_column,
     get_scaler,

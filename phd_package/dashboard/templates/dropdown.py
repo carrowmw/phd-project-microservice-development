@@ -6,8 +6,8 @@ from dash import dcc
 from dash.dependencies import Input, Output
 
 
-from dashboard.data import CustomDashboardData
-from dashboard.utils.color_helper import (
+from ..data import CustomDashboardData
+from ..utils.color_helper import (
     completeness_color_scale,
     freshness_color_scale,
     plot_color_gradient,

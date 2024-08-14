@@ -35,95 +35,95 @@
     },
     "preprocessing": [
         {
-            "name": "pipeline.stages.preprocessing.initialise_preprocessing_pipeline",
+            "name": "phd_package.pipeline.stages.preprocessing.initialise_preprocessing_pipeline",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.preprocessing.remove_directionality_feature",
+            "name": "phd_package.pipeline.stages.preprocessing.remove_directionality_feature",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.preprocessing.aggregate_on_datetime",
+            "name": "phd_package.pipeline.stages.preprocessing.aggregate_on_datetime",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.preprocessing.get_consecutive_sequences",
+            "name": "phd_package.pipeline.stages.preprocessing.get_consecutive_sequences",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.preprocessing.remove_specified_fields",
+            "name": "phd_package.pipeline.stages.preprocessing.remove_specified_fields",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.preprocessing.terminate_preprocessing_pipeline",
+            "name": "phd_package.pipeline.stages.preprocessing.terminate_preprocessing_pipeline",
             "execute_step": true
         }
     ],
     "feature_engineering": [
         {
-            "name": "pipeline.stages.feature_engineering.initialise_engineering_pipeline",
+            "name": "phd_package.pipeline.stages.feature_engineering.initialise_engineering_pipeline",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.feature_engineering.add_term_dates_feature",
+            "name": "phd_package.pipeline.stages.feature_engineering.add_term_dates_feature",
             "execute_step": false
         },
         {
-            "name": "pipeline.stages.feature_engineering.create_periodicity_features",
+            "name": "phd_package.pipeline.stages.feature_engineering.create_periodicity_features",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.feature_engineering.extract_time_features",
+            "name": "phd_package.pipeline.stages.feature_engineering.extract_time_features",
             "execute_step": false
         },
         {
-            "name": "pipeline.stages.feature_engineering.datetime_to_float",
+            "name": "phd_package.pipeline.stages.feature_engineering.datetime_to_float",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.feature_engineering.scale_features",
+            "name": "phd_package.pipeline.stages.feature_engineering.scale_features",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.feature_engineering.resample_frequency",
+            "name": "phd_package.pipeline.stages.feature_engineering.resample_frequency",
             "execute_step": false
         },
         {
-            "name": "pipeline.stages.feature_engineering.drop_datetime_column",
+            "name": "phd_package.pipeline.stages.feature_engineering.drop_datetime_column",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.feature_engineering.drop_sequence_column",
+            "name": "phd_package.pipeline.stages.feature_engineering.drop_sequence_column",
             "execute_step": false
         },
         {
-            "name": "pipeline.stages.feature_engineering.terminate_engineering_pipeline",
+            "name": "phd_package.pipeline.stages.feature_engineering.terminate_engineering_pipeline",
             "execute_step": true
         }
     ],
     "dataloader": [
         {
-            "name": "pipeline.stages.dataloader.sliding_windows",
+            "name": "phd_package.pipeline.stages.dataloader.sliding_windows",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.dataloader.create_dataloaders",
+            "name": "phd_package.pipeline.stages.dataloader.create_dataloader",
             "execute_step": true
         },
         {
-            "name": "pipeline.stages.dataloader.add_model_to_dataloaders",
+            "name": "phd_package.pipeline.stages.dataloader.add_model_to_dataloader",
             "execute_step": true
         }
     ],
     "training": [
         {
-            "name": "pipeline.stages.train_model.train_model",
+            "name": "phd_package.pipeline.stages.train_model.train_model",
             "execute_step": true
         }
     ],
     "testing": [
         {
-            "name": "pipeline.stages.test_model.test_model",
+            "name": "phd_package.pipeline.stages.test_model.test_model",
             "execute_step": true
         }
     ]

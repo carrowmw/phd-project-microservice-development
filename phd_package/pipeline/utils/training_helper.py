@@ -1,3 +1,5 @@
+# phd_package/pipeline/utils/training_helper.py
+
 import os
 import numpy as np
 import pandas as pd
@@ -5,7 +7,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from utils.config_helper import (
+from ...utils.config_helper import (
     get_optimiser,
     get_criterion,
     get_device,

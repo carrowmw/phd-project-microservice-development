@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
-from dashboard.data import CustomDashboardData
+from ..data import CustomDashboardData
 
 
 class TabTemplateDoubleGraph:

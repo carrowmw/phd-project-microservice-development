@@ -14,18 +14,17 @@ It contains the following functions:
 - `create_training_windows_graph`: Creates a graph showing training windows.
 """
 
-from datetime import datetime, timedelta
+
 import pandas as pd
-import numpy as np
 import plotly.graph_objects as go
 
-from config.paths import get_mapbox_access_token_path
+from ..config.paths import get_mapbox_access_token_path
 
-from utils.config_helper import get_n_days, get_query_agnostic_start_and_end_date
-from utils.data_helper import load_test_metrics, find_tuple_by_first_element
+from ..utils.config_helper import get_n_days, get_query_agnostic_start_and_end_date
+from ..utils.data_helper import load_test_metrics, find_tuple_by_first_element
 
-from dashboard.data import CustomDashboardData
-from dashboard.utils.color_helper import (
+from .data import CustomDashboardData
+from .utils.color_helper import (
     base_colors,
     category_colors,
     completeness_color_scale,
@@ -299,7 +298,6 @@ class PipelineChartCreator:
             data, tuple
         ), f"Expected data to be a tuple, but got {type(data)}"
 
-        training_metrics = data[0]
         validation_metrics = data[1]
 
         test_fig = go.Figure()
@@ -339,33 +337,6 @@ class PipelineChartCreator:
                 line=dict(color=self.category_colors[3]),
             )
         )
-        # test_fig.add_trace(
-        #     go.Scatter(
-        #         x=list(range(len(training_metrics))),
-        #         y=[item["Train loss"] for item in training_metrics],
-        #         mode="lines+markers",
-        #         name="Train loss",
-        #         line=dict(color=self.category_colors[4]),
-        #     )
-        # )
-        # test_fig.add_trace(
-        #     go.Scatter(
-        #         x=list(range(len(training_metrics))),
-        #         y=[item["Train MAE"] for item in training_metrics],
-        #         mode="lines+markers",
-        #         name="Train MAE",
-        #         line=dict(color=self.category_colors[5]),
-        #     )
-        # )
-        # test_fig.add_trace(
-        #     go.Scatter(
-        #         x=list(range(len(training_metrics))),
-        #         y=[item["Train RMSE"] for item in training_metrics],
-        #         mode="lines+markers",
-        #         name="Train RMSE",
-        #         line=dict(color=self.category_colors[6]),
-        #     )
-        # )
 
         test_fig.update_layout(
             title={

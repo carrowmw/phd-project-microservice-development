@@ -20,9 +20,8 @@ setup(
     long_description=open("README.md", "r", encoding="utf8").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/carrowmw/phd-project",
-    packages=find_packages(
-        include=["api", "dashboard", "database", "pipeline", "utils", "config", "data"]
-    ),
+    packages=find_packages(where="phd_package"),
+    package_dir={"": "phd_package"},
     include_package_data=True,
     install_requires=parse_requirements("requirements.txt"),
     entry_points={

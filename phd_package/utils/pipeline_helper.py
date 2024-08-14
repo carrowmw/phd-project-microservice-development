@@ -4,7 +4,7 @@ from functools import reduce
 import random
 import string
 
-from utils.config_helper import load_config
+from .config_helper import load_config
 
 
 def get_step_config(step_name, config):
@@ -101,6 +101,7 @@ def apply_steps(df, steps_config):
             return df
         module_name, function_name = step["name"].rsplit(".", 1)
         module = importlib.import_module(module_name)
+        print(f"Module: {module}, Function: {function_name}")
         func = getattr(module, function_name)
         kwargs = step.get("kwargs", {})
         return func(df, **kwargs)

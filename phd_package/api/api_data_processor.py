@@ -3,7 +3,7 @@ import concurrent.futures
 import pandas as pd
 
 # pylint: disable=<C0413:wrong-import-position>
-from utils.config_helper import (
+from ..utils.config_helper import (
     get_datetime_column,
     get_api_config,
     get_window_size,
@@ -11,7 +11,7 @@ from utils.config_helper import (
     get_min_df_length_to_window_size_ratio,
 )
 
-from utils.data_helper import json_to_dataframe, RawDataItem
+from ..utils.data_helper import json_to_dataframe, RawDataItem
 
 from .api_client import APIClient
 

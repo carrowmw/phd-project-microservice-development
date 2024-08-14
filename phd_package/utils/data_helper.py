@@ -1,14 +1,12 @@
 from typing import TypeAlias, Tuple, List, get_args, Callable
 import os
 import pickle
-from datetime import date
 import torch.nn as nn
 from torch.utils.data import DataLoader
 import pandas as pd
 import numpy as np
 
-from config.paths import (
-    get_api_config_path,
+from ..config.paths import (
     get_sensor_dir,
     get_raw_data_dir,
     get_preprocessed_data_dir,
@@ -17,7 +15,7 @@ from config.paths import (
     get_trained_models_dir,
     get_test_dir,
 )
-from utils.config_helper import (
+from .config_helper import (
     get_polygon_wkb,
     get_query_agnostic_start_and_end_date,
     get_window_size,
@@ -69,7 +67,7 @@ def load_data(file_path, data_type):
 
     Args:
         file_path (str): The path to the data file.
-        data_type (str): The type of data being loaded (e.g., "raw", "preprocessed", "engineered", "dataloaders").
+        data_type (str): The type of data being loaded (e.g., "raw", "preprocessed", "engineered", "dataloader").
 
     Returns:
         The loaded data.
@@ -77,8 +75,11 @@ def load_data(file_path, data_type):
 
     print(f"\nReading in {data_type} data from local storage...\n")
     with open(file_path, "rb") as f:
-        data = pickle.load(f)
-
+        try:
+            data = pickle.load(f)
+        except ModuleNotFoundError as e:
+            print(f"Error loading {data_type}: {e} data from path: {file_path}.")
+            raise
     return data
 
 
@@ -89,7 +90,7 @@ def save_data(data, file_path, data_type):
     Args:
         data: The data to be saved.
         file_path (str): The path to save the data file.
-        data_type (str): The type of data being saved (e.g., "raw", "preprocessed", "engineered", "dataloaders").
+        data_type (str): The type of data being saved (e.g., "raw", "preprocessed", "engineered", "dataloader").
     """
     print(f"\nSaving {data_type} data to local storage...\n")
 
@@ -227,19 +228,20 @@ def load_engineered_data() -> EngineeredItem:
     return load_data(file_path, "engineered")
 
 
-def load_dataloaders() -> DataLoaderItem:
+def load_dataloader() -> DataLoaderItem:
     file_path = create_file_path(get_dataloader_dir, pipeline_output_data_filename)
-    return load_data(file_path, "dataloaders")
+    print(file_path)
+    return load_data(file_path, "dataloader")
 
 
 def load_trained_models() -> TrainedModelItem:
     file_path = create_file_path(get_trained_models_dir, pipeline_output_data_filename)
-    return load_data(file_path, "trained models")
+    return load_data(file_path, "train_model")
 
 
 def load_test_metrics() -> TestItem:
     file_path = create_file_path(get_test_dir, pipeline_output_data_filename)
-    return load_data(file_path, "test metrics")
+    return load_data(file_path, "test_model")
 
 
 def save_sensor_list(data, file_path):
@@ -258,8 +260,8 @@ def save_engineered_data(data, file_path):
     save_data(data, file_path, "engineered")
 
 
-def save_dataloaders(data, file_path):
-    save_data(data, file_path, "dataloaders")
+def save_dataloader(data, file_path):
+    save_data(data, file_path, "dataloader")
 
 
 def save_trained_models(data, file_path):

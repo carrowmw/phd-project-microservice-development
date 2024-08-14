@@ -1,6 +1,6 @@
 if __name__ == "__main__":
 
-    from api.api_data_processor import APIDataProcessor
+    from .api_data_processor import APIDataProcessor
 
     processor = APIDataProcessor()
 

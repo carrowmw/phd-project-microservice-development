@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from api.api_client import APIClient
-from utils.config_helper import get_api_config
+from phd_package.utils.config_helper import get_api_config
+from ..api.api_client import APIClient
 
 
 class TestAPIClient(unittest.TestCase):

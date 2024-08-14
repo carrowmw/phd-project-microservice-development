@@ -1,3 +1,5 @@
+# phd_package/pipeline/stages/train_model.py
+
 """
 Module for training neural network models and tracking performance metrics.
 """
@@ -11,7 +13,7 @@ import mlflow.pytorch
 
 import sklearn.metrics
 
-from pipeline.utils.training_helper import (
+from ..utils.training_helper import (
     create_criterion,
     create_optimiser,
     map_model_to_mps,
@@ -20,12 +22,12 @@ from pipeline.utils.training_helper import (
     validate_model_and_criterion,
     safe_tensor_to_numpy,
 )
-from utils.data_helper import DataLoaderItem, TrainedModelItem
-from utils.config_helper import (
+from ...utils.data_helper import DataLoaderItem, TrainedModelItem
+from ...utils.config_helper import (
     get_epochs,
 )
 
-from pipeline.stages.test_model import evaluate_model
+from .test_model import evaluate_model
 
 
 def train_model(

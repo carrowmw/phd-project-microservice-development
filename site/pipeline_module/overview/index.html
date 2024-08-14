@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Pipeline Module Overview - PhD Project Documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Pipeline Module Overview";
+        var mkdocs_page_input_path = "pipeline_module/overview.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/markdown.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> PhD Project Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Module</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/overview/">API Module Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/api_client/">API Client</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/api_data_processor/">API Data Processor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/__main__/">API Main</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline Module</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Pipeline Module Overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#pipeline-module-overview">Pipeline Module Overview</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#key-components">Key Components:</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#key-submodules">Key Submodules</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-pipeline-generator-pipeline_generatorpy">1. Pipeline Generator (pipeline_generator.py)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-preprocessing-preprocessingpy">2. Preprocessing (preprocessing.py)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-feature-engineering-feature_engineeringpy">3. Feature Engineering (feature_engineering.py)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-dataloader-dataloaderpy">4. Dataloader (dataloader.py)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#5-model-training-train_modelpy">5. Model Training (train_model.py)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#6-model-testing-test_modelpy">6. Model Testing (test_model.py)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#key-features">Key Features</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="../__main__.md">Pipeline Main</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline Generator</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">PhD Project Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Pipeline Module</li>
+      <li class="breadcrumb-item active">Pipeline Module Overview</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="phd-package-pipeline-module-documentation">PHD Package Pipeline Module Documentation</h1>
+<h2 id="pipeline-module-overview">Pipeline Module Overview</h2>
+<p>The pipeline module is a core component of the PHD package, designed to handle the end-to-end process of time series data analysis and prediction. It encompasses several stages, from data loading to model training and evaluation.</p>
+<h3 id="key-components">Key Components:</h3>
+<ol>
+<li><strong>Pipeline Generator</strong>: Orchestrates the entire data processing and modeling pipeline.</li>
+<li><strong>Preprocessing</strong>: Includes functions for data cleaning and initial transformations.</li>
+<li><strong>Feature Engineering</strong>: Provides methods for creating and transforming features.</li>
+<li><strong>Dataloader</strong>: Handles the creation of PyTorch DataLoaders for model training.</li>
+<li><strong>Model Training</strong>: Implements the training loop for neural network models.</li>
+<li><strong>Model Testing</strong>: Evaluates the trained models on test data.</li>
+</ol>
+<h2 id="key-submodules">Key Submodules</h2>
+<h3 id="1-pipeline-generator-pipeline_generatorpy">1. Pipeline Generator (<code>pipeline_generator.py</code>)</h3>
+<p>The core submodule that orchestrates the entire data processing and modeling pipeline. It includes methods for each stage of the process, from data acquisition to model testing.</p>
+<h3 id="2-preprocessing-preprocessingpy">2. Preprocessing (<code>preprocessing.py</code>)</h3>
+<p>Contains functions for data cleaning and initial transformations, such as:
+* Removing directionality features
+* Aggregating data on datetime
+* Finding consecutive sequences
+* Removing specified fields</p>
+<h3 id="3-feature-engineering-feature_engineeringpy">3. Feature Engineering (<code>feature_engineering.py</code>)</h3>
+<p>Provides methods for creating and transforming features, including:
+* Scaling features
+* Resampling frequency
+* Adding term dates features
+* Creating periodicity features
+* Converting datetime to float</p>
+<h3 id="4-dataloader-dataloaderpy">4. Dataloader (<code>dataloader.py</code>)</h3>
+<p>Handles the creation of PyTorch DataLoaders for model training. Key functions include:
+* <code>sliding_windows</code>: Generates sliding windows from time series data.
+* <code>create_dataloader</code>: Prepares training, validation, and test dataloaders.
+* <code>add_model_to_dataloader</code>: Adds the appropriate model to the dataloader pipeline.</p>
+<h3 id="5-model-training-train_modelpy">5. Model Training (<code>train_model.py</code>)</h3>
+<p>Implements the training loop for neural network models. The main function <code>train_model</code> handles:
+* Model training over specified epochs
+* Performance metric tracking
+* Validation during training</p>
+<h3 id="6-model-testing-test_modelpy">6. Model Testing (<code>test_model.py</code>)</h3>
+<p>Evaluates the trained models on test data. Key functions include:
+* <code>evaluate_model</code>: Calculates performance metrics on a given dataset.
+* <code>test_model</code>: Evaluates the trained model on the test dataset.</p>
+<h2 id="usage">Usage</h2>
+<p>The pipeline module is designed to be used as part of the larger PHD package. It's typically initiated through the main function, which creates an instance of the <code>Pipeline</code> class and calls its <code>run_pipeline()</code> method.</p>
+<p>Each stage of the pipeline can also be used independently for more granular control over the data processing and modeling workflow.</p>
+<h2 id="key-features">Key Features</h2>
+<ul>
+<li>Modular design allowing for easy customization and extension</li>
+<li>Integration with PyTorch for deep learning model implementation</li>
+<li>Comprehensive approach to time series analysis, from data preprocessing to model evaluation</li>
+<li>Utilization of MLflow for experiment tracking and metric logging</li>
+<li>Support for various types of models, including LSTM and autoencoder architectures</li>
+</ul>
+<p>This pipeline module provides a robust framework for time series analysis and prediction, encapsulating best practices in data preprocessing, feature engineering, and model training for time series data.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../api_module/__main__/" class="btn btn-neutral float-left" title="API Main"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../pipeline/" class="btn btn-neutral float-right" title="Pipeline Generator">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../api_module/__main__/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../pipeline/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

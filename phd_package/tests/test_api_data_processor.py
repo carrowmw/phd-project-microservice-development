@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import pandas as pd
-from api.api_data_processor import APIDataProcessor
+from ..api.api_data_processor import APIDataProcessor
 
 
 class TestAPIDataProcessor(unittest.TestCase):

@@ -7,9 +7,9 @@ from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
-from utils.config_helper import get_horizon
-from dashboard.data import CustomDashboardData
-from dashboard.utils.color_helper import base_colors
+from ...utils.config_helper import get_horizon
+from ..data import CustomDashboardData
+from ..utils.color_helper import base_colors
 
 
 class TabTemplateDataLoaderViewer:

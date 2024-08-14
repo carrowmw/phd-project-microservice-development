@@ -1,0 +1,356 @@
+digraph G {
+concentrate=true;
+splines="ortho";
+rankdir="LR";
+subgraph legend{
+    rank = min;
+    label = "legend";
+    Legend [shape=none, margin=0, label = <
+        <table cellspacing="0" cellpadding="0" border="1"><tr><td>Code2flow Legend</td></tr><tr><td>
+        <table cellspacing="0">
+        <tr><td>Regular function</td><td width="50px" bgcolor='#cccccc'></td></tr>
+        <tr><td>Trunk function (nothing calls this)</td><td bgcolor='#966F33'></td></tr>
+        <tr><td>Leaf function (this calls nothing else)</td><td bgcolor='#6db33f'></td></tr>
+        <tr><td>Function call</td><td><font color='black'>&#8594;</font></td></tr>
+        </table></td></tr></table>
+        >];
+}node_8dd9e832 [label="8: handle_api_response()" name="api_utils::handle_api_response" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_37da30a1 [label="29: make_api_request()" name="api_utils::make_api_request" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_cf59e651 [label="9: create_and_load_file_path()" name="app_utils::create_and_load_file_path" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_7331fad5 [label="1: get_custom_palette()" name="custom_plots::get_custom_palette" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_ac657ff6 [label="116: plot_mv_windows()" name="custom_plots::plot_mv_windows" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_b4d39a8c [label="52: plot_windows()" name="custom_plots::plot_windows" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_d369664a [label="16: create_file_path_from_config()" name="data_loaders::create_file_path_from_config" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_a7cf38af [label="35: download_and_save_raw_data()" name="data_loaders::download_and_save_raw_data" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_88995688 [label="59: fetch_raw_data()" name="data_loaders::fetch_raw_data" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_ce5af088 [label="1: compute_metrics()" name="evaluate::compute_metrics" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_8da2ecd6 [label="49: evaluate_linear_model()" name="evaluate::evaluate_linear_model" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_3169a89d [label="188: evaluate_lstm_model()" name="evaluate::evaluate_lstm_model" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_7e8d066c [label="6: compute_performance_metrics()" name="evaluation_metrics::compute_performance_metrics" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_0ada2382 [label="332: execute_periodic_raw_sensor_data_request()" name="execute_requests::execute_periodic_raw_sensor_data_request" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_c8e09605 [label="283: execute_raw_sensor_data_request()" name="execute_requests::execute_raw_sensor_data_request" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_0d0b7c60 [label="201: execute_sensor_type_request()" name="execute_requests::execute_sensor_type_request" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_d1356535 [label="243: execute_sensors_request()" name="execute_requests::execute_sensors_request" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_fbb5b010 [label="226: execute_themes_request()" name="execute_requests::execute_themes_request" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_8cf4ef7f [label="214: execute_variables_request()" name="execute_requests::execute_variables_request" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_75e88f7d [label="99: get_all_sensor_data_parallel()" name="execute_requests::get_all_sensor_data_parallel" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_7ee2ad1f [label="21: json_to_dataframe()" name="execute_requests::json_to_dataframe" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_9e769c61 [label="34: print_api_response_information()" name="execute_requests::print_api_response_information" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_dd9e5ddc [label="129: print_sensor_request_metrics()" name="execute_requests::print_sensor_request_metrics" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_52aa61b7 [label="57: process_sensor_data()" name="execute_requests::process_sensor_data" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_af837a73 [label="0: (global)()" name="fstore_utils::(global)" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_6487d1e1 [label="7: test_read_raw()" name="fstore_utils::test_read_raw" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_a54889c2 [label="6: load_config()" name="general_utils::load_config" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_d8a6d976 [label="38: should_execute_step()" name="general_utils::should_execute_step" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_04d39520 [label="64: __init__()" name="model_definitions::LSTMModel.__init__" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_4ba2710f [label="30: __init__()" name="model_definitions::LinearModel.__init__" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_547ca2e6 [label="31: apply_feature_engineering()" name="pipeline::apply_feature_engineering" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_f97fd680 [label="62: load_training_data()" name="pipeline::load_training_data" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_2d8f25c7 [label="8: preprocess_raw_data()" name="pipeline::preprocess_raw_data" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_cc09775b [label="96: train_model()" name="pipeline::train_model" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_a24a4c4b [label="6: apply_steps()" name="pipeline_utils::apply_steps" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_b7ba02c9 [label="33: process_data()" name="pipeline_utils::process_data" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_2f5bd100 [label="9: create_wkb_polygon()" name="polygon_utils::create_wkb_polygon" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_4753773b [label="94: check_completeness()" name="preprocessing::check_completeness" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_dee0896f [label="29: compute_max_daily_records()" name="preprocessing::compute_max_daily_records" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_af7229c7 [label="132: find_longest_consecutive_sequence()" name="preprocessing::find_longest_consecutive_sequence" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_5063e451 [label="185: get_all_sequences_longer_than_training_window()" name="preprocessing::get_all_sequences_longer_than_training_window" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_d8301cbf [label="49: remove_incomplete_days()" name="preprocessing::remove_incomplete_days" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_5f2bae1d [label="34: request()" name="raw_sensor_data_api::request" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_af85a251 [label="19: request()" name="sensor_types_api::request" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_ce94a661 [label="19: request()" name="sensors_api::request" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_a8f48111 [label="19: request()" name="themes_api::request" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_99fa022f [label="62: evaluate_model()" name="train::evaluate_model" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_3753765d [label="16: safe_tensor_to_numpy()" name="train::safe_tensor_to_numpy" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_a35038f9 [label="109: train()" name="train::train" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_9f9c7302 [label="32: validate_dataloader()" name="train::validate_dataloader" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_84dbb282 [label="54: validate_model_and_criterion()" name="train::validate_model_and_criterion" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_1c39f67c [label="15: __init__()" name="training_datasets::TimeSeriesDataset.__init__" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_12ad7df3 [label="115: load_model_and_dataloaders()" name="training_loader::load_model_and_dataloaders" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_ef41bb69 [label="68: prepare_dataloaders()" name="training_loader::prepare_dataloaders" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_e46c8c7a [label="12: sliding_windows()" name="training_loader::sliding_windows" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_a8f761cd [label="8: check_mps_availability()" name="training_utils::check_mps_availability" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_445f7888 [label="103: create_criterion()" name="training_utils::create_criterion" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_db0b1995 [label="62: create_optimiser()" name="training_utils::create_optimiser" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_03f4fe6c [label="34: map_model_to_mps()" name="training_utils::map_model_to_mps" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_c9c84395 [label="47: map_tensor_to_mps()" name="training_utils::map_tensor_to_mps" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_27471f89 [label="139: save_model_state()" name="training_utils::save_model_state" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_b42e105a [label="19: request()" name="variables_api::request" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_0ae32e75 [label="0: (global)()" name="websocket::(global)" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_e9c090c7 [label="6: wsListener()" name="websocket::wsListener" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_cf59e651 -> node_2f5bd100 [color="#E69F00" penwidth="2"];
+node_ac657ff6 -> node_7331fad5 [color="#D55E00" penwidth="2"];
+node_b4d39a8c -> node_7331fad5 [color="#F0E442" penwidth="2"];
+node_d369664a -> node_a54889c2 [color="#56B4E9" penwidth="2"];
+node_d369664a -> node_2f5bd100 [color="#56B4E9" penwidth="2"];
+node_a7cf38af -> node_c8e09605 [color="#CC79A7" penwidth="2"];
+node_a7cf38af -> node_d1356535 [color="#CC79A7" penwidth="2"];
+node_a7cf38af -> node_dd9e5ddc [color="#CC79A7" penwidth="2"];
+node_88995688 -> node_d369664a [color="#000000" penwidth="2"];
+node_88995688 -> node_a7cf38af [color="#000000" penwidth="2"];
+node_8da2ecd6 -> node_ce5af088 [color="#D55E00" penwidth="2"];
+node_8da2ecd6 -> node_7e8d066c [color="#D55E00" penwidth="2"];
+node_8da2ecd6 -> node_4ba2710f [color="#D55E00" penwidth="2"];
+node_8da2ecd6 -> node_ef41bb69 [color="#D55E00" penwidth="2"];
+node_8da2ecd6 -> node_27471f89 [color="#D55E00" penwidth="2"];
+node_3169a89d -> node_ce5af088 [color="#0072B2" penwidth="2"];
+node_3169a89d -> node_7e8d066c [color="#0072B2" penwidth="2"];
+node_3169a89d -> node_04d39520 [color="#0072B2" penwidth="2"];
+node_3169a89d -> node_ef41bb69 [color="#0072B2" penwidth="2"];
+node_3169a89d -> node_27471f89 [color="#0072B2" penwidth="2"];
+node_0ada2382 -> node_75e88f7d [color="#56B4E9" penwidth="2"];
+node_0ada2382 -> node_dd9e5ddc [color="#56B4E9" penwidth="2"];
+node_0ada2382 -> node_a54889c2 [color="#56B4E9" penwidth="2"];
+node_c8e09605 -> node_75e88f7d [color="#0072B2" penwidth="2"];
+node_c8e09605 -> node_dd9e5ddc [color="#0072B2" penwidth="2"];
+node_0d0b7c60 -> node_7ee2ad1f [color="#000000" penwidth="2"];
+node_d1356535 -> node_7ee2ad1f [color="#0072B2" penwidth="2"];
+node_d1356535 -> node_a54889c2 [color="#0072B2" penwidth="2"];
+node_d1356535 -> node_2f5bd100 [color="#0072B2" penwidth="2"];
+node_fbb5b010 -> node_7ee2ad1f [color="#000000" penwidth="2"];
+node_8cf4ef7f -> node_7ee2ad1f [color="#CC79A7" penwidth="2"];
+node_75e88f7d -> node_52aa61b7 [color="#0072B2" penwidth="2"];
+node_52aa61b7 -> node_7ee2ad1f [color="#CC79A7" penwidth="2"];
+node_52aa61b7 -> node_9e769c61 [color="#CC79A7" penwidth="2"];
+node_52aa61b7 -> node_9e769c61 [color="#CC79A7" penwidth="2"];
+node_52aa61b7 -> node_9e769c61 [color="#CC79A7" penwidth="2"];
+node_af837a73 -> node_6487d1e1 [color="#009E73" penwidth="2"];
+node_547ca2e6 -> node_b7ba02c9 [color="#D55E00" penwidth="2"];
+node_f97fd680 -> node_a54889c2 [color="#000000" penwidth="2"];
+node_f97fd680 -> node_b7ba02c9 [color="#000000" penwidth="2"];
+node_2d8f25c7 -> node_88995688 [color="#CC79A7" penwidth="2"];
+node_2d8f25c7 -> node_a54889c2 [color="#CC79A7" penwidth="2"];
+node_2d8f25c7 -> node_b7ba02c9 [color="#CC79A7" penwidth="2"];
+node_cc09775b -> node_b7ba02c9 [color="#009E73" penwidth="2"];
+node_a24a4c4b -> node_d8a6d976 [color="#009E73" penwidth="2"];
+node_b7ba02c9 -> node_a54889c2 [color="#E69F00" penwidth="2"];
+node_b7ba02c9 -> node_a24a4c4b [color="#E69F00" penwidth="2"];
+node_4753773b -> node_a54889c2 [color="#009E73" penwidth="2"];
+node_4753773b -> node_a54889c2 [color="#009E73" penwidth="2"];
+node_4753773b -> node_dee0896f [color="#009E73" penwidth="2"];
+node_af7229c7 -> node_a54889c2 [color="#CC79A7" penwidth="2"];
+node_af7229c7 -> node_dee0896f [color="#CC79A7" penwidth="2"];
+node_5063e451 -> node_a54889c2 [color="#E69F00" penwidth="2"];
+node_5063e451 -> node_a54889c2 [color="#E69F00" penwidth="2"];
+node_5063e451 -> node_af7229c7 [color="#E69F00" penwidth="2"];
+node_d8301cbf -> node_a54889c2 [color="#CC79A7" penwidth="2"];
+node_d8301cbf -> node_dee0896f [color="#CC79A7" penwidth="2"];
+node_5f2bae1d -> node_8dd9e832 [color="#0072B2" penwidth="2"];
+node_5f2bae1d -> node_37da30a1 [color="#0072B2" penwidth="2"];
+node_af85a251 -> node_8dd9e832 [color="#E69F00" penwidth="2"];
+node_af85a251 -> node_37da30a1 [color="#E69F00" penwidth="2"];
+node_ce94a661 -> node_8dd9e832 [color="#E69F00" penwidth="2"];
+node_ce94a661 -> node_37da30a1 [color="#E69F00" penwidth="2"];
+node_a8f48111 -> node_8dd9e832 [color="#E69F00" penwidth="2"];
+node_a8f48111 -> node_37da30a1 [color="#E69F00" penwidth="2"];
+node_99fa022f -> node_3753765d [color="#CC79A7" penwidth="2"];
+node_99fa022f -> node_3753765d [color="#CC79A7" penwidth="2"];
+node_99fa022f -> node_c9c84395 [color="#CC79A7" penwidth="2"];
+node_99fa022f -> node_c9c84395 [color="#CC79A7" penwidth="2"];
+node_a35038f9 -> node_99fa022f [color="#E69F00" penwidth="2"];
+node_a35038f9 -> node_99fa022f [color="#E69F00" penwidth="2"];
+node_a35038f9 -> node_9f9c7302 [color="#E69F00" penwidth="2"];
+node_a35038f9 -> node_9f9c7302 [color="#E69F00" penwidth="2"];
+node_a35038f9 -> node_84dbb282 [color="#E69F00" penwidth="2"];
+node_a35038f9 -> node_445f7888 [color="#E69F00" penwidth="2"];
+node_a35038f9 -> node_db0b1995 [color="#E69F00" penwidth="2"];
+node_a35038f9 -> node_03f4fe6c [color="#E69F00" penwidth="2"];
+node_a35038f9 -> node_c9c84395 [color="#E69F00" penwidth="2"];
+node_a35038f9 -> node_c9c84395 [color="#E69F00" penwidth="2"];
+node_12ad7df3 -> node_a54889c2 [color="#009E73" penwidth="2"];
+node_ef41bb69 -> node_1c39f67c [color="#E69F00" penwidth="2"];
+node_ef41bb69 -> node_1c39f67c [color="#E69F00" penwidth="2"];
+node_e46c8c7a -> node_a54889c2 [color="#56B4E9" penwidth="2"];
+node_03f4fe6c -> node_a8f761cd [color="#F0E442" penwidth="2"];
+node_c9c84395 -> node_a8f761cd [color="#0072B2" penwidth="2"];
+node_b42e105a -> node_8dd9e832 [color="#56B4E9" penwidth="2"];
+node_b42e105a -> node_37da30a1 [color="#56B4E9" penwidth="2"];
+node_0ae32e75 -> node_e9c090c7 [color="#0072B2" penwidth="2"];
+subgraph cluster_2c00230a {
+    node_8dd9e832 node_37da30a1;
+    label="File: api_utils";
+    name="api_utils";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_5b454ff1 {
+    node_cf59e651;
+    label="File: app_utils";
+    name="app_utils";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_f7b9e6a4 {
+    node_7331fad5 node_b4d39a8c node_ac657ff6;
+    label="File: custom_plots";
+    name="custom_plots";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_9c8c40de {
+    node_d369664a node_a7cf38af node_88995688;
+    label="File: data_loaders";
+    name="data_loaders";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_0323615f {
+    node_ce5af088 node_8da2ecd6 node_3169a89d;
+    label="File: evaluate";
+    name="evaluate";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_f8328340 {
+    node_7e8d066c;
+    label="File: evaluation_metrics";
+    name="evaluation_metrics";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_a823a600 {
+    node_7ee2ad1f node_9e769c61 node_52aa61b7 node_75e88f7d node_dd9e5ddc node_0d0b7c60 node_8cf4ef7f node_fbb5b010 node_d1356535 node_c8e09605 node_0ada2382;
+    label="File: execute_requests";
+    name="execute_requests";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_8441cd0c {
+    node_6487d1e1 node_af837a73;
+    label="File: fstore_utils";
+    name="fstore_utils";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_f2f1ade6 {
+    node_a54889c2 node_d8a6d976;
+    label="File: general_utils";
+    name="general_utils";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_29953534 {
+    label="File: model_definitions";
+    name="model_definitions";
+    style="filled";
+    graph[style=dotted];
+    subgraph cluster_61f11b1a {
+        node_4ba2710f;
+        label="Class: LinearModel";
+        name="LinearModel";
+        style="filled";
+        graph[style=dotted];
+    };
+    subgraph cluster_ae8bb9fa {
+        node_04d39520;
+        label="Class: LSTMModel";
+        name="LSTMModel";
+        style="filled";
+        graph[style=dotted];
+    };
+};
+subgraph cluster_95fd1798 {
+    node_2d8f25c7 node_547ca2e6 node_f97fd680 node_cc09775b;
+    label="File: pipeline";
+    name="pipeline";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_5e0dc33c {
+    node_a24a4c4b node_b7ba02c9;
+    label="File: pipeline_utils";
+    name="pipeline_utils";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_c931ed18 {
+    node_2f5bd100;
+    label="File: polygon_utils";
+    name="polygon_utils";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_0dc74e66 {
+    node_dee0896f node_d8301cbf node_4753773b node_af7229c7 node_5063e451;
+    label="File: preprocessing";
+    name="preprocessing";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_2cda9156 {
+    node_5f2bae1d;
+    label="File: raw_sensor_data_api";
+    name="raw_sensor_data_api";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_ac79f312 {
+    node_af85a251;
+    label="File: sensor_types_api";
+    name="sensor_types_api";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_3c6f7f3c {
+    node_ce94a661;
+    label="File: sensors_api";
+    name="sensors_api";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_6dd78f31 {
+    node_a8f48111;
+    label="File: themes_api";
+    name="themes_api";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_d5a9a3d4 {
+    node_3753765d node_9f9c7302 node_84dbb282 node_99fa022f node_a35038f9;
+    label="File: train";
+    name="train";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_1ca6b8cb {
+    label="File: training_datasets";
+    name="training_datasets";
+    style="filled";
+    graph[style=dotted];
+    subgraph cluster_3b771d1a {
+        node_1c39f67c;
+        label="Class: TimeSeriesDataset";
+        name="TimeSeriesDataset";
+        style="filled";
+        graph[style=dotted];
+    };
+};
+subgraph cluster_ec71fdb7 {
+    node_e46c8c7a node_ef41bb69 node_12ad7df3;
+    label="File: training_loader";
+    name="training_loader";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_2177db97 {
+    node_a8f761cd node_03f4fe6c node_c9c84395 node_db0b1995 node_445f7888 node_27471f89;
+    label="File: training_utils";
+    name="training_utils";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_f83823c5 {
+    node_b42e105a;
+    label="File: variables_api";
+    name="variables_api";
+    style="filled";
+    graph[style=dotted];
+};
+subgraph cluster_e7f13db3 {
+    node_e9c090c7 node_0ae32e75;
+    label="File: websocket";
+    name="websocket";
+    style="filled";
+    graph[style=dotted];
+};
+}

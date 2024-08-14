@@ -94,7 +94,7 @@ pyenv local 3.9.7
 
 ### Step 3: Initialize Poetry in the Project
 
-Initialize Poetry in your project directory:
+Initialise Poetry in your project directory:
 
 ```sh
 poetry init
@@ -141,7 +141,7 @@ poetry env info
 
 ### Step 7: Remove Old Virtual Environment (Optional)
 
-If you no longer need the old pyenv virtual environment, deactivate and remove it:
+If you no longer need the old `pyenv` virtual environment, deactivate and remove it:
 
 ```sh
 pyenv deactivate

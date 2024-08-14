@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 
-from config.paths import (
+from ..config.paths import (
     get_daily_record_counts_path,
     get_completeness_metrics_path,
     get_freshness_metrics_path,
@@ -16,7 +16,7 @@ from config.paths import (
     get_training_windows_path,
 )
 
-from utils.data_helper import (
+from ..utils.data_helper import (
     save_data,
     load_data,
     find_tuple_by_first_element,
@@ -27,12 +27,12 @@ from utils.data_helper import (
     load_raw_data,
     load_preprocessed_data,
     load_engineered_data,
-    load_dataloaders,
+    load_dataloader,
     load_trained_models,
     load_test_metrics,
 )
 
-from utils.config_helper import (
+from ..utils.config_helper import (
     get_datetime_column,
     get_n_days,
     get_query_agnostic_start_and_end_date,
@@ -56,7 +56,7 @@ class CustomDashboardData:
             self.data = load_raw_data()
             self.preprocessed_data = load_preprocessed_data()
             self.engineered_data = load_engineered_data()
-            self.dataloaders = load_dataloaders()
+            self.dataloader = load_dataloader()
             self.trained_models = load_trained_models()
             self.test_metrics = load_test_metrics()
         except FileNotFoundError:
@@ -372,7 +372,7 @@ class CustomDashboardData:
             if training_windows_data is not None:
                 return training_windows_data
 
-        training_windows_data = load_dataloaders()
+        training_windows_data = load_dataloader()
 
         print("Unbatching...")
         app_data = [[], [], [], []]

@@ -1,10 +1,12 @@
+# phd_package/pipeline/pipeline_generator.py
+
 import os
 import sys
 import logging
 import pandas as pd
 import mlflow
 import mlflow.pytorch
-from config.paths import (
+from ..config.paths import (
     get_pipeline_config_path,
     get_sensor_dir,
     get_raw_data_dir,
@@ -14,15 +16,15 @@ from config.paths import (
     get_trained_models_dir,
     get_test_dir,
 )
-from api.api_data_processor import APIDataProcessor
+from ..api.api_data_processor import APIDataProcessor
 
 # from experiments.tracker import ExperimentTracker
-from utils.pipeline_helper import (
+from ..utils.pipeline_helper import (
     process_data,
     load_or_process_data,
     generate_random_string,
 )
-from utils.data_helper import (
+from ..utils.data_helper import (
     check_type,
     SensorListItem,
     RawDataItem,
@@ -39,18 +41,18 @@ from utils.data_helper import (
     load_raw_data,
     load_preprocessed_data,
     load_engineered_data,
-    load_dataloaders,
+    load_dataloader,
     load_trained_models,
     load_test_metrics,
     save_sensor_list,
     save_raw_data,
     save_preprocessed_data,
     save_engineered_data,
-    save_dataloaders,
+    save_dataloader,
     save_trained_models,
     save_test_metrics,
 )
-from utils.config_helper import get_window_size, get_horizon
+from ..utils.config_helper import get_window_size, get_horizon
 
 
 class Pipeline:
@@ -204,14 +206,14 @@ class Pipeline:
 
         return engineered_dfs
 
-    def load_data(self, engineered_dfs) -> DataLoaderItem:
+    def load_dataloader(self, engineered_dfs) -> DataLoaderItem:
         """
         Load data into dataloaders.
         """
         window_size = get_window_size()
         horizon = get_horizon()
 
-        def process_dataloaders(dfs):
+        def process_dataloader(dfs):
             print(f"\n\nLoading data for {len(dfs)} DataFrames...\n")
             logging.info("\n\nLoading data for %d DataFrames...\n", len(dfs))
             print(
@@ -242,9 +244,9 @@ class Pipeline:
         list_of_dataloaders = load_or_process_data(
             engineered_dfs,
             create_file_path(get_dataloader_dir, pipeline_output_data_filename),
-            load_dataloaders,
-            process_dataloaders,
-            save_dataloaders,
+            load_dataloader,
+            process_dataloader,
+            save_dataloader,
             "data loading",
         )
 
@@ -317,7 +319,7 @@ class Pipeline:
             load_trained_models,
             process_trained_models,
             save_trained_models,
-            "training",
+            "train_model",
         )
 
         assert isinstance(
@@ -378,7 +380,7 @@ class Pipeline:
         raw_dfs = self.read_or_download_data()
         preprocessed_dfs = self.preprocess_data(raw_dfs)
         engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
-        dataloaders_list = self.load_data(engineered_dfs)
+        dataloaders_list = self.load_dataloader(engineered_dfs)
         trained_models_list = self.train_model(dataloaders_list)
         test_metrics_list = self.test_model(trained_models_list)
         return test_metrics_list

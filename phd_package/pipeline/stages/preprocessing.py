@@ -1,3 +1,5 @@
+# phd_package/pipeline/stages/preprocessing.py
+
 """
 This module contains functions for preprocessing time-series data.
 """
@@ -5,7 +7,7 @@ This module contains functions for preprocessing time-series data.
 import logging
 from typing import List
 import pandas as pd
-from utils.config_helper import (
+from ...utils.config_helper import (
     get_window_size,
     get_horizon,
     get_datetime_column,
