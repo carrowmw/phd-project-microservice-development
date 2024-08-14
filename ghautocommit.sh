@@ -1,8 +1,5 @@
 # ./ghautocommit.sh
-
 #!/bin/bash
-
-# This script is used to commit changes to the develop branch and update feature branches.
 
 set -e  # Exit immediately if a command exits with a non-zero status.
 
@@ -25,17 +22,27 @@ update_feature_branch() {
     shift
     local files=("$@")
 
-    git checkout -B "$branch" develop
-    git rm -rf .
+    git checkout "$branch"
+    git fetch origin
+    git reset --hard origin/develop
+
+    # Remove all files except .git
+    find . -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
+
+    # Checkout specific files from develop
     for file in "${files[@]}"; do
-        git checkout develop -- "$file"
+        git checkout develop -- "$file" || echo "Warning: Could not checkout $file from develop"
     done
+
     echo "Changes for $branch:"
     git status
+
     read -p "Do you want to proceed with these changes? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        commit_changes "$branch"
+        git add .
+        git commit -m "Update $branch with latest changes"
+        git push --force origin "$branch"
     else
         echo "Operation cancelled for $branch"
         git reset --hard
