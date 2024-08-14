@@ -48,11 +48,11 @@ git push origin develop
 
 # Feature/api-update branch
 update_branch_with_specific_dirs "feature/api-update" "$API_COMMIT_MESSAGE" \
-    "api" "config/api.json" "config/query.json" "utils/config_helper.py" "utils/data_helper.py" "config/paths.py"
+    "api" "config/api.json" "config/query.json" "utils/config_helper.py" "utils/data_helper.py" "config/paths.py" "ghautocommit.sh"
 
 # Feature/dashboard-update branch
 update_branch_with_specific_dirs "feature/dashboard-update" "$DASHBOARD_COMMIT_MESSAGE" \
-    "dashboard" "config/dashboard.json" "config/query.json" "utils/config_helper.py" "utils/data_helper.py" "config/paths.py"
+    "dashboard" "config/dashboard.json" "config/query.json" "utils/config_helper.py" "utils/data_helper.py" "config/paths.py" "ghautocommit.sh"
 
 # Return to develop branch
 git checkout develop
