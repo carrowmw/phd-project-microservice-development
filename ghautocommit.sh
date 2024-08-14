@@ -16,6 +16,17 @@ commit_changes() {
     git push origin "$branch"
 }
 
+# Function to rebuild the virtual environment using Poetry
+rebuild_venv() {
+    echo "Rebuilding virtual environment..."
+    if [ -d ".venv" ]; then
+        rm -rf .venv
+    fi
+    poetry env use python3.10
+    poetry install
+    echo "Virtual environment rebuilt."
+}
+
 # Function to update a feature branch with specific files
 update_feature_branch() {
     local branch=$1
@@ -77,5 +88,9 @@ update_feature_branch "feature/dashboard-update" "${dashboard_files[@]}"
 
 # Return to develop branch
 git checkout develop
+
+# Rebuild the virtual environment
+rebuild_venv
+
 
 echo "Script completed. Please verify the changes in each branch."
