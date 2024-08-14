@@ -2,6 +2,8 @@
 
 #!/bin/bash
 
+# This script is used to commit changes to the develop branch and update feature branches.
+
 set -e  # Exit immediately if a command exits with a non-zero status.
 
 # Ensure script is run from the git repository root
