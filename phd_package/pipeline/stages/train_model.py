@@ -21,13 +21,12 @@ from ..utils.training_helper import (
     validate_dataloader,
     validate_model_and_criterion,
     safe_tensor_to_numpy,
+    evaluate_model,
 )
 from ...utils.data_helper import DataLoaderItem, TrainedModelItem
 from ...utils.config_helper import (
     get_epochs,
 )
-
-from .test_model import evaluate_model
 
 
 def train_model(
@@ -84,24 +83,28 @@ def train_model(
             predictions_np = safe_tensor_to_numpy(predictions)
             labels_np = safe_tensor_to_numpy(y)
 
-            mae_score = sklearn.metrics.mean_absolute_error(predictions_np, labels_np)
+            mape_score = sklearn.metrics.mean_absolute_percentage_error(
+                predictions_np, labels_np
+            )
 
             if batch % 10 == 0:
                 loss_score, current = loss.item(), batch
                 step = batch // 100 * (epoch + 1)
                 mlflow.log_metric("batch", f"{current}", step=step)
                 mlflow.log_metric("batch_train_loss", f"{loss_score:2f}", step=step)
-                mlflow.log_metric("batch_train_mae_score", f"{mae_score:2f}", step=step)
+                mlflow.log_metric(
+                    "batch_train_mape_score", f"{mape_score:2f}", step=step
+                )
 
             total_train_loss += loss.item() * X.size(0)
 
         scheduler.step()
 
         # Evaluate model performance on both training and validation datasets
-        _, _, train_loss, train_mae, train_rmse, _ = evaluate_model(
+        _, _, train_loss, train_mape, train_rmse, _ = evaluate_model(
             model, train_dataloader, criterion, "train"
         )
-        _, _, val_loss, val_mae, val_rmse, val_r2 = evaluate_model(
+        _, _, val_loss, val_mape, val_rmse, val_r2 = evaluate_model(
             model, val_dataloader, criterion, "val"
         )
 
@@ -109,7 +112,7 @@ def train_model(
         train_metrics_per_epoch = {
             "Epoch": int(epoch + 1),
             "Train loss": np.round(train_loss, 3),
-            "Train MAE": np.round(train_mae, 3),
+            "Train MAPE": np.round(train_mape, 3),
             "Train RMSE": np.round(train_rmse, 3),
         }
         if epoch == 0:
@@ -128,7 +131,7 @@ def train_model(
         val_metrics_per_epoch = {
             "Epoch": int(epoch + 1),
             "Val loss": np.round(val_loss, 3),
-            "Val MAE": np.round(val_mae, 3),
+            "Val MAPE": np.round(val_mape, 3),
             "Val RMSE": np.round(val_rmse, 3),
             "Val R2": np.round(val_r2, 3),
         }

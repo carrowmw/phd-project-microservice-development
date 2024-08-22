@@ -19,3 +19,4 @@ nav:
     - Pipeline Module Overview: pipeline_module/overview.md
     - Pipeline Main: pipeline_module/__main__.md
     - Pipeline Generator: pipeline_module/pipeline.md
+    - Pipeline Stages: pipeline_module/stages.md

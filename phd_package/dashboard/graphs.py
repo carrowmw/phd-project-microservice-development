@@ -313,9 +313,9 @@ class PipelineChartCreator:
         test_fig.add_trace(
             go.Scatter(
                 x=list(range(len(validation_metrics))),
-                y=[item["Val MAE"] for item in validation_metrics],
+                y=[item["Val MAPE"] for item in validation_metrics],
                 mode="lines+markers",
-                name="Val MAE",
+                name="Val MAPE",
                 line=dict(color=self.category_colors[1]),
             )
         )

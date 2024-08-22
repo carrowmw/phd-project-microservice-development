@@ -21,6 +21,9 @@ from ...utils.config_helper import (
     get_train_ratio,
     get_val_ratio,
     get_model_type,
+    get_hidden_dim,
+    get_num_layers,
+    get_dropout,
 )
 
 
@@ -163,12 +166,12 @@ def add_model_to_dataloader(
     model_type = get_model_type()
     if model_type.lower() == "lstm":
         model_type = "LSTM" + "Model"
-    elif model_type.lower() == "lstmautoencoder":
-        model_type = "LSTMAutoencoder" + "Model"
-    elif model_type.lower() == "randomforest":
-        model_type = "RandomForest" + "Model"
+    elif model_type.lower() == "gru":
+        model_type = "GRU" + "Model"
     else:
-        model_type = model_type.capitalize() + "Model"
+        raise ValueError(
+            f"Model type {model_type} not supported. Please choose from 'LSTM' or 'GRU'."
+        )
 
     print(f"\n\nAttempting to load: {model_type}\n\n")
 
@@ -176,7 +179,12 @@ def add_model_to_dataloader(
         raise ValueError(f"Model type {model_type} not found in model_definitions.py")
 
     ModelClass = getattr(model_definitions, model_type)
-    model = ModelClass(feature_dim)
+    model = ModelClass(
+        feature_dim=feature_dim,
+        hidden_dim=get_hidden_dim(),
+        num_layers=get_num_layers(),
+        dropout=get_dropout(),
+    )
     print("Model loaded successfully.")
 
     return (model, pipeline[0], pipeline[1], pipeline[2])

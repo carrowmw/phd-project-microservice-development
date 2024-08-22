@@ -50,6 +50,14 @@ def get_query_config_path():
     return QUERY_CONFIG_PATH
 
 
+# Pipeline Directories
+TUNING_OUTPUT_DIR = PIPELINE_DIR / "tuning_output"
+
+
+def get_tuning_output_dir():
+    return TUNING_OUTPUT_DIR
+
+
 # Data Directories
 
 DASHBOARD_DATA_DIR = DATA_DIR / "app_data"

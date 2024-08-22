@@ -38,13 +38,13 @@ if __name__ == "__main__":
 To run the PHD package, execute the following command in your terminal:
 
 ```shell
-python -m phd_package
+python -m phd_package.pipeline
 ```
 
 or with `poetry`:
 
 ```shell
-poetry run python -m phd_package
+poetry run python -m phd_package.pipeline
 ```
 
 This command will:
@@ -55,9 +55,9 @@ This command will:
 
 ## Pipeline Stages
 
-The `run_pipeline()` method typically includes the following stages:
+The `run_pipeline()` method typically executes the following stages:
 
-1. Data acquisition (e.g., reading sensor data)
+1. Fetch data (currently executes the APIProcessor module - in future implementations this step will preferentially load data from a database if available)
 2. Preprocessing
 3. Feature engineering
 4. Data loading

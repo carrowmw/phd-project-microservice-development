@@ -1,13 +1,13 @@
 {
     "coords": [
-        -1.6534,
-        54.9310,
-        -1.5487,
-        55.0209
+        -1.61366,
+        54.96678,
+        1.60081,
+        54.97788
     ],
     "query_date_format": "startend",
     "theme": "People",
     "last_n_days": 720,
     "starttime": 20220724,
-    "endtime": 20240802
+    "endtime": 20240821
 }

@@ -135,3 +135,16 @@ preprocessed_dfs = pipeline.preprocess_data(raw_dfs)
 ```
 
 This `Pipeline` class provides a comprehensive workflow for processing sensor data, from raw data acquisition to model training and testing. Each method in the pipeline can be used independently or as part of the full `run_pipeline` process.
+
+### Pipeline Helper Module
+
+The Pipeline class is supported by a set of helper functions that manage data processing, step execution, and configuration handling. These functions provide the underlying functionality for the pipeline's flexibility and modularity.
+Key areas supported by helper functions include:
+
+* Configuration management for processing steps
+* Dynamic execution of data processing steps
+* Caching and loading of processed data
+* Application of configurable processing steps to DataFrames
+
+For developers interested in extending or customising the pipeline, detailed documentation of these helper functions is available in the `pipeline_helper.py` module.
+This Pipeline class, along with its supporting helper functions, provides a comprehensive workflow for processing sensor data, from raw data acquisition to model training and testing. Each method in the pipeline can be used independently or as part of the full run_pipeline process.

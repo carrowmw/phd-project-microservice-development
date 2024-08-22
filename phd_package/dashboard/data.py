@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 
+from .utils.transformation_helper import unbatch_dataloaders_to_numpy
+
 from ..config.paths import (
     get_daily_record_counts_path,
     get_completeness_metrics_path,
@@ -141,10 +143,7 @@ class CustomDashboardData:
                 .reset_index(name="Count")
             )
             daily_counts.append((sensor_name, df))
-            print(sensor_name)
-            print(df[self.datetime_column].min(), df[self.datetime_column].max())
             min, max = get_query_agnostic_start_and_end_date()
-            print(min.date(), max.date())
         return daily_counts
 
     def get_completeness_graph_data(self) -> list:
@@ -315,6 +314,34 @@ class CustomDashboardData:
         )
         return train_metrics
 
+    def compute_test_metrics(self):
+        """
+        Compute the test metrics for the sensors.
+
+        Returns:
+            List: A list of tuples containing the sensor name and the test metrics.
+        """
+        data = self.test_metrics
+        print("CustomDashboardData.compute_test_metrics()")
+        test_metrics = [(tuple[0], tuple[3]) for tuple in data]
+        return test_metrics
+
+    def get_test_metrics(self):
+        """
+        Get the test data for the sensors.
+
+        Returns:
+            List: A list of tuples containing the sensor name and the test metrics.
+        """
+        file_path = create_file_path(
+            get_test_predictions_path, pipeline_output_data_filename
+        )
+        print("CustomDashboardData.get_test_metrics()")
+        test_metrics = self.read_or_compute_app_data(
+            file_path, self.compute_test_metrics
+        )
+        return test_metrics
+
     def get_preprocessing_table(self, sensor_name=None):
         """
         Get the preprocessing data for the sensors.
@@ -377,35 +404,41 @@ class CustomDashboardData:
         print("Unbatching...")
         app_data = [[], [], [], []]
         for _, (_, _, _, val_dataloader, _) in enumerate(training_windows_data):
-            unbatched_input_feature = []
-            unbatched_labels = []
-            unbatched_eng_features = []
             dataloader = val_dataloader
-            for batch in dataloader:
-                features, labels = batch
-                features_array, labels_array = features.numpy(), labels.numpy()
-                labels_array = labels_array.reshape(-1, 1)
 
-                _, _, no_of_features = features_array.shape
+            unbatched_input_feature, unbatched_labels, unbatched_eng_features = (
+                unbatch_dataloaders_to_numpy(dataloader)
+            )
 
-                # Iterate through each feature
-                for i in range(no_of_features):
-                    feature_data = features_array[:, :, i]
+            # unbatched_input_feature = []
+            # unbatched_labels = []
+            # unbatched_eng_features = []
 
-                    # Append the feature data to the unbatched_eng_features array
-                    if len(unbatched_eng_features) <= i:
-                        unbatched_eng_features.append(feature_data)
-                    else:
-                        unbatched_eng_features[i] = np.concatenate(
-                            (unbatched_eng_features[i], feature_data), axis=0
-                        )
+            # for batch in dataloader:
+            #     features, labels = batch
+            #     features_array, labels_array = features.numpy(), labels.numpy()
+            #     labels_array = labels_array.reshape(-1, 1)
 
-                unbatched_input_feature.append(features_array[:, :, 0])
-                unbatched_labels.append(labels_array)
+            #     _, _, no_of_features = features_array.shape
 
-            unbatched_input_feature = np.concatenate(unbatched_input_feature, axis=0)
-            unbatched_labels = np.concatenate(unbatched_labels, axis=0)
-            unbatched_eng_features = np.array(unbatched_eng_features)
+            #     # Iterate through each feature
+            #     for i in range(no_of_features):
+            #         feature_data = features_array[:, :, i]
+
+            #         # Append the feature data to the unbatched_eng_features array
+            #         if len(unbatched_eng_features) <= i:
+            #             unbatched_eng_features.append(feature_data)
+            #         else:
+            #             unbatched_eng_features[i] = np.concatenate(
+            #                 (unbatched_eng_features[i], feature_data), axis=0
+            #             )
+
+            #     unbatched_input_feature.append(features_array[:, :, 0])
+            #     unbatched_labels.append(labels_array)
+
+            # unbatched_input_feature = np.concatenate(unbatched_input_feature, axis=0)
+            # unbatched_labels = np.concatenate(unbatched_labels, axis=0)
+            # unbatched_eng_features = np.array(unbatched_eng_features)
 
             app_data[0].append(unbatched_input_feature)
             app_data[1].append(unbatched_labels)

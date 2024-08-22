@@ -67,12 +67,67 @@ The pipeline module is designed to be used as part of the larger PHD package. It
 
 Each stage of the pipeline can also be used independently for more granular control over the data processing and modeling workflow.
 
+## Pipeline Configuration (pipeline.json)
+
+The pipeline's behaviour is highly customisable through the pipeline.json configuration file. This file allows users to adjust various parameters and enable/disable specific processing steps without modifying the core code.
+Structure of pipeline.json
+The pipeline.json file is structured into several main sections:
+
+1. ``kwargs``: Contains global parameters used across different stages of the pipeline.
+2. `preprocessing`: Defines the sequence and configuration of preprocessing steps.
+3. `feature_engineering`: Specifies the feature engineering steps to be applied.
+4. `dataloader`: Configures the data loading process.
+5. `training`: Sets up the model training parameters.
+6. `testing`: Configures the model testing process.
+
+### Key Configuration Options
+
+Global Parameters (`kwargs`)
+
+* `aggregation_frequency_mins`: Frequency for data aggregation (e.g., "15min").
+* `datetime_column`: Name of the `datetime` column (e.g., "Timestamp").
+* `value_column`: Name of the main value column (e.g., "Value").
+* `window_size`, `horizon`, `stride`: Parameters for sliding window creation.
+* `batch_size`, `shuffle`, `num_workers`: DataLoader configuration.
+* `train_ratio`, `val_ratio`: Data split ratios.
+* `model_type`: Type of model to use (e.g., "`lstm`").
+* `epochs`, `optimiser`, `lr`: Training parameters.
+
+### Stage-specific Configurations
+
+Each stage (preprocessing, feature_engineering, etc.) contains an array of steps, where each step is defined by:
+
+* `name`: The full path to the function to be executed.
+* `execute_step`: A boolean indicating whether to run this step (default is true).
+
+### How It Works
+
+1. The pipeline reads the `pipeline.json` file at runtime.
+2. Global parameters from `kwargs` are used to configure various aspects of the pipeline.
+3. For each stage, the pipeline iterates through the specified steps:
+
+* It checks the execute_step flag to determine whether to run the step.
+* If true, it dynamically imports and executes the function specified in the name field.
+
+4. This configuration allows for easy addition, removal, or reordering of processing steps.
+
+### Customisation
+
+Users can customise the pipeline by:
+
+* Adjusting global parameters in the `kwargs` section.
+* Enabling or disabling specific processing steps by modifying the execute_step flag.
+* Changing the order of processing steps within each stage.
+* Adding new processing steps by including new entries in the relevant stage arrays.
+
+This configuration-driven approach provides flexibility and allows users to tailor the pipeline to their specific needs without diving into the code base.
+
 ## Key Features
 
-* Modular design allowing for easy customization and extension
+* Modular design allowing for easy customisation and extension
 * Integration with PyTorch for deep learning model implementation
 * Comprehensive approach to time series analysis, from data preprocessing to model evaluation
-* Utilization of MLflow for experiment tracking and metric logging
-* Support for various types of models, including LSTM and autoencoder architectures
+* Utilisation of MLflow for experiment tracking and metric logging
+* Support for various types of models, including LSTM and Autoencoder architectures
 
 This pipeline module provides a robust framework for time series analysis and prediction, encapsulating best practices in data preprocessing, feature engineering, and model training for time series data.

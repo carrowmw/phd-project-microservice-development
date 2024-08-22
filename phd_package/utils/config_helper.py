@@ -517,6 +517,12 @@ def get_val_ratio():
 
 
 def get_polygon_wkb():
+    """
+    Retrieves the polygon in WKB format from the query configuration.
+
+    Returns:
+        str: The polygon in WKB format
+    """
     coords = get_coords()
     min_lon = coords[0]
     min_lat = coords[1]
@@ -531,3 +537,39 @@ def get_polygon_wkb():
     polygon_wkb = dumps(polygon, hex=True)
 
     return polygon_wkb
+
+
+def get_hidden_dim():
+    """
+    Retrieves the hidden dimension from the pipeline configuration.
+
+    Returns:
+        int: The hidden dimension.
+    """
+    pipeline_config_path = get_pipeline_config_path()
+    pipeline_config = load_config(pipeline_config_path)
+    return get_kwargs(pipeline_config, "hidden_dim")
+
+
+def get_num_layers():
+    """
+    Retrieves the number of layers from the pipeline configuration.
+
+    Returns:
+        int: The number of layers.
+    """
+    pipeline_config_path = get_pipeline_config_path()
+    pipeline_config = load_config(pipeline_config_path)
+    return get_kwargs(pipeline_config, "num_layers")
+
+
+def get_dropout():
+    """
+    Retrieves the dropout from the pipeline configuration.
+
+    Returns:
+        float: The dropout.
+    """
+    pipeline_config_path = get_pipeline_config_path()
+    pipeline_config = load_config(pipeline_config_path)
+    return get_kwargs(pipeline_config, "dropout")
