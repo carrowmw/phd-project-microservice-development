@@ -59,9 +59,7 @@ class Pipeline:
 
     def __init__(self, experiment_name: str = None):
         # Initialize Experiment Tracker
-        if experiment_name is not None:
-            self.experiment_name = experiment_name
-        self.experiment_name = generate_random_string(12)
+        self.experiment_name = experiment_name or generate_random_string(12)
         # self.experiment_tracker = ExperimentTracker(experiment_name)
         # Initialize logging
         logging.basicConfig(
@@ -268,50 +266,45 @@ class Pipeline:
             logging.info("\n\nTraining %d models...\n", len(loaders))
             list_of_trained_models_and_metrics = []
 
-            experiment_id = mlflow.create_experiment(self.experiment_name)
-            print(type(experiment_id))
-            print(experiment_id)
-            with mlflow.start_run(
-                run_name="PARENT_RUN",
-                experiment_id=experiment_id,
-                tags={"version": "v1", "priority": "P1"},
-                description="parent",
-            ) as parent_run:
+            # experiment_id = mlflow.create_experiment(self.experiment_name)
+            # print(type(experiment_id))
+            # print(experiment_id)
+            # with mlflow.start_run(
+            #     run_name="PARENT_RUN",
+            #     experiment_id=experiment_id,
+            #     tags={"version": "v1", "priority": "P1"},
+            #     description="parent",
+            # ) as parent_run:
 
-                for i, loader in enumerate(loaders, start=1):
-                    with mlflow.start_run(
-                        run_name=loader[0],
-                        experiment_id=experiment_id,
-                        nested=True,
-                    ) as child_run:
+            for i, loader in enumerate(loaders, start=1):
+                with mlflow.start_run(run_name=f"Model_{loader[0]}", nested=True):
+                    print(f"\nTraining model {i}/{len(loaders)} - {loader[0]}")
+                    logging.info(
+                        "\nTraining model %d/%d - %s",
+                        (i + 1),
+                        len(loaders),
+                        loader[0],
+                    )
 
-                        print(f"\nTraining model {i}/{len(loaders)} - {loader[0]}")
-                        logging.info(
-                            "\nTraining model %d/%d - %s",
-                            (i + 1),
-                            len(loaders),
-                            loader[0],
-                        )
+                    model, train_metrics, val_metrics = process_data(
+                        (loader[1], loader[2], loader[3]),
+                        stage="training",
+                        config_path=get_pipeline_config_path(),
+                    )
 
-                        model, train_metrics, val_metrics = process_data(
-                            (loader[1], loader[2], loader[3]),
-                            stage="training",
-                            config_path=get_pipeline_config_path(),
-                        )
+                    # print(f"Logging model {loader[0]} to MLflow...")
+                    # mlflow.pytorch.log_model(model, "models")
 
-                        # print(f"Logging model {loader[0]} to MLflow...")
-                        # mlflow.pytorch.log_model(model, "models")
+                    # # Register the model
+                    # model_name = f"sensor_model_{loader[0]}"
+                    # model_uri = f"runs:/{child_run.info.run_id}/models/{loader[0]}"
+                    # mlflow.register_model(model_uri, model_name)
 
-                        # # Register the model
-                        # model_name = f"sensor_model_{loader[0]}"
-                        # model_uri = f"runs:/{child_run.info.run_id}/models/{loader[0]}"
-                        # mlflow.register_model(model_uri, model_name)
+                    list_of_trained_models_and_metrics.append(
+                        (loader[0], model, loader[4], train_metrics, val_metrics)
+                    )
 
-                        list_of_trained_models_and_metrics.append(
-                            (loader[0], model, loader[4], train_metrics, val_metrics)
-                        )
-
-                return list_of_trained_models_and_metrics
+            return list_of_trained_models_and_metrics
 
         trained_models_and_metrics_list = load_or_process_data(
             dataloaders_list,
@@ -376,11 +369,12 @@ class Pipeline:
         """
         Run the pipeline.
         """
-        sensors_df = self.read_or_download_sensors()
-        raw_dfs = self.read_or_download_data()
-        preprocessed_dfs = self.preprocess_data(raw_dfs)
-        engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
-        dataloaders_list = self.load_dataloader(engineered_dfs)
-        trained_models_list = self.train_model(dataloaders_list)
-        test_metrics_list = self.test_model(trained_models_list)
+        with mlflow.start_run(run_name=self.experiment_name, nested=True):
+            sensors_df = self.read_or_download_sensors()
+            raw_dfs = self.read_or_download_data()
+            preprocessed_dfs = self.preprocess_data(raw_dfs)
+            engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
+            dataloaders_list = self.load_dataloader(engineered_dfs)
+            trained_models_list = self.train_model(dataloaders_list)
+            test_metrics_list = self.test_model(trained_models_list)
         return test_metrics_list

@@ -24,6 +24,12 @@ from .config_helper import (
     get_batch_size,
     get_model_type,
     get_epochs,
+    get_lr,
+    get_hidden_dim,
+    get_num_layers,
+    get_dropout,
+    get_scheduler_step_size,
+    get_scheduler_gamma,
 )
 
 
@@ -182,8 +188,13 @@ def pipeline_output_data_filename() -> str:
     batch_size = get_batch_size()
     model_type = get_model_type()
     epochs = get_epochs()
+    scheduler_step_size = get_scheduler_step_size()
+    scheduler_gamma = get_scheduler_gamma()
+    hidden_dim = get_hidden_dim()
+    num_layers = get_num_layers()
+    dropout = get_dropout()
 
-    file_path = f"{prefix}_BatchSize_{batch_size}_Model_{model_type}_Epoch_{epochs}.pkl"
+    file_path = f"{prefix}_BatchSize_{batch_size}_Model_{model_type}_Epoch_{epochs}_HiddenDim_{hidden_dim}_NumLayers_{num_layers}_Dropout_{dropout}_SchedulerStepSize_{scheduler_step_size}_SchedulerGamma_{scheduler_gamma}.pkl"
 
     return file_path
 

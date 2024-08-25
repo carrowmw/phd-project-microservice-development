@@ -1,5 +1,6 @@
 # phd_package/pipeline/hyperparameter_tuning.py
 import os
+import mlflow
 from typing import List, Tuple, Dict
 import json
 import logging
@@ -7,6 +8,7 @@ from datetime import datetime
 import numpy as np
 import optuna
 from phd_package.config.paths import PIPELINE_CONFIG_PATH, TUNING_OUTPUT_DIR
+from phd_package.utils.pipeline_helper import generate_random_string
 from .pipeline_generator import Pipeline
 
 
@@ -25,7 +27,6 @@ class HyperparameterTuner:
         self.optimize_metric = optimize_metric
         self.output_dir = output_dir
         self.setup_logging()
-        logging.basicConfig(level=logging.INFO)
 
     def setup_logging(self):
         # Create ouptut directory if it doesn't exist
@@ -36,71 +37,110 @@ class HyperparameterTuner:
         self.log_file = os.path.join(self.output_dir, f"tuning_{timestamp}.log")
         self.results_file = os.path.join(self.output_dir, f"tuning_{timestamp}.json")
 
-        # Setup logging to file and console
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s - %(levelname)s - %(message)s",
-            handlers=[
-                logging.FileHandler(self.log_file),
-                logging.StreamHandler(),
-            ],
-        )
+        # Setup the logger
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.INFO)
+
+        # Create file and console handlers (both will log INFO level messages)
+        file_handler = logging.FileHandler(self.log_file)
+        console_handler = logging.StreamHandler()
+
+        # Create a formatter and set it to the handlers
+        formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        file_handler.setFormatter(formatter)
+        console_handler.setFormatter(formatter)
+
+        # Add the handlers to the logger
+        logger.addHandler(file_handler)
+        logger.addHandler(console_handler)
+
+        # Capture Optuna's output
+        optuna_logger = logging.getLogger("optuna")
+        optuna_logger.addHandler(file_handler)
+        optuna_logger.addHandler(console_handler)
 
     def objective(self, trial: optuna.Trial) -> float:
         """
         Optuna objective function to minimize the loss or maximize the accuracy score.
         """
         # Define the hyperparameters to tune
-        config = {
-            "window_size": trial.suggest_int("window_size", 2, 10),
-            "horizon": trial.suggest_int("horizon", 1, 12),
-            "batch_size": trial.suggest_categorical("batch_size", [32, 64, 128]),
-            "lr": trial.suggest_loguniform("lr", 1e-5, 1e-1),
-            "epochs": trial.suggest_int("epochs", 5, 50),
-            "model_type": trial.suggest_categorical("model_type", ["lstm", "gru"]),
-            "hidden_dim": trial.suggest_int("hidden_dim", 32, 256),
-            "num_layers": trial.suggest_int("num_layers", 1, 3),
-            "dropout": trial.suggest_uniform("dropout", 0.0, 0.5),
-        }
+        experiment_name = f"Trail_{trial.number}_{generate_random_string(8)}"
+        experiment_id = mlflow.create_experiment(experiment_name)
+        with mlflow.start_run(experiment_id=experiment_id):
 
-        try:
-            # Update the pipeline configuration with the trial's hyperparameters
-            self.update_config_file(config)
+            config = {
+                "window_size": trial.suggest_categorical("window_size", [2, 4, 8, 16]),
+                "horizon": trial.suggest_categorical("horizon", [4, 8, 12, 24]),
+                "batch_size": trial.suggest_categorical("batch_size", [32, 64, 128]),
+                "lr": trial.suggest_float("lr", 1e-5, 1e-1, log=True),
+                "epochs": trial.suggest_categorical("epochs", [5, 10, 20]),
+                "model_type": trial.suggest_categorical("model_type", ["lstm", "gru"]),
+                "hidden_dim": trial.suggest_categorical(
+                    "hidden_dim", [32, 64, 128, 256]
+                ),
+                "num_layers": trial.suggest_int("num_layers", 1, 3),
+                "dropout": trial.suggest_float("dropout", 0.0, 0.5),
+                # LR Scheduler parameters
+                "scheduler_step_size": trial.suggest_int("scheduler_step_size", 1, 10),
+                "scheduler_gamma": trial.suggest_float("scheduler_gamma", 0.1, 0.9),
+            }
 
-            # Run the pipeline with the current hyperparameters
-            pipeline = Pipeline()
-            test_metrics_list = pipeline.run_pipeline()
+            # Log the hyperparameters to MLflow
+            mlflow.log_params(config)
 
-            # Calculate the average performance across all models
-            test_loss, test_mape, test_rmse, test_r2 = self.extract_average_performance(
-                test_metrics_list
-            )
+            try:
+                # Update the pipeline configuration with the trial's hyperparameters
+                self.update_config_file(config)
 
-            # Log the results
-            logging.info(
-                "Trial %d: loss=%.4f, mape=%.4f, rmse=%.4f, r2=%.4f",
-                trial.number,
-                np.mean(test_loss),
-                np.mean(test_mape),
-                np.mean(test_rmse),
-                np.mean(test_r2),
-            )
+                # Run the pipeline with the current hyperparameters
+                pipeline = Pipeline(experiment_name=experiment_name)
+                test_metrics_list = pipeline.run_pipeline()
 
-            # Return the metric we want to optimize
-            if self.optimize_metric.lower() == "rmse":
-                return np.mean(test_rmse)
-            elif self.optimize_metric.lower() == "mape":
-                return np.mean(test_mape)
-            elif self.optimize_metric.lower() == "loss":
-                return np.mean(test_loss)
-            elif self.optimize_metric.lower() == "r2":
-                return -np.mean(test_r2)  # Negative because Optuna minimizes by default
-            else:
-                raise ValueError(f"Unknown optimization metric: {self.optimize_metric}")
+                # Calculate the average performance across all models
+                test_loss, test_mape, test_rmse, test_r2 = (
+                    self.extract_average_performance(test_metrics_list)
+                )
 
-        except Exception as e:
-            logging.error("Error in trial %d: %s", trial.number, str(e))
-            raise optuna.exceptions.TrialPruned()
+                # Log the results
+                logging.info(
+                    "Trial %d: loss=%.4f, mape=%.4f, rmse=%.4f, r2=%.4f",
+                    trial.number,
+                    np.mean(test_loss),
+                    np.mean(test_mape),
+                    np.mean(test_rmse),
+                    np.mean(test_r2),
+                )
+
+                # Log metrics to MLflow
+                mlflow.log_metrics(
+                    {
+                        "mean_test_loss": np.mean(test_loss),
+                        "mean_test_mape": np.mean(test_mape),
+                        "mean_test_rmse": np.mean(test_rmse),
+                        "mean_test_r2": np.mean(test_r2),
+                    }
+                )
+
+                # Return the metric we want to optimize
+                if self.optimize_metric.lower() == "rmse":
+                    return np.mean(test_rmse)
+                elif self.optimize_metric.lower() == "mape":
+                    return np.mean(test_mape)
+                elif self.optimize_metric.lower() == "loss":
+                    return np.mean(test_loss)
+                elif self.optimize_metric.lower() == "r2":
+                    return -np.mean(
+                        test_r2
+                    )  # Negative because Optuna minimizes by default
+                else:
+                    raise ValueError(
+                        f"Unknown optimization metric: {self.optimize_metric}"
+                    )
+
+            except Exception as e:
+                logging.error("Error in trial %d: %s", trial.number, str(e))
+                mlflow.log_param("error", str(e))
+                raise optuna.exceptions.TrialPruned()
 
     def update_config_file(self, config: Dict):
         """

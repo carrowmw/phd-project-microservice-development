@@ -573,3 +573,27 @@ def get_dropout():
     pipeline_config_path = get_pipeline_config_path()
     pipeline_config = load_config(pipeline_config_path)
     return get_kwargs(pipeline_config, "dropout")
+
+
+def get_lr():
+    """
+    Retrieves the learning rate from the pipeline configuration.
+
+    Returns:
+        float: The learning rate.
+    """
+    pipeline_config_path = get_pipeline_config_path()
+    pipeline_config = load_config(pipeline_config_path)
+    return get_kwargs(pipeline_config, "lr")
+
+
+def get_early_stopping_patience():
+    """
+    Retrieves the early stopping patience from the pipeline configuration.
+
+    Returns:
+        int: The early stopping patience.
+    """
+    pipeline_config_path = get_pipeline_config_path()
+    pipeline_config = load_config(pipeline_config_path)
+    return get_kwargs(pipeline_config, "early_stopping_patience")

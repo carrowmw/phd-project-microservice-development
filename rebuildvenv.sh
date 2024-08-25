@@ -4,7 +4,9 @@ rebuild_venv() {
     if [ -d ".venv" ]; then
         rm -rf .venv
     fi
-    poetry env use python3.10
+    python3.10 -m venv .venv
+    source .venv/bin/activate
+    poetry env use $(which python)
     poetry install
     echo "Virtual environment rebuilt."
 }
