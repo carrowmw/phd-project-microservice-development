@@ -69,12 +69,14 @@ class HyperparameterTuner:
         with mlflow.start_run(experiment_id=experiment_id):
 
             config = {
-                "window_size": trial.suggest_categorical("window_size", [2, 4, 8, 16]),
-                "horizon": trial.suggest_categorical("horizon", [4, 8, 12, 24]),
+                "window_size": trial.suggest_categorical(
+                    "window_size", [4, 8, 12, 16, 20, 24]
+                ),
+                "horizon": trial.suggest_categorical("horizon", [24]),
                 "batch_size": trial.suggest_categorical("batch_size", [32, 64, 128]),
                 "lr": trial.suggest_float("lr", 1e-5, 1e-1, log=True),
                 "epochs": trial.suggest_categorical("epochs", [5, 10, 20]),
-                "model_type": trial.suggest_categorical("model_type", ["lstm", "gru"]),
+                "model_type": trial.suggest_categorical("model_type", ["lstm"]),
                 "hidden_dim": trial.suggest_categorical(
                     "hidden_dim", [32, 64, 128, 256]
                 ),
