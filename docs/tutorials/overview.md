@@ -1,3 +1,33 @@
+# Overview
+
+This library is controlled through a series of config files. These files change how the pipeline preprocesses, engineers, trains and evaluates, as well as which types of data is queried in the first place. The main config files that will need to changed by the user are:
+
+* `query.json`
+* `pipeline.json`
+
+These two files control which data is selected for from the Urban Observatory database as an input for the pipeline, and how that data is then used in the pipeline.
+
+The `query.json` might look like this:
+
+```json
+{
+    "coords": [
+        -1.611096,
+        54.968919,
+        -1.607040,
+        54.972681
+    ],
+    "query_date_format": "startend",
+    "theme": "People",
+    "last_n_days": 720,
+    "starttime": 20220724,
+    "endtime": 20240821
+}
+```
+
+The `pipeline.json` is more lengthy. It first defines the parameters that are used as input to define its behaviour. It then defines the steps that are executed when the pipeline is ran. New functions can be written by the user and added to the library during each of the processing stages, so long as they follow the I/O rules for each stage. The function can the be added as a step in the relevant stage below and will be executed in the pipeline. This is especially useful during the feature engineering stage, where functions that add various features might need to be experimented with and turned on and off.
+
+```json
 {
     "kwargs": {
         "features_to_include_on_aggregation": null,
@@ -132,3 +162,5 @@
         }
     ]
 }
+```
+

@@ -1,5 +1,6 @@
 # phd_package/pipeline/hyperparameter_tuning.py
 import os
+import traceback
 import mlflow
 from typing import List, Tuple, Dict
 import json
@@ -27,6 +28,10 @@ class HyperparameterTuner:
         self.optimize_metric = optimize_metric
         self.output_dir = output_dir
         self.setup_logging()
+        self.experiment_name = (
+            f"Hyperparameter_Tuning_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        )
+        self.experiment_id = mlflow.create_experiment(self.experiment_name)
 
     def setup_logging(self):
         # Create ouptut directory if it doesn't exist
@@ -64,9 +69,9 @@ class HyperparameterTuner:
         Optuna objective function to minimize the loss or maximize the accuracy score.
         """
         # Define the hyperparameters to tune
-        experiment_name = f"Trail_{trial.number}_{generate_random_string(8)}"
-        experiment_id = mlflow.create_experiment(experiment_name)
-        with mlflow.start_run(experiment_id=experiment_id):
+        with mlflow.start_run(
+            experiment_id=self.experiment_id, run_name=f"Trial_{trial.number}"
+        ):
 
             config = {
                 "window_size": trial.suggest_categorical(
@@ -95,13 +100,41 @@ class HyperparameterTuner:
                 self.update_config_file(config)
 
                 # Run the pipeline with the current hyperparameters
-                pipeline = Pipeline(experiment_name=experiment_name)
+                pipeline = Pipeline(
+                    experiment_id=self.experiment_id, trial_number=trial.number
+                )
                 test_metrics_list = pipeline.run_pipeline()
+
+                # Log the structure of test_metrics_list for debugging
+                logging.info(
+                    "Structure of test_metrics_list: %s", type(test_metrics_list)
+                )
+                for i, item in enumerate(test_metrics_list):
+                    logging.info("Item %s: %s", i, type(item))
 
                 # Calculate the average performance across all models
                 test_loss, test_mape, test_rmse, test_r2 = (
                     self.extract_average_performance(test_metrics_list)
                 )
+
+                # Log individual model metrics
+                for item in test_metrics_list:
+                    if not isinstance(item, tuple) or len(item) != 4:
+                        logging.error(
+                            "Expected test_metrics to be a tuple with 4 elements, but got %s with %s elements",
+                            type(item),
+                            len(test_metrics),
+                        )
+                        continue
+                    sensor_name, _, _, test_metrics = item
+                    mlflow.log_metrics(
+                        {
+                            f"{sensor_name}_test_loss": test_metrics["Test loss"],
+                            f"{sensor_name}_test_mape": test_metrics["Test MAPE"],
+                            f"{sensor_name}_test_rmse": test_metrics["Test RMSE"],
+                            f"{sensor_name}_test_r2": test_metrics["Test R2"],
+                        }
+                    )
 
                 # Log the results
                 logging.info(
@@ -141,8 +174,12 @@ class HyperparameterTuner:
 
             except Exception as e:
                 logging.error("Error in trial %d: %s", trial.number, str(e))
-                mlflow.log_param("error", str(e))
-                raise optuna.exceptions.TrialPruned()
+                logging.error("Exception type: %s", type(e).__name__)
+                logging.error("Exception traceback: %s", traceback.format_exc())
+                return None
+
+                #  mlflow.log_param("error", str(e))
+                # raise optuna.exceptions.TrialPruned()
 
     def update_config_file(self, config: Dict):
         """
@@ -163,9 +200,7 @@ class HyperparameterTuner:
             logging.error("Error updating config file: %s", str(e))
             raise
 
-    def extract_average_performance(
-        self, test_metrics_list: List[Tuple[str, np.ndarray, np.ndarray, Dict]]
-    ) -> Tuple[List[float], List[float], List[float], List[float]]:
+    def extract_average_performance(self, test_metrics_list):
         """
         Returns:
             test_loss (list): Each model's average test loss.
@@ -173,12 +208,18 @@ class HyperparameterTuner:
             test_rmse (list): Each model's average test RMSE.
             test_r2 (list): Each model's average test R2.
         """
-        # Extract the precalculated average performance metrics and sensor name from the test_metrics_list
-        avg_performance = [tuple[3] for tuple in test_metrics_list]
-        test_loss = [dict["Test loss"] for dict in avg_performance]
-        test_mape = [dict["Test MAPE"] for dict in avg_performance]
-        test_rmse = [dict["Test RMSE"] for dict in avg_performance]
-        test_r2 = [dict["Test R2"] for dict in avg_performance]
+        logging.info(f"Extracting average performance from: {test_metrics_list}")
+
+        test_loss = []
+        test_mape = []
+        test_rmse = []
+        test_r2 = []
+
+        for _, _, _, metrics in test_metrics_list:
+            test_loss.append(metrics["Test loss"])
+            test_mape.append(metrics["Test MAPE"])
+            test_rmse.append(metrics["Test RMSE"])
+            test_r2.append(metrics["Test R2"])
 
         return test_loss, test_mape, test_rmse, test_r2
 
@@ -192,27 +233,42 @@ class HyperparameterTuner:
         )
 
         logging.info("Best trial:")
-        trial = study.best_trial
-        logging.info("  Value: %s", trial.value)
-        logging.info("  Params: ")
-        for key, value in trial.params.items():
-            logging.info("    %s: %s", key, value)
+        try:
+            trial = study.best_trial
+            logging.info("  Value: %s", trial.value)
+            logging.info("  Params: ")
+            for key, value in trial.params.items():
+                logging.info("    %s: %s", key, value)
+        except ValueError:
+            # This will be triggered when no trials have been completed yet
+            logging.info("No trials completed yet.")
 
         # Save the best hyperparameters and study statistics to a JSON file
         self.save_results(study)
 
-        return study.best_params
+        return study.best_params if study.best_trial else None
 
     def save_results(self, study: optuna.study.Study):
         results = {
-            "best_params": study.best_params,
-            "best_value": study.best_value,
-            "best_trial_number": study.best_trial.number,
             "n_trials": len(study.trials),
             "optimization_history": [
-                {"trial_number": t.number, "value": t.value} for t in study.trials
+                {
+                    "trial_number": t.number,
+                    "value": t.value if t.value is not None else "Incomplete",
+                }
+                for t in study.trials
             ],
         }
+        try:
+            results.update(
+                {
+                    "best_params": study.best_params,
+                    "best_value": study.best_value,
+                    "best_trial_number": study.best_trial.number,
+                }
+            )
+        except ValueError:
+            results["best_trial"] = "No trials completed yet."
 
         with open(self.results_file, "w", encoding="utf8") as f:
             json.dump(results, f, indent=4)
@@ -224,8 +280,16 @@ class HyperparameterTuner:
         """
         Callback function to print the best trial's results.
         """
-        if study.best_trial.number == trial.number:
-            logging.info("New best trial: %d", trial.number)
+        try:
+            if study.best_trial.number == trial.number:
+                logging.info("New best trial: %d", trial.number)
+                logging.info("  Value: %s", trial.value)
+                logging.info("  Params: ")
+                for key, value in trial.params.items():
+                    logging.info("    %s: %s", key, value)
+        except ValueError:
+            # This will be triggered when no trials have been completed yet
+            logging.info("Trials %d compeleted, but no best trial determined yet.")
             logging.info("  Value: %s", trial.value)
             logging.info("  Params: ")
             for key, value in trial.params.items():

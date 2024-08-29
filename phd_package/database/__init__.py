@@ -1,27 +1,13 @@
 # database/__init__.py
 
-import psycopg2
+from phd_package.database.database import init_db
+from phd_package.api.api_data_processor import APIDataProcessor
 
 
-def connect_to_db():
-    try:
-        connection = psycopg2.connect(
-            dbname="phdprojectdatabase",
-            user="phdprojectdatabase",
-            password="phdprojectdatabase",
-            host="localhost",
-        )
-        cursor = connection.cursor()
-        print("Connected to phdprojectdatabase")
-        return connection, cursor
-    except Exception as error:
-        print(f"Error connecting to the database: {error}")
-        return None, None
+def setup_database():
+    init_db()
+    processor = APIDataProcessor()
+    processor.execute_data_request()  # This will fetch and process the data
 
 
-connection, cursor = connect_to_db()
-
-# Remember to close the connection
-if connection:
-    cursor.close()
-    connection.close()
+setup_database()

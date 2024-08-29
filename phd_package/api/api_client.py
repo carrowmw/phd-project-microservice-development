@@ -31,14 +31,17 @@ class APIClient:
         Retrieves the request parameters for a given endpoint, merging with any additional parameters.
         """
         api_params_list = self.endpoints[endpoint_key].get("params")
-        request_params = {
-            key: value
-            for (key, value) in self.query_config.items()
-            if key in api_params_list
-        }
-        if "polygon_wkb" in api_params_list:
-            request_params.update({"polygon_wkb": get_polygon_wkb()})
-        return request_params
+        if api_params_list is not None:
+            request_params = {
+                key: value
+                for (key, value) in self.query_config.items()
+                if key in api_params_list
+            }
+            if "polygon_wkb" in api_params_list:
+                request_params.update({"polygon_wkb": get_polygon_wkb()})
+            return request_params
+        else:
+            return {}
 
     def get(self, endpoint_key, sensor_name=None, **kwargs):
         """

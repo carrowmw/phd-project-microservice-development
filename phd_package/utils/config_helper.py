@@ -6,6 +6,7 @@ from ..config.paths import (
     get_pipeline_config_path,
     get_api_config_path,
     get_query_config_path,
+    get_database_config_path,
 )
 
 
@@ -45,6 +46,28 @@ def get_query_config():
     """
     query_config_path = get_query_config_path()
     return load_config(query_config_path)
+
+
+def get_database_config():
+    """
+    Retrieves the database configuration.
+
+    Returns:
+        dict: The database configuration.
+    """
+    database_config_path = get_database_config_path()
+    return load_config(database_config_path)
+
+
+def get_database_url():
+    """
+    Retrieves the database URI from the database configuration.
+
+    Returns:
+        str: The database URI.
+    """
+    database_config = get_database_config()
+    return database_config.get("database_url", None)
 
 
 def get_query_date_format():

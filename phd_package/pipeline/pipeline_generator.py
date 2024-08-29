@@ -57,9 +57,11 @@ from ..utils.config_helper import get_window_size, get_horizon
 
 class Pipeline:
 
-    def __init__(self, experiment_name: str = None):
+    def __init__(self, experiment_id: str = None, trial_number: int = None):
         # Initialize Experiment Tracker
-        self.experiment_name = experiment_name or generate_random_string(12)
+        self.experiment_id = experiment_id or generate_random_string(12)
+        self.trial_number = trial_number or 0
+
         # self.experiment_tracker = ExperimentTracker(experiment_name)
         # Initialize logging
         logging.basicConfig(
@@ -266,42 +268,50 @@ class Pipeline:
             logging.info("\n\nTraining %d models...\n", len(loaders))
             list_of_trained_models_and_metrics = []
 
-            # experiment_id = mlflow.create_experiment(self.experiment_name)
-            # print(type(experiment_id))
-            # print(experiment_id)
-            # with mlflow.start_run(
-            #     run_name="PARENT_RUN",
-            #     experiment_id=experiment_id,
-            #     tags={"version": "v1", "priority": "P1"},
-            #     description="parent",
-            # ) as parent_run:
-
             for i, loader in enumerate(loaders, start=1):
-                with mlflow.start_run(run_name=f"Model_{loader[0]}", nested=True):
-                    print(f"\nTraining model {i}/{len(loaders)} - {loader[0]}")
+                model_name, model, train_loader, val_loader, test_loader = loader
+                with mlflow.start_run(run_name=f"Train_{model_name}", nested=True):
+                    print(f"\nTraining model {i}/{len(loaders)} - {model_name}")
                     logging.info(
                         "\nTraining model %d/%d - %s",
                         (i + 1),
                         len(loaders),
-                        loader[0],
+                        model_name,
                     )
 
-                    model, train_metrics, val_metrics = process_data(
-                        (loader[1], loader[2], loader[3]),
+                    model, train_metrics_list, val_metrics_list = process_data(
+                        (model, train_loader, val_loader),
                         stage="training",
                         config_path=get_pipeline_config_path(),
                     )
 
-                    # print(f"Logging model {loader[0]} to MLflow...")
-                    # mlflow.pytorch.log_model(model, "models")
-
-                    # # Register the model
-                    # model_name = f"sensor_model_{loader[0]}"
-                    # model_uri = f"runs:/{child_run.info.run_id}/models/{loader[0]}"
-                    # mlflow.register_model(model_uri, model_name)
+                    # Log model specific metrics
+                    mlflow.log_metrics(
+                        {
+                            f"{model_name}_train_loss": train_metrics_list[-1][
+                                "Train loss"
+                            ],
+                            f"{model_name}_train_mape": train_metrics_list[-1][
+                                "Train MAPE"
+                            ],
+                            f"{model_name}_train_rmse": train_metrics_list[-1][
+                                "Train RMSE"
+                            ],
+                            f"{model_name}_val_loss": val_metrics_list[-1]["Val loss"],
+                            f"{model_name}_val_mape": val_metrics_list[-1]["Val MAPE"],
+                            f"{model_name}_val_rmse": val_metrics_list[-1]["Val RMSE"],
+                            f"{model_name}_val_r2": val_metrics_list[-1]["Val R2"],
+                        }
+                    )
 
                     list_of_trained_models_and_metrics.append(
-                        (loader[0], model, loader[4], train_metrics, val_metrics)
+                        (
+                            model_name,
+                            model,
+                            test_loader,
+                            train_metrics_list,
+                            val_metrics_list,
+                        )
                     )
 
             return list_of_trained_models_and_metrics
@@ -332,19 +342,45 @@ class Pipeline:
             print(f"\n\nTesting {len(models)} models…\n")
             logging.info("\n\nTesting %d models…\n", len(models))
             list_of_test_metrics = []
-            for i, model in enumerate(models, start=1):
-                print(f"\nTesting model {i}/{len(models)} - {model[0]}")
-                logging.info(
-                    "\nTesting model %d/%d - %s", (i + 1), len(models), model[0]
-                )
-                test_predictions, test_labels, test_metrics = process_data(
-                    (model[1], model[2]),
-                    stage="testing",
-                    config_path=get_pipeline_config_path(),
-                )
-                list_of_test_metrics.append(
-                    (model[0], test_predictions, test_labels, test_metrics)
-                )
+            for i, model_data in enumerate(models, start=1):
+                try:
+                    if not isinstance(model_data, tuple) or len(model_data) != 5:
+                        logging.error("Unexpected model structure: %s", model_data)
+                        continue
+                    model_name, model, test_loader = (
+                        model_data[0],
+                        model_data[1],
+                        model_data[2],
+                    )
+                    print(f"\nTesting model {i}/{len(models)} - {model_name}")
+                    logging.info(
+                        "\nTesting model %d/%d - %s", (i + 1), len(models), model_name
+                    )
+
+                    with mlflow.start_run(run_name=f"Test_{model_name}", nested=True):
+                        test_predictions, test_labels, test_metrics = process_data(
+                            (model, test_loader),
+                            stage="testing",
+                            config_path=get_pipeline_config_path(),
+                        )
+
+                        # Log model specific metrics
+                        mlflow.log_metrics(
+                            {
+                                f"{model_name}_test_loss": test_metrics["Test loss"],
+                                f"{model_name}_test_mape": test_metrics["Test MAPE"],
+                                f"{model_name}_test_rmse": test_metrics["Test RMSE"],
+                                f"{model_name}_test_r2": test_metrics["Test R2"],
+                            }
+                        )
+
+                    list_of_test_metrics.append(
+                        (model_name, test_predictions, test_labels, test_metrics)
+                    )
+
+                except Exception as e:
+                    logging.error("Error testing model %s: %s", model_name, str(e))
+                    logging.error("Exception type: %s", type(e).__name__)
 
             return list_of_test_metrics
 
@@ -369,7 +405,11 @@ class Pipeline:
         """
         Run the pipeline.
         """
-        with mlflow.start_run(run_name=self.experiment_name, nested=True):
+        with mlflow.start_run(
+            run_name=f"Trial_{self.trial_number}_Pipeline",
+            experiment_id=self.experiment_id,
+            nested=True,
+        ):
             sensors_df = self.read_or_download_sensors()
             raw_dfs = self.read_or_download_data()
             preprocessed_dfs = self.preprocess_data(raw_dfs)

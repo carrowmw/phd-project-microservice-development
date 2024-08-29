@@ -10,10 +10,12 @@
             ]
         },
         "sensor_types": {
-            "url": "sensors/types/json"
+            "url": "sensors/types/json",
+            "params": []
         },
         "themes": {
-            "url": "themes/json"
+            "url": "themes/json",
+            "params": []
         },
         "variables": {
             "url": "variables/json",

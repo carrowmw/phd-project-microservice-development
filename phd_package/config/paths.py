@@ -16,6 +16,7 @@ PIPELINE_CONFIG_PATH = CONFIG_DIR / "pipeline.json"
 API_CONFIG_PATH = CONFIG_DIR / "api.json"
 DASHBOARD_CONFIG_PATH = CONFIG_DIR / "dashboard.json"
 QUERY_CONFIG_PATH = CONFIG_DIR / "query.json"
+DATABASE_CONFIG_PATH = CONFIG_DIR / "database.json"
 
 
 def get_data_dir():
@@ -48,6 +49,10 @@ def get_dashboard_config_path():
 
 def get_query_config_path():
     return QUERY_CONFIG_PATH
+
+
+def get_database_config_path():
+    return DATABASE_CONFIG_PATH
 
 
 # Pipeline Directories
