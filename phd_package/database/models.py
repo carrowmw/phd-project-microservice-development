@@ -21,7 +21,7 @@ class Sensor(Base):
     sensor_name = Column(String, unique=True)
     centroid_longitude = Column(Float)
     centroid_latitude = Column(Float)
-    metadata = Column(JSON)  # For storing additional sensor information
+    sensor_metadata = Column(JSON)  # For storing additional sensor information
 
 
 class RawData(Base):
@@ -31,7 +31,7 @@ class RawData(Base):
     sensor_id = Column(Integer, ForeignKey("sensors.id"))
     timestamp = Column(DateTime, index=True)
     value = Column(Float)
-    metadata = Column(JSON)  # For storing flags, units, etc.
+    raw_metadata = Column(JSON)  # For storing flags, units, etc.
 
     sensor = relationship("Sensor", back_populates="raw_data")
 
@@ -43,7 +43,7 @@ class ProcessedData(Base):
     sensor_id = Column(Integer, ForeignKey("sensors.id"))
     timestamp = Column(DateTime, index=True)
     data = Column(LargeBinary)  # Storing pickled preprocessed DataFrame
-    metadata = Column(JSON)  # For storing preprocessing parameters
+    process_metadata = Column(JSON)  # For storing preprocessing parameters
 
     sensor = relationship("Sensor", back_populates="processed_data")
 
@@ -55,7 +55,7 @@ class EngineeredFeatures(Base):
     sensor_id = Column(Integer, ForeignKey("sensors.id"))
     timestamp = Column(DateTime, index=True)
     data = Column(LargeBinary)  # Storing pickled engineered DataFrame
-    metadata = Column(JSON)  # For storing feature engineering parameters
+    engineered_metadata = Column(JSON)  # For storing feature engineering parameters
 
     sensor = relationship("Sensor", back_populates="engineered_features")
 
@@ -68,7 +68,9 @@ class ModelArtifact(Base):
     model_type = Column(String)
     creation_date = Column(DateTime)
     model_data = Column(LargeBinary)  # Storing pickled model
-    metadata = Column(JSON)  # For storing model parameters, performance metrics, etc.
+    model_metadata = Column(
+        JSON
+    )  # For storing model parameters, performance metrics, etc.
 
     sensor = relationship("Sensor", back_populates="models")
 

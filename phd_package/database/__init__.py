@@ -1,4 +1,20 @@
-# database/__init__.py
+# phd_package/database/__init__.py
+
+from .database import init_db, get_db
+from .models import Sensor, RawData, ProcessedData, EngineeredFeatures, ModelArtifact
+
+__all__ = [
+    "init_db",
+    "get_db",
+    "Sensor",
+    "RawData",
+    "ProcessedData",
+    "EngineeredFeatures",
+    "ModelArtifact",
+]
+
+# Version information
+__version__ = "0.1.0"
 
 from phd_package.database.database import init_db
 from phd_package.api.api_data_processor import APIDataProcessor

@@ -109,11 +109,20 @@
 .logo-element {
     height: 40px;
     width: auto;
-    /* border: 2px solid red; */
+
+}
+
+.logo-element.newcastle {
     position: absolute;
     top: 20px;
     right: 10px;
 
+}
+
+.logo-element.cdt {
+    position: absolute;
+    top: 20px;
+    right: 160px;
 }
 
 .footer-element {

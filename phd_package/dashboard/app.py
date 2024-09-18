@@ -136,13 +136,17 @@ class SensorDashboardApp:
         title_row = dbc.Row(
             id="title_row",
             children=[
-                html.Img(
-                    src="assets/images/newcastle_logo.png",
-                    className="logo-element",
-                ),
                 html.H2(
                     "Sensor Dashboard",
                     className="title-element",
+                ),
+                html.Img(
+                    src="assets/images/cdt_long.png",
+                    className="logo-element cdt",
+                ),
+                html.Img(
+                    src="assets/images/newcastle.png",
+                    className="logo-element newcastle",
                 ),
             ],
             align="center",

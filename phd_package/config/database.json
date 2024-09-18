@@ -1,5 +1,5 @@
 {
-    "database_url": "postgres://phdprojectdatabase:phdprojectdatabase@localhost:5432/phdprojectdatabase",
+    "database_url": "postgres+psycopg2://phdprojectdatabase:phdprojectdatabase@localhost:5432/phdprojectdatabase",
     "psql": {
         "host": "localhost",
         "port": 5432,

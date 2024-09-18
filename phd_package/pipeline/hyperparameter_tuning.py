@@ -129,10 +129,10 @@ class HyperparameterTuner:
                     sensor_name, _, _, test_metrics = item
                     mlflow.log_metrics(
                         {
-                            f"{sensor_name}_test_loss": test_metrics["Test loss"],
-                            f"{sensor_name}_test_mape": test_metrics["Test MAPE"],
-                            f"{sensor_name}_test_rmse": test_metrics["Test RMSE"],
-                            f"{sensor_name}_test_r2": test_metrics["Test R2"],
+                            f"{sensor_name}_Test_loss": test_metrics["Test loss"],
+                            f"{sensor_name}_Test_MAPE": test_metrics["Test MAPE"],
+                            f"{sensor_name}_Test_RMSE": test_metrics["Test RMSE"],
+                            f"{sensor_name}_Test_R2": test_metrics["Test R2"],
                         }
                     )
 

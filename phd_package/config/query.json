@@ -5,6 +5,7 @@
         -1.607040,
         54.972681
     ],
+    "source": "api",
     "query_date_format": "startend",
     "theme": "People",
     "last_n_days": 720,
