@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Viewing Data - PhD Project Documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Viewing Data";
+        var mkdocs_page_input_path = "tutorials/viewing_data.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/markdown.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> PhD Project Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Module</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/overview/">API Module Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/api_client/">API Client</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/api_data_processor/">API Data Processor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/__main__/">API Main</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline Module</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline_module/overview/">Pipeline Module Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline_module/__main__/">Pipeline Main</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline_module/pipeline/">Pipeline Generator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline_module/stages/">Pipeline Stages</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../running_pipeline/">Running Pipeline</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Viewing Data</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#config-files">Config Files</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#example-queryjson">Example query.json</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#requesting-data">Requesting Data</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#list-of-sensors">List of Sensors</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#raw-sensor-data">Raw Sensor Data</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">PhD Project Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Tutorials</li>
+      <li class="breadcrumb-item active">Viewing Data</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="tutorial-viewing-the-urban-observatory-data">Tutorial: Viewing the Urban Observatory Data</h1>
+<h2 id="config-files">Config Files</h2>
+<p>The api.json config file contains the endpoints for the API request and the query parameters to be include in the request it is advised that these are left as they are. The values of the query parameters are found in the <code>config/query.json</code> file, this file requires input from the user. The <code>coords</code> parameter defines the area which sensors will be requested from. The <code>theme</code> parameter defines the type of sensors that will be looked for (in the example below it will look for pedestrian sensors). The <code>query_date_format</code> defines which of the subsequent three parameters will be used. In the example below it is set to <code>startend</code> which means the query will return data between the dates defined in <code>starttime</code> and <code>endtime</code> formatted as <code>%Y%m%d</code>. Alternatively the <code>query_date_format</code> parameter may be set to <code>last_n_days</code> in which case the query will return data from the number of days defined in the <code>last_n_days</code> parameter (in the case of the example below, the last 720 days).</p>
+<h3 id="example-queryjson">Example <code>query.json</code></h3>
+<pre><code class="language-json">{
+    &quot;coords&quot;: [
+        -1.611096,
+        54.968919,
+        -1.607040,
+        54.972681
+    ],
+    &quot;theme&quot;: &quot;People&quot;,
+    &quot;query_date_format&quot;: &quot;startend&quot;,
+    &quot;last_n_days&quot;: 720,
+    &quot;starttime&quot;: 20220724,
+    &quot;endtime&quot;: 20240821
+}
+</code></pre>
+<h2 id="requesting-data">Requesting Data</h2>
+<p>With these parameters one can make a request using the <code>api_data_processor</code> module. The following example shows how this may be achieved.</p>
+<h3 id="list-of-sensors">List of Sensors</h3>
+<pre><code class="language-python">&gt;&gt;&gt;from phd_package.api.api_data_processor import APIDataProcessor
+&gt;&gt;&gt;processor = APIDataProcessor()
+&gt;&gt;&gt;sensor_list = processor.execute_sensors_request()
+&gt;&gt;&gt;sensor_list.head(5)
+</code></pre>
+<pre><code class="language-output">  Raw ID                                        Sensor Name  ...          Broker Name                     Location (WKT)
+0  79884  PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_...  ...  People Counting API            POINT (-1.6105 54.9721)
+1  79883  PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_NORTH_TO_...  ...  People Counting API            POINT (-1.6105 54.9721)
+2  79869  PER_PEOPLE_GREYSTTHEATRESOUTH_SOUTHWEST_TO_NOR...  ...  People Counting API            POINT (-1.6108 54.9722)
+3  79868  PER_PEOPLE_GREYSTTHEATRESOUTH_SOUTHROAD_TO_NOR...  ...  People Counting API  POINT (-1.610675161 54.972252194)
+4  79859  PER_PEOPLE_GREYSTTHEATRESOUTH_SOUTHEAST_TO_NOR...  ...  People Counting API            POINT (-1.6106 54.9723)
+
+[5 rows x 9 columns]
+</code></pre>
+<h3 id="raw-sensor-data">Raw Sensor Data</h3>
+<pre><code class="language-python">&gt;&gt;&gt;from phd_package.api.api_data_processor import APIDataProcessor
+&gt;&gt;&gt;processor = APIDataProcessor()
+&gt;&gt;&gt;raw_data = processor.execute_data_request()
+&gt;&gt;&gt;type(raw_data), type(raw_data[0]), type(raw_data[0][0]), type(raw_data[0][1])
+</code></pre>
+<pre><code class="language-output">(&lt;class 'list'&gt;, &lt;class 'tuple'&gt;, &lt;class 'str'&gt;, &lt;class 'pandas.core.frame.DataFrame'&gt;)
+</code></pre>
+<pre><code class="language-python">name_of_first_sensor_in_list = raw_data[0][0]
+data_from_first_sensor_in_list = raw_data[0][1]
+print(name_of_first_sensor_in_list)
+data_from_first_sensor_in_list.head(5)
+</code></pre>
+<pre><code class="language-output">PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_NORTH
+
+                                         Sensor Name Variable  ...  Value           Timestamp
+0  PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_...  Walking  ...   27.0 2022-09-02 09:15:00
+1  PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_...  Walking  ...   26.0 2022-09-02 09:30:00
+2  PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_...  Walking  ...   14.0 2022-09-02 09:45:00
+3  PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_...  Walking  ...   14.0 2022-09-02 10:00:00
+4  PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_...  Walking  ...   23.0 2022-09-02 10:15:00
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../running_pipeline/" class="btn btn-neutral float-left" title="Running Pipeline"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../running_pipeline/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

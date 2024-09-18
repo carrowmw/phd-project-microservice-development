@@ -87,13 +87,36 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pipeline-configuration-pipelinejson">Pipeline Configuration (pipeline.json)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#key-configuration-options">Key Configuration Options</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#stage-specific-configurations">Stage-specific Configurations</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#how-it-works">How It Works</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#customisation">Customisation</a>
+    </li>
+        </ul>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#key-features">Key Features</a>
     </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="" href="../__main__.md">Pipeline Main</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../__main__/">Pipeline Main</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline Generator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../stages/">Pipeline Stages</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/running_pipeline/">Running Pipeline</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/viewing_data/">Viewing Data</a>
                   </li>
               </ul>
       </div>
@@ -136,42 +159,108 @@
 <h3 id="1-pipeline-generator-pipeline_generatorpy">1. Pipeline Generator (<code>pipeline_generator.py</code>)</h3>
 <p>The core submodule that orchestrates the entire data processing and modeling pipeline. It includes methods for each stage of the process, from data acquisition to model testing.</p>
 <h3 id="2-preprocessing-preprocessingpy">2. Preprocessing (<code>preprocessing.py</code>)</h3>
-<p>Contains functions for data cleaning and initial transformations, such as:
-* Removing directionality features
-* Aggregating data on datetime
-* Finding consecutive sequences
-* Removing specified fields</p>
+<p>Contains functions for data cleaning and initial transformations, such as:</p>
+<ul>
+<li>Removing directionality features</li>
+<li>Aggregating data on datetime</li>
+<li>Finding consecutive sequences</li>
+<li>Removing specified fields</li>
+</ul>
 <h3 id="3-feature-engineering-feature_engineeringpy">3. Feature Engineering (<code>feature_engineering.py</code>)</h3>
-<p>Provides methods for creating and transforming features, including:
-* Scaling features
-* Resampling frequency
-* Adding term dates features
-* Creating periodicity features
-* Converting datetime to float</p>
+<p>Provides methods for creating and transforming features, including:</p>
+<ul>
+<li>Scaling features</li>
+<li>Resampling frequency</li>
+<li>Adding term dates features</li>
+<li>Creating periodicity features</li>
+<li>Converting datetime to float</li>
+</ul>
 <h3 id="4-dataloader-dataloaderpy">4. Dataloader (<code>dataloader.py</code>)</h3>
-<p>Handles the creation of PyTorch DataLoaders for model training. Key functions include:
-* <code>sliding_windows</code>: Generates sliding windows from time series data.
-* <code>create_dataloader</code>: Prepares training, validation, and test dataloaders.
-* <code>add_model_to_dataloader</code>: Adds the appropriate model to the dataloader pipeline.</p>
+<p>Handles the creation of PyTorch DataLoaders for model training. Key functions include:</p>
+<ul>
+<li><code>sliding_windows</code>: Generates sliding windows from time series data.</li>
+<li><code>create_dataloader</code>: Prepares training, validation, and test dataloaders.</li>
+<li><code>add_model_to_dataloader</code>: Adds the appropriate model to the dataloader pipeline.</li>
+</ul>
 <h3 id="5-model-training-train_modelpy">5. Model Training (<code>train_model.py</code>)</h3>
-<p>Implements the training loop for neural network models. The main function <code>train_model</code> handles:
-* Model training over specified epochs
-* Performance metric tracking
-* Validation during training</p>
+<p>Implements the training loop for neural network models. The main function <code>train_model</code> handles:</p>
+<ul>
+<li>Model training over specified epochs</li>
+<li>Performance metric tracking</li>
+<li>Validation during training</li>
+</ul>
 <h3 id="6-model-testing-test_modelpy">6. Model Testing (<code>test_model.py</code>)</h3>
-<p>Evaluates the trained models on test data. Key functions include:
-* <code>evaluate_model</code>: Calculates performance metrics on a given dataset.
-* <code>test_model</code>: Evaluates the trained model on the test dataset.</p>
+<p>Evaluates the trained models on test data. Key functions include:</p>
+<ul>
+<li><code>evaluate_model</code>: Calculates performance metrics on a given dataset.</li>
+<li><code>test_model</code>: Evaluates the trained model on the test dataset.</li>
+</ul>
 <h2 id="usage">Usage</h2>
 <p>The pipeline module is designed to be used as part of the larger PHD package. It's typically initiated through the main function, which creates an instance of the <code>Pipeline</code> class and calls its <code>run_pipeline()</code> method.</p>
 <p>Each stage of the pipeline can also be used independently for more granular control over the data processing and modeling workflow.</p>
+<h2 id="pipeline-configuration-pipelinejson">Pipeline Configuration (pipeline.json)</h2>
+<p>The pipeline's behaviour is highly customisable through the pipeline.json configuration file. This file allows users to adjust various parameters and enable/disable specific processing steps without modifying the core code.
+Structure of pipeline.json
+The pipeline.json file is structured into several main sections:</p>
+<ol>
+<li><code>kwargs</code>: Contains global parameters used across different stages of the pipeline.</li>
+<li><code>preprocessing</code>: Defines the sequence and configuration of preprocessing steps.</li>
+<li><code>feature_engineering</code>: Specifies the feature engineering steps to be applied.</li>
+<li><code>dataloader</code>: Configures the data loading process.</li>
+<li><code>training</code>: Sets up the model training parameters.</li>
+<li><code>testing</code>: Configures the model testing process.</li>
+</ol>
+<h3 id="key-configuration-options">Key Configuration Options</h3>
+<p>Global Parameters (<code>kwargs</code>)</p>
+<ul>
+<li><code>aggregation_frequency_mins</code>: Frequency for data aggregation (e.g., "15min").</li>
+<li><code>datetime_column</code>: Name of the <code>datetime</code> column (e.g., "Timestamp").</li>
+<li><code>value_column</code>: Name of the main value column (e.g., "Value").</li>
+<li><code>window_size</code>, <code>horizon</code>, <code>stride</code>: Parameters for sliding window creation.</li>
+<li><code>batch_size</code>, <code>shuffle</code>, <code>num_workers</code>: DataLoader configuration.</li>
+<li><code>train_ratio</code>, <code>val_ratio</code>: Data split ratios.</li>
+<li><code>model_type</code>: Type of model to use (e.g., "<code>lstm</code>").</li>
+<li><code>epochs</code>, <code>optimiser</code>, <code>lr</code>: Training parameters.</li>
+</ul>
+<h3 id="stage-specific-configurations">Stage-specific Configurations</h3>
+<p>Each stage (preprocessing, feature_engineering, etc.) contains an array of steps, where each step is defined by:</p>
+<ul>
+<li><code>name</code>: The full path to the function to be executed.</li>
+<li><code>execute_step</code>: A boolean indicating whether to run this step (default is true).</li>
+</ul>
+<h3 id="how-it-works">How It Works</h3>
+<ol>
+<li>The pipeline reads the <code>pipeline.json</code> file at runtime.</li>
+<li>Global parameters from <code>kwargs</code> are used to configure various aspects of the pipeline.</li>
+<li>
+<p>For each stage, the pipeline iterates through the specified steps:</p>
+</li>
+<li>
+<p>It checks the execute_step flag to determine whether to run the step.</p>
+</li>
+<li>
+<p>If true, it dynamically imports and executes the function specified in the name field.</p>
+</li>
+<li>
+<p>This configuration allows for easy addition, removal, or reordering of processing steps.</p>
+</li>
+</ol>
+<h3 id="customisation">Customisation</h3>
+<p>Users can customise the pipeline by:</p>
+<ul>
+<li>Adjusting global parameters in the <code>kwargs</code> section.</li>
+<li>Enabling or disabling specific processing steps by modifying the execute_step flag.</li>
+<li>Changing the order of processing steps within each stage.</li>
+<li>Adding new processing steps by including new entries in the relevant stage arrays.</li>
+</ul>
+<p>This configuration-driven approach provides flexibility and allows users to tailor the pipeline to their specific needs without diving into the code base.</p>
 <h2 id="key-features">Key Features</h2>
 <ul>
-<li>Modular design allowing for easy customization and extension</li>
+<li>Modular design allowing for easy customisation and extension</li>
 <li>Integration with PyTorch for deep learning model implementation</li>
 <li>Comprehensive approach to time series analysis, from data preprocessing to model evaluation</li>
-<li>Utilization of MLflow for experiment tracking and metric logging</li>
-<li>Support for various types of models, including LSTM and autoencoder architectures</li>
+<li>Utilisation of MLflow for experiment tracking and metric logging</li>
+<li>Support for various types of models, including LSTM and Autoencoder architectures</li>
 </ul>
 <p>This pipeline module provides a robust framework for time series analysis and prediction, encapsulating best practices in data preprocessing, feature engineering, and model training for time series data.</p>
               
@@ -179,7 +268,7 @@
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href="../../api_module/__main__/" class="btn btn-neutral float-left" title="API Main"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../pipeline/" class="btn btn-neutral float-right" title="Pipeline Generator">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../__main__/" class="btn btn-neutral float-right" title="Pipeline Main">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -205,7 +294,7 @@
       <span><a href="../../api_module/__main__/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../pipeline/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../__main__/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

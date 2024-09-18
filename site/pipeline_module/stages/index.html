@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Pipeline Stages - PhD Project Documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Pipeline Stages";
+        var mkdocs_page_input_path = "pipeline_module/stages.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/markdown.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> PhD Project Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Module</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/overview/">API Module Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/api_client/">API Client</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/api_data_processor/">API Data Processor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/__main__/">API Main</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline Module</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../overview/">Pipeline Module Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../__main__/">Pipeline Main</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline Generator</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Pipeline Stages</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#data-types">Data Types</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1-preprocessing-stage">1. Preprocessing Stage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#initialise_preprocessing_pipelinedf-pddataframe-pddataframe">initialise_preprocessing_pipeline(df: pd.DataFrame) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#remove_directionality_featuredf-pddataframe-kwargs-pddataframe">remove_directionality_feature(df: pd.DataFrame, **kwargs) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#aggregate_on_datetimedf-pddataframe-kwargs-pddataframe">aggregate_on_datetime(df: pd.DataFrame, **kwargs) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_consecutive_sequencesdf-pddataframe-pddataframe">get_consecutive_sequences(df: pd.DataFrame) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#remove_specified_fieldsdf-pddataframe-kwargs-pddataframe">remove_specified_fields(df: pd.DataFrame, **kwargs) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#terminate_preprocessing_pipelinedf-pddataframe-pddataframe">terminate_preprocessing_pipeline(df: pd.DataFrame) -&gt; pd.DataFrame</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-feature-engineering-stage">2. Feature Engineering Stage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#initialise_engineering_pipelinedf-pddataframe-pddataframe">initialise_engineering_pipeline(df: pd.DataFrame) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#create_periodicity_featuresdf-pddataframe-pddataframe">create_periodicity_features(df: pd.DataFrame) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#datetime_to_floatdf-pddataframe-pddataframe">datetime_to_float(df: pd.DataFrame) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#scale_featuresdf-pddataframe-kwargs-pddataframe">scale_features(df: pd.DataFrame, **kwargs) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#drop_datetime_columndf-pddataframe-pddataframe">drop_datetime_column(df: pd.DataFrame) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#drop_sequence_columndf-pddataframe-pddataframe">drop_sequence_column(df: pd.DataFrame) -&gt; pd.DataFrame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#terminate_engineering_pipelinedf-pddataframe-pddataframe">terminate_engineering_pipeline(df: pd.DataFrame) -&gt; pd.DataFrame</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-dataloader-stage">3. Dataloader Stage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#sliding_windowsdf-pddataframe-kwargs-tupletorchtensor-torchtensor">sliding_windows(df: pd.DataFrame, **kwargs) -&gt; Tuple[torch.tensor, torch.tensor]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#create_dataloaderpipeline-tupletorchtensor-torchtensor-int-kwargs-tupledataloader-dataloader-dataloader-int">create_dataloader(pipeline: Tuple[torch.Tensor, torch.Tensor, int], **kwargs) -&gt; Tuple[DataLoader, DataLoader, DataLoader, int]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#add_model_to_dataloaderpipeline-tupledataloader-dataloader-dataloader-int-kwargs-tupletorchnnmodule-dataloader-dataloader-dataloader">add_model_to_dataloader(pipeline: Tuple[DataLoader, DataLoader, DataLoader, int], **kwargs) -&gt; Tuple[torch.nn.Module, DataLoader, DataLoader, DataLoader]</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-model-training-stage">4. Model Training Stage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#train_modelpipeline-dataloaderitem-kwargs-trainedmodelitem">train_model(pipeline: DataLoaderItem, **kwargs) -&gt; TrainedModelItem</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-model-testing-stage">5. Model Testing Stage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#test_modelpipeline-listtrainedmodelitem-kwargs-testitem">test_model(pipeline: List[TrainedModelItem], **kwargs) -&gt; TestItem</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/running_pipeline/">Running Pipeline</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/viewing_data/">Viewing Data</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">PhD Project Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Pipeline Module</li>
+      <li class="breadcrumb-item active">Pipeline Stages</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="pipeline-stages-documentation">Pipeline Stages Documentation</h1>
+<p>Each stage is designed so that the inputs and are immutable (cannot be changed). To achieve this a custom data is created for each stage.</p>
+<h2 id="data-types">Data Types</h2>
+<p>Before diving into the pipeline stages, let's look the key data types used throughout the pipeline:</p>
+<p><code>SensorListItem: TypeAlias = pd.DataFrame</code></p>
+<p>A pandas DataFrame containing information about sensors.</p>
+<p><code>RawDataItem: TypeAlias = list[Tuple[str, pd.DataFrame]]</code></p>
+<p>A list of tuples, each containing a sensor name (string) and its raw data (DataFrame).</p>
+<p><code>PreprocessedItem: TypeAlias = list[Tuple[str, pd.DataFrame]]</code></p>
+<p>A list of tuples, each containing a sensor name (string) and its preprocessed data (DataFrame).</p>
+<p><code>EngineeredItem: TypeAlias = list[Tuple[str, pd.DataFrame]]</code></p>
+<p>A list of tuples, each containing a sensor name (string) and its feature-engineered data (DataFrame).</p>
+<p><code>DataLoaderItem: TypeAlias = list[Tuple[str, nn.Module, DataLoader, DataLoader, DataLoader]]</code></p>
+<p>A list of tuples, each containing:</p>
+<ul>
+<li>Sensor name (string)</li>
+<li>Neural network model (nn.Module)</li>
+<li>Train DataLoader</li>
+<li>Validation DataLoader</li>
+<li>Test DataLoader</li>
+</ul>
+<p><code>TrainedModelItem: TypeAlias = list[Tuple[str, nn.Module, DataLoader, List, List]]</code></p>
+<p>A list of tuples, each containing:</p>
+<ul>
+<li>Sensor name (string)</li>
+<li>Trained neural network model (nn.Module)</li>
+<li>Test DataLoader</li>
+<li>List of training performance metrics</li>
+<li>List of validation performance metrics</li>
+</ul>
+<p><code>TestItem: TypeAlias = list[Tuple[str, np.ndarray, np.ndarray, dict]]</code></p>
+<p>A list of tuples, each containing:</p>
+<ul>
+<li>Sensor name (string)</li>
+<li>Test predictions (numpy array)</li>
+<li>Test labels (numpy array)</li>
+<li>Dictionary of test metrics</li>
+</ul>
+<h2 id="1-preprocessing-stage">1. Preprocessing Stage</h2>
+<p>The preprocessing stage prepares the raw data for further analysis. The purpose of this stage is to get rid of any fields that will not be used further down the pipeline. It also serves as an initial check to make sure all of the data is the correct format and datatypes. The steps below can optionally be configured to run. For most time series models, consecutive data windows are required, therefore running <code>get_consecutive_sequences</code> is highly recommended.</p>
+<p><strong>Methods:</strong></p>
+<h4 id="initialise_preprocessing_pipelinedf-pddataframe-pddataframe"><code>initialise_preprocessing_pipeline(df: pd.DataFrame) -&gt; pd.DataFrame</code></h4>
+<p>Initialises the preprocessing pipeline by checking the DataFrame for required columns.
+Ensures 'Timestamp' and 'Value' columns are present and correctly formatted.</p>
+<h4 id="remove_directionality_featuredf-pddataframe-kwargs-pddataframe"><code>remove_directionality_feature(df: pd.DataFrame, **kwargs) -&gt; pd.DataFrame</code></h4>
+<p>Removes directionality in data by aggregating values with the same timestamp.
+Useful for datasets where 'value' depends on a directional parameter.</p>
+<h4 id="aggregate_on_datetimedf-pddataframe-kwargs-pddataframe"><code>aggregate_on_datetime(df: pd.DataFrame, **kwargs) -&gt; pd.DataFrame</code></h4>
+<p>Aggregates data based on the <code>datetime</code> index, grouping by a specified frequency (default: 15min).
+Handles gaps in data by preserving original timestamps for large gaps.</p>
+<h4 id="get_consecutive_sequencesdf-pddataframe-pddataframe"><code>get_consecutive_sequences(df: pd.DataFrame) -&gt; pd.DataFrame</code></h4>
+<p>Finds all consecutive sequences in the input DataFrame longer than the specified window size.
+Assigns sequence numbers to each sequence.</p>
+<h4 id="remove_specified_fieldsdf-pddataframe-kwargs-pddataframe"><code>remove_specified_fields(df: pd.DataFrame, **kwargs) -&gt; pd.DataFrame</code></h4>
+<p>Removes specified columns from the DataFrame.
+Default columns to drop: ["Time_Difference", "Interval_Minutes"].</p>
+<h4 id="terminate_preprocessing_pipelinedf-pddataframe-pddataframe"><code>terminate_preprocessing_pipeline(df: pd.DataFrame) -&gt; pd.DataFrame</code></h4>
+<p>Performs final checks on the preprocessed DataFrame.
+Ensures all required columns are present and correctly formatted.</p>
+<h2 id="2-feature-engineering-stage">2. Feature Engineering Stage</h2>
+<p>This stage creates new features and transforms existing ones. Similarly, to preprocessing, the following functions can be optionally configured to run. It is recommended that at least scaling is run.</p>
+<p><strong>Methods:</strong></p>
+<h4 id="initialise_engineering_pipelinedf-pddataframe-pddataframe"><code>initialise_engineering_pipeline(df: pd.DataFrame) -&gt; pd.DataFrame</code></h4>
+<p>Initialises the feature engineering pipeline by checking the DataFrame for required columns.
+Ensures 'Timestamp' and 'Value' columns are present and correctly formatted.</p>
+<h4 id="create_periodicity_featuresdf-pddataframe-pddataframe"><code>create_periodicity_features(df: pd.DataFrame) -&gt; pd.DataFrame</code></h4>
+<p>Generates frequency features for time series data.
+Creates sine and cosine features based on daily, half-day, weekly, quarterly, and yearly periods.</p>
+<h4 id="datetime_to_floatdf-pddataframe-pddataframe"><code>datetime_to_float(df: pd.DataFrame) -&gt; pd.DataFrame</code></h4>
+<p>Converts the <code>datetime</code> column to a float representation.</p>
+<h4 id="scale_featuresdf-pddataframe-kwargs-pddataframe"><code>scale_features(df: pd.DataFrame, **kwargs) -&gt; pd.DataFrame</code></h4>
+<p>Scales all values in the DataFrame using StandardScaler.</p>
+<h4 id="drop_datetime_columndf-pddataframe-pddataframe"><code>drop_datetime_column(df: pd.DataFrame) -&gt; pd.DataFrame</code></h4>
+<p>Drops the <code>datetime</code> column from the DataFrame.</p>
+<h4 id="drop_sequence_columndf-pddataframe-pddataframe"><code>drop_sequence_column(df: pd.DataFrame) -&gt; pd.DataFrame</code></h4>
+<p>Drops the sequence column from the DataFrame.</p>
+<h4 id="terminate_engineering_pipelinedf-pddataframe-pddataframe"><code>terminate_engineering_pipeline(df: pd.DataFrame) -&gt; pd.DataFrame</code></h4>
+<p>Performs final checks on the feature-engineered DataFrame.
+Ensures all required columns are present and correctly formatted.</p>
+<h2 id="3-dataloader-stage">3. Dataloader Stage</h2>
+<p>This stage prepares the data for model training. The data is split into windows and added to a <code>pytorch</code> <a href="https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader"><code>DataLoader</code></a> object.</p>
+<p><strong>Methods:</strong></p>
+<h4 id="sliding_windowsdf-pddataframe-kwargs-tupletorchtensor-torchtensor"><code>sliding_windows(df: pd.DataFrame, **kwargs) -&gt; Tuple[torch.tensor, torch.tensor]</code></h4>
+<p>Generates sliding windows from the provided time-series data for sequence learning.
+Uses default values for training:</p>
+<ul>
+<li><code>window_size: 4</code></li>
+<li><code>horizon 8</code></li>
+<li><code>stride 1</code></li>
+</ul>
+<h4 id="create_dataloaderpipeline-tupletorchtensor-torchtensor-int-kwargs-tupledataloader-dataloader-dataloader-int"><code>create_dataloader(pipeline: Tuple[torch.Tensor, torch.Tensor, int], **kwargs) -&gt; Tuple[DataLoader, DataLoader, DataLoader, int]</code></h4>
+<p>Prepares training, validation, and test <code>dataloaders</code>.</p>
+<p>Uses default values to create the <code>dataloaders</code>:</p>
+<ul>
+<li><code>batch_size 64</code></li>
+<li><code>shuffle: False</code></li>
+<li><code>num_workers: 0</code></li>
+<li><code>train_ratio: 0.7</code></li>
+<li><code>val_ratio: 0.15</code></li>
+</ul>
+<h4 id="add_model_to_dataloaderpipeline-tupledataloader-dataloader-dataloader-int-kwargs-tupletorchnnmodule-dataloader-dataloader-dataloader"><code>add_model_to_dataloader(pipeline: Tuple[DataLoader, DataLoader, DataLoader, int], **kwargs) -&gt; Tuple[torch.nn.Module, DataLoader, DataLoader, DataLoader]</code></h4>
+<p>Adds the appropriate model (LSTM in this case) to the <code>dataloader</code> pipeline.</p>
+<h2 id="4-model-training-stage">4. Model Training Stage</h2>
+<p>This stage handles the training of the model.</p>
+<p><strong>Methods:</strong></p>
+<h4 id="train_modelpipeline-dataloaderitem-kwargs-trainedmodelitem"><code>train_model(pipeline: DataLoaderItem, **kwargs) -&gt; TrainedModelItem</code></h4>
+<p>Trains and evaluates the neural network model.
+Uses default values for model training:</p>
+<ul>
+<li><code>epochs: 5</code>,</li>
+<li><code>optimiser: adam</code></li>
+<li><code>lr: 0.01</code></li>
+<li><code>criterion: mse</code></li>
+<li><code>device: mps</code></li>
+</ul>
+<p>Implements a learning rate scheduler with:</p>
+<ul>
+<li><code>step_size: 0.01</code></li>
+<li><code>gamma 0.1</code></li>
+</ul>
+<p>Logs metrics using the <code>mlflow</code> module.</p>
+<h2 id="5-model-testing-stage">5. Model Testing Stage</h2>
+<p>This stage evaluates the trained model. From the training stage, only the test DataLoader is passed into this stage.</p>
+<p><strong>Methods:</strong></p>
+<h4 id="test_modelpipeline-listtrainedmodelitem-kwargs-testitem"><code>test_model(pipeline: List[TrainedModelItem], **kwargs) -&gt; TestItem</code></h4>
+<p>Evaluates the trained model on the test dataset.
+Calculates and returns test predictions, labels, and metrics.</p>
+<p>Each of these stages and their respective methods work together to process the data, engineer features, prepare it for modelling, train the model, and evaluate its performance. The entire process is customisable through the pipeline.json configuration file, allowing for flexibility in data processing and model training without changing the core code.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../pipeline/" class="btn btn-neutral float-left" title="Pipeline Generator"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../tutorials/overview/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../pipeline/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../tutorials/overview/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

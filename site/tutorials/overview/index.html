@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Overview - PhD Project Documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Overview";
+        var mkdocs_page_input_path = "tutorials/overview.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/markdown.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> PhD Project Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Module</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/overview/">API Module Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/api_client/">API Client</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/api_data_processor/">API Data Processor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api_module/__main__/">API Main</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline Module</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline_module/overview/">Pipeline Module Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline_module/__main__/">Pipeline Main</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline_module/pipeline/">Pipeline Generator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline_module/stages/">Pipeline Stages</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Overview</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../running_pipeline/">Running Pipeline</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../viewing_data/">Viewing Data</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">PhD Project Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Tutorials</li>
+      <li class="breadcrumb-item active">Overview</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="overview">Overview</h1>
+<p>This library is controlled through a series of config files. These files change how the pipeline preprocesses, engineers, trains and evaluates, as well as which types of data is queried in the first place. The main config files that will need to changed by the user are:</p>
+<ul>
+<li><code>query.json</code></li>
+<li><code>pipeline.json</code></li>
+</ul>
+<p>These two files control which data is selected for from the Urban Observatory database as an input for the pipeline, and how that data is then used in the pipeline.</p>
+<p>The <code>query.json</code> might look like this:</p>
+<pre><code class="language-json">{
+    &quot;coords&quot;: [
+        -1.611096,
+        54.968919,
+        -1.607040,
+        54.972681
+    ],
+    &quot;query_date_format&quot;: &quot;startend&quot;,
+    &quot;theme&quot;: &quot;People&quot;,
+    &quot;last_n_days&quot;: 720,
+    &quot;starttime&quot;: 20220724,
+    &quot;endtime&quot;: 20240821
+}
+</code></pre>
+<p>The <code>pipeline.json</code> is more lengthy. It first defines the parameters that are used as input to define its behaviour. It then defines the steps that are executed when the pipeline is ran. New functions can be written by the user and added to the library during each of the processing stages, so long as they follow the I/O rules for each stage. The function can the be added as a step in the relevant stage below and will be executed in the pipeline. This is especially useful during the feature engineering stage, where functions that add various features might need to be experimented with and turned on and off.</p>
+<pre><code class="language-json">{
+    &quot;kwargs&quot;: {
+        &quot;features_to_include_on_aggregation&quot;: null,
+        &quot;aggregation_frequency_mins&quot;: &quot;15min&quot;,
+        &quot;columns_to_drop&quot;: [
+            &quot;Time_Difference&quot;,
+            &quot;Interval_Minutes&quot;
+        ],
+        &quot;completeness_threshold&quot;: 1.0,
+        &quot;datetime_column&quot;: &quot;Timestamp&quot;,
+        &quot;value_column&quot;: &quot;Value&quot;,
+        &quot;min_df_length&quot;: 10000,
+        &quot;min_df_length_to_window_size_ratio&quot;: 50,
+        &quot;frequency&quot;: null,
+        &quot;scaler&quot;: &quot;standard&quot;,
+        &quot;input_feature_indices&quot;: null,
+        &quot;target_feature_index&quot;: 0,
+        &quot;model_type&quot;: &quot;lstm&quot;,
+        &quot;window_size&quot;: 12,
+        &quot;horizon&quot;: 24,
+        &quot;stride&quot;: 1,
+        &quot;batch_size&quot;: 128,
+        &quot;shuffle&quot;: false,
+        &quot;num_workers&quot;: 0,
+        &quot;train_ratio&quot;: 0.7,
+        &quot;val_ratio&quot;: 0.15,
+        &quot;device&quot;: &quot;mps&quot;,
+        &quot;epochs&quot;: 10,
+        &quot;hidden_dim&quot;: 128,
+        &quot;num_layers&quot;: 3,
+        &quot;dropout&quot;: 0.045499097918902325,
+        &quot;optimiser&quot;: &quot;adam&quot;,
+        &quot;lr&quot;: 1.1965425636602132e-05,
+        &quot;criterion&quot;: &quot;mse&quot;,
+        &quot;momentum&quot;: 0.9,
+        &quot;scheduler_step_size&quot;: 4,
+        &quot;scheduler_gamma&quot;: 0.4338623980132082,
+        &quot;early_stopping_patience&quot;: 3
+    },
+    &quot;preprocessing&quot;: [
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.preprocessing.initialise_preprocessing_pipeline&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.preprocessing.remove_directionality_feature&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.preprocessing.aggregate_on_datetime&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.preprocessing.get_consecutive_sequences&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.preprocessing.remove_specified_fields&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.preprocessing.terminate_preprocessing_pipeline&quot;,
+            &quot;execute_step&quot;: true
+        }
+    ],
+    &quot;feature_engineering&quot;: [
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.initialise_engineering_pipeline&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.add_term_dates_feature&quot;,
+            &quot;execute_step&quot;: false
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.create_periodicity_features&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.extract_time_features&quot;,
+            &quot;execute_step&quot;: false
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.datetime_to_float&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.scale_features&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.resample_frequency&quot;,
+            &quot;execute_step&quot;: false
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.drop_datetime_column&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.drop_sequence_column&quot;,
+            &quot;execute_step&quot;: false
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.feature_engineering.terminate_engineering_pipeline&quot;,
+            &quot;execute_step&quot;: true
+        }
+    ],
+    &quot;dataloader&quot;: [
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.dataloader.sliding_windows&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.dataloader.create_dataloader&quot;,
+            &quot;execute_step&quot;: true
+        },
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.dataloader.add_model_to_dataloader&quot;,
+            &quot;execute_step&quot;: true
+        }
+    ],
+    &quot;training&quot;: [
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.train_model.train_model&quot;,
+            &quot;execute_step&quot;: true
+        }
+    ],
+    &quot;testing&quot;: [
+        {
+            &quot;name&quot;: &quot;phd_package.pipeline.stages.test_model.test_model&quot;,
+            &quot;execute_step&quot;: true
+        }
+    ]
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../pipeline_module/stages/" class="btn btn-neutral float-left" title="Pipeline Stages"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../running_pipeline/" class="btn btn-neutral float-right" title="Running Pipeline">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../pipeline_module/stages/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../running_pipeline/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

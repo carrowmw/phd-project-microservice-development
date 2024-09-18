@@ -63,7 +63,7 @@
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../overview/">Pipeline Module Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="" href="../__main__.md">Pipeline Main</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../__main__/">Pipeline Main</a>
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Pipeline Generator</a>
     <ul class="current">
@@ -93,9 +93,22 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#usage-example">Usage Example</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pipeline-helper-module">Pipeline Helper Module</a>
+    </li>
         </ul>
     </li>
     </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../stages/">Pipeline Stages</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/running_pipeline/">Running Pipeline</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/viewing_data/">Viewing Data</a>
                   </li>
               </ul>
       </div>
@@ -128,56 +141,66 @@
 <h3 id="initialisation">Initialisation</h3>
 <pre><code class="language-python">class Pipeline:
     def __init__(self, experiment_name: str = None):
-        # Initialize the pipeline with an optional experiment name
+        # Initialise the pipeline with an optional experiment name
 </code></pre>
-<p>If no <code>experiment_name</code> is provided, a random string will be generated.</p>
+<p>If no <code>experiment_name</code> is provided, a random string will be generated. The outputs from the model training and analysis are stored in the mlruns directory and can be viewed by calling <code>mlflow ui</code> in the command line.</p>
 <h3 id="methods">Methods</h3>
-<h4 id="read_or_download_sensors">read_or_download_sensors</h4>
+<h4 id="read_or_download_sensors"><code>read_or_download_sensors</code></h4>
 <pre><code class="language-python">def read_or_download_sensors(self) -&gt; SensorListItem:
 </code></pre>
 <p>Downloads the list of sensors from the API or reads from local storage if available.</p>
 <p><strong>Returns:</strong> A DataFrame containing the sensor list.</p>
-<h4 id="read_or_download_data">read_or_download_data</h4>
+<h4 id="read_or_download_data"><code>read_or_download_data</code></h4>
 <pre><code class="language-python">def read_or_download_data(self) -&gt; RawDataItem:
 </code></pre>
 <p>Reads raw sensor data from local storage if available or downloads it from the API.</p>
 <p><strong>Returns:</strong> A list of tuples, each containing a sensor name and its raw data DataFrame.</p>
-<h4 id="preprocess_data">preprocess_data</h4>
+<h4 id="preprocess_data"><code>preprocess_data</code></h4>
 <pre><code class="language-python">def preprocess_data(self, raw_dfs) -&gt; PreprocessedItem:
 </code></pre>
 <p>Preprocesses the raw data.</p>
-<p><strong>Parameters:</strong>
-- <code>raw_dfs</code>: List of tuples containing sensor names and raw data DataFrames.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>raw_dfs</code>: List of tuples containing sensor names and raw data DataFrames.</li>
+</ul>
 <p><strong>Returns:</strong> A list of tuples, each containing a sensor name and its preprocessed data DataFrame.</p>
-<h4 id="apply_feature_engineering">apply_feature_engineering</h4>
+<h4 id="apply_feature_engineering"><code>apply_feature_engineering</code></h4>
 <pre><code class="language-python">def apply_feature_engineering(self, preprocessed_dfs) -&gt; EngineeredItem:
 </code></pre>
 <p>Applies feature engineering to preprocessed data.</p>
-<p><strong>Parameters:</strong>
-- <code>preprocessed_dfs</code>: List of tuples containing sensor names and preprocessed data DataFrames.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>preprocessed_dfs</code>: List of tuples containing sensor names and preprocessed data DataFrames.</li>
+</ul>
 <p><strong>Returns:</strong> A list of tuples, each containing a sensor name and its feature-engineered data DataFrame.</p>
-<h4 id="load_dataloader">load_dataloader</h4>
+<h4 id="load_dataloader"><code>load_dataloader</code></h4>
 <pre><code class="language-python">def load_dataloader(self, engineered_dfs) -&gt; DataLoaderItem:
 </code></pre>
-<p>Loads data into dataloaders.</p>
-<p><strong>Parameters:</strong>
-- <code>engineered_dfs</code>: List of tuples containing sensor names and feature-engineered data DataFrames.</p>
+<p>Loads data into <code>dataloaders</code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>engineered_dfs</code>: List of tuples containing sensor names and feature-engineered data DataFrames.</li>
+</ul>
 <p><strong>Returns:</strong> A list of tuples, each containing a sensor name, model, train loader, validation loader, and test loader.</p>
-<h4 id="train_model">train_model</h4>
+<h4 id="train_model"><code>train_model</code></h4>
 <pre><code class="language-python">def train_model(self, dataloaders_list) -&gt; TrainedModelItem:
 </code></pre>
-<p>Trains models using the prepared dataloaders.</p>
-<p><strong>Parameters:</strong>
-- <code>dataloaders_list</code>: List of tuples containing sensor names, models, and dataloaders.</p>
+<p>Trains models using the prepared <code>dataloaders</code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>dataloaders_list</code>: List of tuples containing sensor names, models, and <code>dataloaders</code>.</li>
+</ul>
 <p><strong>Returns:</strong> A list of tuples, each containing a sensor name, trained model, test loader, training metrics, and validation metrics.</p>
-<h4 id="test_model">test_model</h4>
+<h4 id="test_model"><code>test_model</code></h4>
 <pre><code class="language-python">def test_model(self, trained_models_list) -&gt; TestItem:
 </code></pre>
 <p>Tests the trained models.</p>
-<p><strong>Parameters:</strong>
-- <code>trained_models_list</code>: List of tuples containing sensor names, trained models, and test loaders.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>trained_models_list</code>: List of tuples containing sensor names, trained models, and test loaders.</li>
+</ul>
 <p><strong>Returns:</strong> A list of tuples, each containing a sensor name, test predictions, test labels, and test metrics.</p>
-<h4 id="run_pipeline">run_pipeline</h4>
+<h4 id="run_pipeline"><code>run_pipeline</code></h4>
 <pre><code class="language-python">def run_pipeline(self):
 </code></pre>
 <p>Runs the entire pipeline, executing all steps from data download to model testing.</p>
@@ -198,11 +221,23 @@ preprocessed_dfs = pipeline.preprocess_data(raw_dfs)
 # ... and so on
 </code></pre>
 <p>This <code>Pipeline</code> class provides a comprehensive workflow for processing sensor data, from raw data acquisition to model training and testing. Each method in the pipeline can be used independently or as part of the full <code>run_pipeline</code> process.</p>
+<h3 id="pipeline-helper-module">Pipeline Helper Module</h3>
+<p>The Pipeline class is supported by a set of helper functions that manage data processing, step execution, and configuration handling. These functions provide the underlying functionality for the pipeline's flexibility and modularity.
+Key areas supported by helper functions include:</p>
+<ul>
+<li>Configuration management for processing steps</li>
+<li>Dynamic execution of data processing steps</li>
+<li>Caching and loading of processed data</li>
+<li>Application of configurable processing steps to DataFrames</li>
+</ul>
+<p>For developers interested in extending or customising the pipeline, detailed documentation of these helper functions is available in the <code>pipeline_helper.py</code> module.
+This Pipeline class, along with its supporting helper functions, provides a comprehensive workflow for processing sensor data, from raw data acquisition to model training and testing. Each method in the pipeline can be used independently or as part of the full run_pipeline process.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../overview/" class="btn btn-neutral float-left" title="Pipeline Module Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../__main__/" class="btn btn-neutral float-left" title="Pipeline Main"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../stages/" class="btn btn-neutral float-right" title="Pipeline Stages">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -225,8 +260,10 @@ preprocessed_dfs = pipeline.preprocess_data(raw_dfs)
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../overview/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../__main__/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
+    
+      <span><a href="../stages/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
