@@ -2,6 +2,8 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import html
 
+from phd_package.pipeline import Pipeline
+
 from .templates.tables import TabTemplateSingleTable
 from .templates.dataloader_viewer import TabTemplateDataLoaderViewer
 from .templates.dummy import TabTemplateDummy
@@ -141,11 +143,11 @@ class SensorDashboardApp:
                     className="title-element",
                 ),
                 html.Img(
-                    src="assets/images/cdt_long.png",
+                    src="assets/white_logos/cdt_long.png",
                     className="logo-element cdt",
                 ),
                 html.Img(
-                    src="assets/images/newcastle.png",
+                    src="assets/white_logos/newcastle.png",
                     className="logo-element newcastle",
                 ),
             ],
@@ -230,9 +232,16 @@ class SensorDashboardApp:
         self.dataloader_tab.setup_callbacks()
         self.model_performance_tab.setup_callbacks()
 
+    def ensure_data_exists(self):
+        if CustomDashboardData() is None:
+            print("Data does not exist, running data pipeline...")
+            pipeline = Pipeline()
+            pipeline.run_pipeline()
+
 
 if __name__ == "__main__":
     dashboard_app = SensorDashboardApp()
+    dashboard_app.ensure_data_exists()
     dashboard_app.setup_layout()
     dashboard_app.setup_callbacks()
     dashboard_app.app.run_server(debug=True)

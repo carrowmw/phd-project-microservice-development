@@ -154,7 +154,7 @@ def pipeline_input_data_filename() -> str:
     startdate, enddate = get_query_agnostic_start_and_end_date()
     bbox = get_polygon_wkb()
     bbox = bbox[-8:]
-    file_path = f"{startdate}_to_{enddate}_{bbox}.pkl"
+    file_path = f"{startdate}|to|{enddate}|{bbox}&.pkl"
     return file_path
 
 
@@ -171,7 +171,7 @@ def pipeline_processed_data_filename() -> str:
     stride = get_stride()
 
     file_path = (
-        f"{prefix}_WindowSize_{window_size}_Horizon_{horizon}_Stride_{stride}.pkl"
+        f"{prefix}-window_size={window_size}-horizon={horizon}-stride={stride}.pkl"
     )
 
     return file_path
@@ -194,7 +194,7 @@ def pipeline_output_data_filename() -> str:
     num_layers = get_num_layers()
     dropout = get_dropout()
 
-    file_path = f"{prefix}_BatchSize_{batch_size}_Model_{model_type}_Epoch_{epochs}_HiddenDim_{hidden_dim}_NumLayers_{num_layers}_Dropout_{dropout}_SchedulerStepSize_{scheduler_step_size}_SchedulerGamma_{scheduler_gamma}.pkl"
+    file_path = f"{prefix}-batch_size={batch_size}-model_type={model_type}-epochs={epochs}-hidden_dim={hidden_dim}-num_layers={num_layers}-dropout={dropout}-scheduler_step_size={scheduler_step_size}-scheduler_gamma={scheduler_gamma}.pkl"
 
     return file_path
 

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/7aa9adc61f0a4ede86ffa1c1cb651a75/artifacts
+end_time: 1726824290445
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7aa9adc61f0a4ede86ffa1c1cb651a75
+run_name: Test_PER_PEOPLE_FENWICKSAVILLE_NORTHUMBERLANDSOUTH_TO_NORTHUMBERLANDNOR
+run_uuid: 7aa9adc61f0a4ede86ffa1c1cb651a75
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726824289661
+status: 3
+tags: []
+user_id: administrator

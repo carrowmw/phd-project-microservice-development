@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/3d30d1f9f48d4746b7868c39240d8836/artifacts
+end_time: 1726821812899
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3d30d1f9f48d4746b7868c39240d8836
+run_name: Test_PER_PEOPLE_NCLSIDESTCROWNPOSADANORTH_FROM_EAST_TO_WEST
+run_uuid: 3d30d1f9f48d4746b7868c39240d8836
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726821811916
+status: 3
+tags: []
+user_id: administrator

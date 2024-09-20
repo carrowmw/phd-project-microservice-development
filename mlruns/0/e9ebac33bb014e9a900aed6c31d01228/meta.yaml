@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/e9ebac33bb014e9a900aed6c31d01228/artifacts
+end_time: 1726819819770
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e9ebac33bb014e9a900aed6c31d01228
+run_name: Train_PER_PEOPLE_NCLQUAYSIDETRINITYCHARE_FROM_WEST_TO_EAST
+run_uuid: e9ebac33bb014e9a900aed6c31d01228
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726819808591
+status: 3
+tags: []
+user_id: administrator

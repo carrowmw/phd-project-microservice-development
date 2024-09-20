@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/87533d2218344642a00bca8dd6853f89/artifacts
+end_time: 1726785796414
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 87533d2218344642a00bca8dd6853f89
+run_name: Train_PER_PEOPLE_THECORESQUARE_THECOREMID_TO_THECOREENTRANCE
+run_uuid: 87533d2218344642a00bca8dd6853f89
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726785793361
+status: 3
+tags: []
+user_id: administrator

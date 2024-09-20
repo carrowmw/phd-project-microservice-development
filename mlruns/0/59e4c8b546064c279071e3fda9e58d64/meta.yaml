@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/59e4c8b546064c279071e3fda9e58d64/artifacts
+end_time: 1726743113305
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 59e4c8b546064c279071e3fda9e58d64
+run_name: Train_PER_PEOPLE_NCLTYNEBRIDGENORTHEAST_FROM_NORTH_TO_SOUTH
+run_uuid: 59e4c8b546064c279071e3fda9e58d64
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726743112054
+status: 3
+tags: []
+user_id: administrator

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/8f8c9d939f8a495681bc5b9e81647121/artifacts
+end_time: 1726776741969
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8f8c9d939f8a495681bc5b9e81647121
+run_name: Test_PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_NORTH
+run_uuid: 8f8c9d939f8a495681bc5b9e81647121
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726776741631
+status: 3
+tags: []
+user_id: administrator

@@ -61,6 +61,7 @@ class Pipeline:
         # Initialize Experiment Tracker
         self.experiment_id = experiment_id or generate_random_string(12)
         self.trial_number = trial_number or 0
+        self.get_or_create_experiment()
 
         # self.experiment_tracker = ExperimentTracker(experiment_name)
         # Initialize logging
@@ -69,6 +70,18 @@ class Pipeline:
             level=logging.INFO,
             format="%(asctime)s - %(levelname)s - %(message)s",
         )
+
+    def get_or_create_experiment(self):
+        experiment_name = f"Pipeline_Experiment_{self.experiment_id}"
+        try:
+            experiment = mlflow.get_experiment_by_name(experiment_name)
+            if experiment is None:
+                self.experiment_id = mlflow.create_experiment(experiment_name)
+            else:
+                self.experiment_id = experiment.experiment_id
+        except Exception as e:
+            logging.error("Error creating/getting experiment: %s", str(e))
+            self.experiment_id = None
 
     def read_or_download_sensors(self) -> SensorListItem:
         """
@@ -405,16 +418,36 @@ class Pipeline:
         """
         Run the pipeline.
         """
-        with mlflow.start_run(
-            run_name=f"Trial_{self.trial_number}_Pipeline",
-            experiment_id=self.experiment_id,
-            nested=True,
-        ):
-            sensors_df = self.read_or_download_sensors()
-            raw_dfs = self.read_or_download_data()
-            preprocessed_dfs = self.preprocess_data(raw_dfs)
-            engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
-            dataloaders_list = self.load_dataloader(engineered_dfs)
-            trained_models_list = self.train_model(dataloaders_list)
-            test_metrics_list = self.test_model(trained_models_list)
+        if self.experiment_id is None:
+            logging.error("No experiment ID found. Exiting pipeline.")
+            return
+        try:
+            with mlflow.start_run(
+                run_name=f"Trial_{self.trial_number}_Pipeline",
+                experiment_id=self.experiment_id,
+                nested=True,
+            ):
+                sensors_df = self.read_or_download_sensors()
+                raw_dfs = self.read_or_download_data()
+                preprocessed_dfs = self.preprocess_data(raw_dfs)
+                engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
+                dataloaders_list = self.load_dataloader(engineered_dfs)
+                trained_models_list = self.train_model(dataloaders_list)
+                test_metrics_list = self.test_model(trained_models_list)
+            return test_metrics_list
+        except mlflow.exceptions.MlflowException as e:
+            logging.error("MLflow error: %s", str(e))
+            return self._run_pipeline_without_mlflow()
+
+    def _run_pipeline_without_mlflow(self):
+        logging.error("Running pipeline without MLflow tracking...")
+
+        sensors_df = self.read_or_download_sensors()
+        raw_dfs = self.read_or_download_data()
+        preprocessed_dfs = self.preprocess_data(raw_dfs)
+        engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
+        dataloaders_list = self.load_dataloader(engineered_dfs)
+        trained_models_list = self.train_model(dataloaders_list)
+        test_metrics_list = self.test_model(trained_models_list)
+
         return test_metrics_list

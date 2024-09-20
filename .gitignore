@@ -10,19 +10,8 @@ data/artificial/
 __pycache__/
 *.pyc
 
-# Ignore models and ML runs
-models/
-mlruns/
-
 # Ignore pickle files
 *.pkl
 
-# Ignore PNG files
-*.png
-
 # Ignore Jupyter notebooks
 *.ipynb
-
-# Ignore development directories
-dump/
-experiments/

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/9c1a427517004093b62712baf088fb70/artifacts
+end_time: 1726774040190
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9c1a427517004093b62712baf088fb70
+run_name: Train_PER_PEOPLE_THECORESQUARE_BEHINDCYCLEPARKING_TO_JUNCTION
+run_uuid: 9c1a427517004093b62712baf088fb70
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726774038179
+status: 3
+tags: []
+user_id: administrator

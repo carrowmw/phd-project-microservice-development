@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/3bee4b2df9b044baae498351c621a124/artifacts
+end_time: 1726761318948
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3bee4b2df9b044baae498351c621a124
+run_name: Train_PER_PEOPLE_FENWICKSAVILLE_NORTHUMBERLAND_TO_NORTHSAVILLE
+run_uuid: 3bee4b2df9b044baae498351c621a124
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726761297903
+status: 3
+tags: []
+user_id: administrator

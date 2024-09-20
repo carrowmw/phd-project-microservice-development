@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/693f3782064f4b7bb8411d1f8653cdfc/artifacts
+end_time: 1726787535695
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 693f3782064f4b7bb8411d1f8653cdfc
+run_name: Test_PER_PEOPLE_ELDONSQUAREWEST_SQUAREWEST_TO_SQUARESOUTH
+run_uuid: 693f3782064f4b7bb8411d1f8653cdfc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726787535528
+status: 3
+tags: []
+user_id: administrator

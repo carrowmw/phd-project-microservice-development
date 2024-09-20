@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/758592cc5b3f46db93ca2747880662f0/artifacts
+end_time: 1726755359694
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 758592cc5b3f46db93ca2747880662f0
+run_name: Train_PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_NORTH_TO_SOUTH
+run_uuid: 758592cc5b3f46db93ca2747880662f0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726755303136
+status: 3
+tags: []
+user_id: administrator

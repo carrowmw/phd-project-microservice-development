@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/c74ab1318fc944fd9039388ca9a7ce85/artifacts
+end_time: 1726819045273
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c74ab1318fc944fd9039388ca9a7ce85
+run_name: Test_PER_PEOPLE_ELDONSQUAREWEST_CROSSING_TO_SQUARE
+run_uuid: c74ab1318fc944fd9039388ca9a7ce85
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726819044811
+status: 3
+tags: []
+user_id: administrator

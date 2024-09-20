@@ -20,3 +20,7 @@ nav:
     - Pipeline Main: pipeline_module/__main__.md
     - Pipeline Generator: pipeline_module/pipeline.md
     - Pipeline Stages: pipeline_module/stages.md
+  - Tutorials:
+    - Overview: tutorials/overview.md
+    - Running Pipeline: tutorials/running_pipeline.md
+    - Viewing Data: tutorials/viewing_data.md

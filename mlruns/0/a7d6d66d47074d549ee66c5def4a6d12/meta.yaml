@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/a7d6d66d47074d549ee66c5def4a6d12/artifacts
+end_time: 1726779198141
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a7d6d66d47074d549ee66c5def4a6d12
+run_name: Test_PER_PEOPLE_THECORESQUARE_JUNCTION_TO_THECOREENTRANCE
+run_uuid: a7d6d66d47074d549ee66c5def4a6d12
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726779198040
+status: 3
+tags: []
+user_id: administrator

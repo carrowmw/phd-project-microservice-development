@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/5b4b15e9a13c42a4a41909a186400787/artifacts
+end_time: 1726806810775
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5b4b15e9a13c42a4a41909a186400787
+run_name: Test_PER_PEOPLE_NCLQUAYSIDETRINITYCHARE_FROM_EAST_TO_WEST
+run_uuid: 5b4b15e9a13c42a4a41909a186400787
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726806810617
+status: 3
+tags: []
+user_id: administrator

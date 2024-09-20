@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/429e50d2ad9e4e41adffa5e9ba466d5d/artifacts
+end_time: 1726764170132
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 429e50d2ad9e4e41adffa5e9ba466d5d
+run_name: Train_PER_PEOPLE_ELDONSQUAREEAST_NORTHEAST_TO_MIDEAST
+run_uuid: 429e50d2ad9e4e41adffa5e9ba466d5d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726764150571
+status: 3
+tags: []
+user_id: administrator

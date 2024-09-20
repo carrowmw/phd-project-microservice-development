@@ -74,18 +74,18 @@ class HyperparameterTuner:
         ):
 
             config = {
-                "window_size": trial.suggest_categorical(
-                    "window_size", [4, 8, 12, 16, 20, 24]
-                ),
-                "horizon": trial.suggest_categorical("horizon", [24]),
+                # "window_size": trial.suggest_categorical(
+                #     "window_size", [4, 8, 12, 16, 20, 24]
+                # ),
+                # "horizon": trial.suggest_categorical("horizon", [24]),
                 "batch_size": trial.suggest_categorical("batch_size", [32, 64, 128]),
                 "lr": trial.suggest_float("lr", 1e-5, 1e-1, log=True),
-                "epochs": trial.suggest_categorical("epochs", [5, 10, 20]),
-                "model_type": trial.suggest_categorical("model_type", ["lstm"]),
-                "hidden_dim": trial.suggest_categorical(
-                    "hidden_dim", [32, 64, 128, 256]
-                ),
-                "num_layers": trial.suggest_int("num_layers", 1, 3),
+                # "epochs": trial.suggest_categorical("epochs", [5, 10, 20]),
+                # "model_type": trial.suggest_categorical("model_type", ["lstm"]),
+                # "hidden_dim": trial.suggest_categorical(
+                #     "hidden_dim", [32, 64, 128, 256]
+                # ),
+                # "num_layers": trial.suggest_int("num_layers", 1, 3),
                 "dropout": trial.suggest_float("dropout", 0.0, 0.5),
                 # LR Scheduler parameters
                 "scheduler_step_size": trial.suggest_int("scheduler_step_size", 1, 10),

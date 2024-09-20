@@ -66,13 +66,7 @@ pytest
 
 ## Running the Project
 
-After installing the dependencies and activating the virtual environment, you can now run the project as follows:
-
-```sh
-python src/pipeline.py
-python apps/missing_data_dashboard.py
-python main.py #implementation coming soon
-```
+For tutorials on running the pipeline visit the [https://carrowmw.github.io/phd-project/tutorials/viewing_data/](docs).
 
 Note: This guide assumes a working knowledge of Python and command-line interfaces. If you encounter any issues, refer to the official Poetry documentation for more detailed information.
 
