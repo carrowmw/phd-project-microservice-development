@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/6e959f3897ee48768d4096b506565472/artifacts
+end_time: 1726898496601
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6e959f3897ee48768d4096b506565472
+run_name: Train_PER_PEOPLE_NCLQUAYSIDEUNDERHIGHLEVELBRIDGE_WEST_TO_EAST
+run_uuid: 6e959f3897ee48768d4096b506565472
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726898463991
+status: 3
+tags: []
+user_id: administrator

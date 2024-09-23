@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/bfafe579b30443449a5f6e5f56545560/artifacts
+end_time: 1726907354868
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: bfafe579b30443449a5f6e5f56545560
+run_name: Test_PER_PEOPLE_NCLNORTHUMBERLANDSTSAVILLEROWWEST_NORTHWEST_TO_SOUTHWEST
+run_uuid: bfafe579b30443449a5f6e5f56545560
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726907354348
+status: 3
+tags: []
+user_id: administrator

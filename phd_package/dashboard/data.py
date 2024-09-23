@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 
+from phd_package.pipeline import Pipeline
+
 from .utils.transformation_helper import unbatch_dataloaders_to_numpy
 
 from ..config.paths import (
@@ -62,9 +64,13 @@ class CustomDashboardData:
             self.trained_models = load_trained_models()
             self.test_metrics = load_test_metrics()
         except FileNotFoundError:
-            print("Data not found. Please run the pipeline to generate the data.")
+            print("Data not found. Running pipeline...\n")
+            pipeline = Pipeline()
+            pipeline.run_pipeline()
         except AttributeError:
-            print("Data not found. Please run the pipeline to generate the data.")
+            print("Data not found. Running pipeline...\n")
+            pipeline = Pipeline()
+            pipeline.run_pipeline()
             return
         self.latest_data = [(tuple[0], tuple[1][-500:]) for tuple in self.data]
         self.sensors = load_sensor_list()

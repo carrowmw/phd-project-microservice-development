@@ -1,0 +1,414 @@
+{
+    "n_trials": 100,
+    "optimization_history": [
+        {
+            "trial_number": 0,
+            "value": 6.100546666666667
+        },
+        {
+            "trial_number": 1,
+            "value": 0.37849333333333335
+        },
+        {
+            "trial_number": 2,
+            "value": -0.08410666666666664
+        },
+        {
+            "trial_number": 3,
+            "value": 0.44205333333333335
+        },
+        {
+            "trial_number": 4,
+            "value": 0.03210666666666667
+        },
+        {
+            "trial_number": 5,
+            "value": 36.23001333333334
+        },
+        {
+            "trial_number": 6,
+            "value": 3.5143066666666662
+        },
+        {
+            "trial_number": 7,
+            "value": 0.023266666666666668
+        },
+        {
+            "trial_number": 8,
+            "value": 0.12802666666666668
+        },
+        {
+            "trial_number": 9,
+            "value": -0.021706666666666673
+        },
+        {
+            "trial_number": 10,
+            "value": 0.33934666666666674
+        },
+        {
+            "trial_number": 11,
+            "value": 0.044760000000000015
+        },
+        {
+            "trial_number": 12,
+            "value": -0.033479999999999996
+        },
+        {
+            "trial_number": 13,
+            "value": 0.26654666666666665
+        },
+        {
+            "trial_number": 14,
+            "value": 1.5289600000000003
+        },
+        {
+            "trial_number": 15,
+            "value": 0.026906666666666683
+        },
+        {
+            "trial_number": 16,
+            "value": 0.8112133333333335
+        },
+        {
+            "trial_number": 17,
+            "value": -0.04157333333333334
+        },
+        {
+            "trial_number": 18,
+            "value": 0.050586666666666676
+        },
+        {
+            "trial_number": 19,
+            "value": 0.88964
+        },
+        {
+            "trial_number": 20,
+            "value": 0.021413333333333322
+        },
+        {
+            "trial_number": 21,
+            "value": -0.05593333333333333
+        },
+        {
+            "trial_number": 22,
+            "value": -0.009173333333333353
+        },
+        {
+            "trial_number": 23,
+            "value": 0.16281333333333334
+        },
+        {
+            "trial_number": 24,
+            "value": 0.08539999999999996
+        },
+        {
+            "trial_number": 25,
+            "value": -0.09275999999999998
+        },
+        {
+            "trial_number": 26,
+            "value": 0.046413333333333334
+        },
+        {
+            "trial_number": 27,
+            "value": 0.29712
+        },
+        {
+            "trial_number": 28,
+            "value": 0.5417733333333333
+        },
+        {
+            "trial_number": 29,
+            "value": 2.576373333333333
+        },
+        {
+            "trial_number": 30,
+            "value": 1.5960400000000001
+        },
+        {
+            "trial_number": 31,
+            "value": -0.03374666666666667
+        },
+        {
+            "trial_number": 32,
+            "value": 0.12493333333333333
+        },
+        {
+            "trial_number": 33,
+            "value": 0.0022399999999999894
+        },
+        {
+            "trial_number": 34,
+            "value": -0.032693333333333324
+        },
+        {
+            "trial_number": 35,
+            "value": 0.031359999999999985
+        },
+        {
+            "trial_number": 36,
+            "value": -0.0002933333333333371
+        },
+        {
+            "trial_number": 37,
+            "value": 0.3565466666666667
+        },
+        {
+            "trial_number": 38,
+            "value": 0.4878666666666665
+        },
+        {
+            "trial_number": 39,
+            "value": -0.019466666666666674
+        },
+        {
+            "trial_number": 40,
+            "value": 0.7153999999999999
+        },
+        {
+            "trial_number": 41,
+            "value": -0.023920000000000014
+        },
+        {
+            "trial_number": 42,
+            "value": 0.20093333333333332
+        },
+        {
+            "trial_number": 43,
+            "value": 0.08263999999999996
+        },
+        {
+            "trial_number": 44,
+            "value": 0.07941333333333335
+        },
+        {
+            "trial_number": 45,
+            "value": -0.12522666666666665
+        },
+        {
+            "trial_number": 46,
+            "value": -0.1492133333333333
+        },
+        {
+            "trial_number": 47,
+            "value": 0.48058666666666655
+        },
+        {
+            "trial_number": 48,
+            "value": 1.8424799999999997
+        },
+        {
+            "trial_number": 49,
+            "value": 3.5601199999999995
+        },
+        {
+            "trial_number": 50,
+            "value": -0.06314666666666667
+        },
+        {
+            "trial_number": 51,
+            "value": -0.034359999999999995
+        },
+        {
+            "trial_number": 52,
+            "value": 0.02710666666666667
+        },
+        {
+            "trial_number": 53,
+            "value": -0.11969333333333333
+        },
+        {
+            "trial_number": 54,
+            "value": 0.10094666666666668
+        },
+        {
+            "trial_number": 55,
+            "value": 0.18617333333333333
+        },
+        {
+            "trial_number": 56,
+            "value": -0.017120000000000014
+        },
+        {
+            "trial_number": 57,
+            "value": -0.06429333333333333
+        },
+        {
+            "trial_number": 58,
+            "value": 0.2112
+        },
+        {
+            "trial_number": 59,
+            "value": -0.1311733333333333
+        },
+        {
+            "trial_number": 60,
+            "value": 0.2535466666666666
+        },
+        {
+            "trial_number": 61,
+            "value": -0.14378666666666667
+        },
+        {
+            "trial_number": 62,
+            "value": -0.08651999999999999
+        },
+        {
+            "trial_number": 63,
+            "value": -0.05261333333333335
+        },
+        {
+            "trial_number": 64,
+            "value": 0.009240000000000003
+        },
+        {
+            "trial_number": 65,
+            "value": -0.03921333333333332
+        },
+        {
+            "trial_number": 66,
+            "value": -0.04712
+        },
+        {
+            "trial_number": 67,
+            "value": 0.2056533333333333
+        },
+        {
+            "trial_number": 68,
+            "value": 0.20676
+        },
+        {
+            "trial_number": 69,
+            "value": 0.013293333333333332
+        },
+        {
+            "trial_number": 70,
+            "value": -0.08117333333333333
+        },
+        {
+            "trial_number": 71,
+            "value": -0.07818666666666668
+        },
+        {
+            "trial_number": 72,
+            "value": -0.10834666666666666
+        },
+        {
+            "trial_number": 73,
+            "value": -0.08598666666666667
+        },
+        {
+            "trial_number": 74,
+            "value": 0.31100000000000005
+        },
+        {
+            "trial_number": 75,
+            "value": 0.0743066666666667
+        },
+        {
+            "trial_number": 76,
+            "value": 0.38486666666666675
+        },
+        {
+            "trial_number": 77,
+            "value": 0.31632
+        },
+        {
+            "trial_number": 78,
+            "value": 0.05129333333333331
+        },
+        {
+            "trial_number": 79,
+            "value": 0.8288133333333333
+        },
+        {
+            "trial_number": 80,
+            "value": -0.12109333333333329
+        },
+        {
+            "trial_number": 81,
+            "value": -0.11366666666666665
+        },
+        {
+            "trial_number": 82,
+            "value": -0.05283999999999999
+        },
+        {
+            "trial_number": 83,
+            "value": -0.08801333333333336
+        },
+        {
+            "trial_number": 84,
+            "value": -0.10415999999999997
+        },
+        {
+            "trial_number": 85,
+            "value": -0.06832
+        },
+        {
+            "trial_number": 86,
+            "value": -0.08709333333333333
+        },
+        {
+            "trial_number": 87,
+            "value": -0.04120000000000001
+        },
+        {
+            "trial_number": 88,
+            "value": -0.12697333333333333
+        },
+        {
+            "trial_number": 89,
+            "value": -0.11407999999999999
+        },
+        {
+            "trial_number": 90,
+            "value": -0.11745333333333335
+        },
+        {
+            "trial_number": 91,
+            "value": -0.08842666666666667
+        },
+        {
+            "trial_number": 92,
+            "value": -0.13562666666666667
+        },
+        {
+            "trial_number": 93,
+            "value": -0.06437333333333332
+        },
+        {
+            "trial_number": 94,
+            "value": 0.012039999999999969
+        },
+        {
+            "trial_number": 95,
+            "value": -0.07641333333333332
+        },
+        {
+            "trial_number": 96,
+            "value": 0.6938133333333334
+        },
+        {
+            "trial_number": 97,
+            "value": 0.02749333333333333
+        },
+        {
+            "trial_number": 98,
+            "value": -0.061133333333333324
+        },
+        {
+            "trial_number": 99,
+            "value": -0.10061333333333333
+        }
+    ],
+    "best_params": {
+        "batch_size": 128,
+        "lr": 3.373711586946143e-05,
+        "dropout": 0.08114035191838617,
+        "scheduler_step_size": 4,
+        "scheduler_gamma": 0.640720281581316
+    },
+    "best_value": -0.1492133333333333,
+    "best_trial_number": 46
+}

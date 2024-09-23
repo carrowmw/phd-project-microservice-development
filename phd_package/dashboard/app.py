@@ -14,6 +14,7 @@ from .templates.cards import (
 from .templates.map import ContainerTemplateMap, ContainerTemplateMapLegend
 from .templates.dropdown import DropdownTemplate
 from .templates.double_graph import TabTemplateDoubleGraph
+from .templates.metadata import TabTemplateMetaData
 from .data import CustomDashboardData
 from .graphs import PipelineChartCreator, SensorMapCreator
 
@@ -123,6 +124,13 @@ class SensorDashboardApp:
             PipelineChartCreator().create_train_metrics_graph,
             self.app,
         )
+        self.metadata_tab = TabTemplateMetaData(
+            "tabs",
+            "Metadata",
+            "metadata_tab",
+            self.app,
+        )
+
         self.dummy_tab = TabTemplateDummy(
             "tabs",
             "Dummy",
@@ -187,6 +195,7 @@ class SensorDashboardApp:
                         self.engineering_tab.get_tab(),
                         self.dataloader_tab.get_tab(),
                         self.model_performance_tab.get_tab(),
+                        self.metadata_tab.get_tab(),
                         self.dummy_tab.get_tab(),
                     ],
                     className="tabs-element",
@@ -232,16 +241,9 @@ class SensorDashboardApp:
         self.dataloader_tab.setup_callbacks()
         self.model_performance_tab.setup_callbacks()
 
-    def ensure_data_exists(self):
-        if CustomDashboardData() is None:
-            print("Data does not exist, running data pipeline...")
-            pipeline = Pipeline()
-            pipeline.run_pipeline()
-
 
 if __name__ == "__main__":
     dashboard_app = SensorDashboardApp()
-    dashboard_app.ensure_data_exists()
     dashboard_app.setup_layout()
     dashboard_app.setup_callbacks()
     dashboard_app.app.run_server(debug=True)

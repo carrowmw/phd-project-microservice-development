@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/7ce4b27bca12485999d80629cec8cc1e/artifacts
+end_time: 1726910510861
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7ce4b27bca12485999d80629cec8cc1e
+run_name: Train_PER_PEOPLE_NCLSIDESTCROWNPOSADASOUTH_FROM_WEST_TO_EAST
+run_uuid: 7ce4b27bca12485999d80629cec8cc1e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726910466214
+status: 3
+tags: []
+user_id: administrator

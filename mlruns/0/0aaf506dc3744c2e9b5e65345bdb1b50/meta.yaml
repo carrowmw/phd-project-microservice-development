@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/0aaf506dc3744c2e9b5e65345bdb1b50/artifacts
+end_time: 1726849334776
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0aaf506dc3744c2e9b5e65345bdb1b50
+run_name: Test_PER_PEOPLE_ELDONSQUAREMID_SQUARE
+run_uuid: 0aaf506dc3744c2e9b5e65345bdb1b50
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726849334455
+status: 3
+tags: []
+user_id: administrator

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/e962a16d9f0143448c3b088992f738f1/artifacts
+end_time: 1726886367745
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e962a16d9f0143448c3b088992f738f1
+run_name: Test_PER_PEOPLE_NCLTYNEBRIDGENORTHEAST_FROM_SOUTH_TO_NORTH
+run_uuid: e962a16d9f0143448c3b088992f738f1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726886367573
+status: 3
+tags: []
+user_id: administrator

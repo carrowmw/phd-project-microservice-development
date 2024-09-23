@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/23f95c9fa428476eb9623397235f28db/artifacts
+end_time: 1726878268520
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 23f95c9fa428476eb9623397235f28db
+run_name: Test_PER_PEOPLE_THECORESQUARE_JUNCTION_TO_WELLINGTONSOUTH
+run_uuid: 23f95c9fa428476eb9623397235f28db
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726878268231
+status: 3
+tags: []
+user_id: administrator

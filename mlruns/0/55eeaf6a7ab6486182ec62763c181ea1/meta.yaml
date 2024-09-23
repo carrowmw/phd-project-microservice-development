@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/55eeaf6a7ab6486182ec62763c181ea1/artifacts
+end_time: 1726902556128
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 55eeaf6a7ab6486182ec62763c181ea1
+run_name: Train_PER_PEOPLE_ELDONSQUAREMID_SQUARE
+run_uuid: 55eeaf6a7ab6486182ec62763c181ea1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726902523688
+status: 3
+tags: []
+user_id: administrator

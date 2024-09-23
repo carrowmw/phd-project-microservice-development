@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/affe950cd04d4eefa4b5ae6954209895/artifacts
+end_time: 1726890257475
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: affe950cd04d4eefa4b5ae6954209895
+run_name: Test_PER_PEOPLE_ELDONSQUAREMID_SOUTHWEST_TO_GREEN
+run_uuid: affe950cd04d4eefa4b5ae6954209895
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726890257260
+status: 3
+tags: []
+user_id: administrator

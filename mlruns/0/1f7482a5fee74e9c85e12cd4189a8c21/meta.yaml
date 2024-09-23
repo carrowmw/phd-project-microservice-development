@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/1f7482a5fee74e9c85e12cd4189a8c21/artifacts
+end_time: 1726888646378
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1f7482a5fee74e9c85e12cd4189a8c21
+run_name: Train_PER_PEOPLE_ELDONSQUAREMID_GREEN_SOUTHWEST
+run_uuid: 1f7482a5fee74e9c85e12cd4189a8c21
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726888636066
+status: 3
+tags: []
+user_id: administrator

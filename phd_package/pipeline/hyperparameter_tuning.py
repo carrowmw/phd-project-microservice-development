@@ -21,7 +21,7 @@ class HyperparameterTuner:
     def __init__(
         self,
         config_path: str,
-        optimize_metric: str = "r2",
+        optimize_metric: str,
         output_dir: str = TUNING_OUTPUT_DIR,
     ):
         self.config_path = config_path
@@ -74,22 +74,20 @@ class HyperparameterTuner:
         ):
 
             config = {
-                # "window_size": trial.suggest_categorical(
-                #     "window_size", [4, 8, 12, 16, 20, 24]
-                # ),
-                # "horizon": trial.suggest_categorical("horizon", [24]),
+                "window_size": trial.suggest_categorical(
+                    "window_size", [4, 8, 12, 16, 24, 32, 48]
+                ),
                 "batch_size": trial.suggest_categorical("batch_size", [32, 64, 128]),
-                "lr": trial.suggest_float("lr", 1e-5, 1e-1, log=True),
-                # "epochs": trial.suggest_categorical("epochs", [5, 10, 20]),
-                # "model_type": trial.suggest_categorical("model_type", ["lstm"]),
-                # "hidden_dim": trial.suggest_categorical(
-                #     "hidden_dim", [32, 64, 128, 256]
-                # ),
-                # "num_layers": trial.suggest_int("num_layers", 1, 3),
-                "dropout": trial.suggest_float("dropout", 0.0, 0.5),
+                "lr": trial.suggest_float("lr", 1e-5, 1e-2, log=True),
+                # "model_type": trial.suggest_categorical("model_type", ["lstm", "gru"]),
+                "hidden_dim": trial.suggest_categorical(
+                    "hidden_dim", [32, 64, 128, 256]
+                ),
+                "num_layers": trial.suggest_int("num_layers", 1, 3),
+                "dropout": trial.suggest_float("dropout", 0.0, 0.2),
                 # LR Scheduler parameters
-                "scheduler_step_size": trial.suggest_int("scheduler_step_size", 1, 10),
-                "scheduler_gamma": trial.suggest_float("scheduler_gamma", 0.1, 0.9),
+                "scheduler_step_size": trial.suggest_int("scheduler_step_size", 3, 7),
+                "scheduler_gamma": trial.suggest_float("scheduler_gamma", 0.3, 0.9),
             }
 
             # Log the hyperparameters to MLflow
@@ -167,6 +165,8 @@ class HyperparameterTuner:
                     return -np.mean(
                         test_r2
                     )  # Negative because Optuna minimizes by default
+                elif self.optimize_metric.lower() == "weighted":
+                    return self.weighted_average_performance(test_metrics_list)
                 else:
                     raise ValueError(
                         f"Unknown optimization metric: {self.optimize_metric}"
@@ -222,6 +222,29 @@ class HyperparameterTuner:
             test_r2.append(metrics["Test R2"])
 
         return test_loss, test_mape, test_rmse, test_r2
+
+    def weighted_average_performance(
+        self,
+        test_metrics_list,
+        rmse_weight: float = 1.0,
+        mape_weight: float = 0.2,
+        loss_weight: float = 0.1,
+    ):
+        """
+        Returns:
+            weighted_error (float): The weighted average of the test error.
+        """
+
+        test_loss, test_mape, test_rmse, _ = self.extract_average_performance(
+            test_metrics_list
+        )
+
+        weighted_error = (
+            np.mean(test_rmse) * rmse_weight
+            + np.mean(test_mape) * mape_weight
+            + np.mean(test_loss) * loss_weight
+        )
+        return weighted_error
 
     def run_tuning(self, n_trials: int = 100) -> Dict:
         """
@@ -298,5 +321,5 @@ class HyperparameterTuner:
 
 # Usage
 if __name__ == "__main__":
-    tuner = HyperparameterTuner(PIPELINE_CONFIG_PATH, optimize_metric="r2")
+    tuner = HyperparameterTuner(PIPELINE_CONFIG_PATH, optimize_metric="rmse")
     best_params = tuner.run_tuning()

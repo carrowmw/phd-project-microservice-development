@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/e5a09cc74e104d7da0162c7c26bd3699/artifacts
+end_time: 1726872470223
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e5a09cc74e104d7da0162c7c26bd3699
+run_name: Test_PER_PEOPLE_GREYSTTHEATRESOUTH_NORTHROAD_TO_SOUTHROAD
+run_uuid: e5a09cc74e104d7da0162c7c26bd3699
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726872469963
+status: 3
+tags: []
+user_id: administrator

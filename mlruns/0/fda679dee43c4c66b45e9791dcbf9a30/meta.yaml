@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/fda679dee43c4c66b45e9791dcbf9a30/artifacts
+end_time: 1726899854267
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: fda679dee43c4c66b45e9791dcbf9a30
+run_name: Train_PER_PEOPLE_THECORESQUARE_JUNCTION_TO_WELLINGTONNORTH
+run_uuid: fda679dee43c4c66b45e9791dcbf9a30
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726899847244
+status: 3
+tags: []
+user_id: administrator

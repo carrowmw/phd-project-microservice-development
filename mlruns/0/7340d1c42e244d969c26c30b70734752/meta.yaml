@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/7340d1c42e244d969c26c30b70734752/artifacts
+end_time: 1726843554794
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7340d1c42e244d969c26c30b70734752
+run_name: Test_PER_PEOPLE_NCLQUAYSIDEWESLEYSQUARE_FROM_WEST_TO_EAST
+run_uuid: 7340d1c42e244d969c26c30b70734752
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726843554538
+status: 3
+tags: []
+user_id: administrator
