@@ -3,6 +3,8 @@ data/pipeline/
 data/app_data/
 data/artificial/
 
+mlruns/
+
 # Ignore virtual environment
 .venv/
 
@@ -15,3 +17,6 @@ __pycache__/
 
 # Ignore Jupyter notebooks
 *.ipynb
+
+# Ignore macOS system files
+.DS_Store

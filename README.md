@@ -1,5 +1,7 @@
 # phd-project
 
+[Read the docs](https://carrowmw.github.io/phd-project/tutorials/viewing_data/)
+
 ## Description
 
 This project, phd-project, is (will be) a comprehensive programme designed for building, testing, and deploying machine learning models fed on urban observatory data. Follow the instructions below to set up and run the project.
@@ -66,7 +68,7 @@ pytest
 
 ## Running the Project
 
-For tutorials on running the pipeline visit the [https://carrowmw.github.io/phd-project/tutorials/viewing_data/](docs).
+For tutorials on running the pipeline visit the project [docs]([docs](https://carrowmw.github.io/phd-project/tutorials/viewing_data/)).
 
 Note: This guide assumes a working knowledge of Python and command-line interfaces. If you encounter any issues, refer to the official Poetry documentation for more detailed information.
 

@@ -10,6 +10,7 @@ cd "$(git rev-parse --show-toplevel)" || exit 1
 commit_changes() {
     local branch=$1
     local message
+    read -p "Warning - This script will reset all changes in $branch. Do you want to proceed? (y/n) " -n 1 -r
     read -p "Enter commit message for $branch: " message
     git add .
     git commit -m "$message" || echo "No changes to commit for $branch"
