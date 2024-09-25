@@ -16,16 +16,24 @@
         "input_feature_indices": null,
         "target_feature_index": 0,
         "model_type": "lstm",
+<<<<<<< Updated upstream
         "window_size": 16,
         "horizon": 24,
         "stride": 1,
         "batch_size": 128,
+=======
+        "window_size": 32,
+        "horizon": 24,
+        "stride": 1,
+        "batch_size": 32,
+>>>>>>> Stashed changes
         "shuffle": false,
         "num_workers": 0,
         "train_ratio": 0.7,
         "val_ratio": 0.15,
         "device": "mps",
         "epochs": 10,
+<<<<<<< Updated upstream
         "hidden_dim": 256,
         "num_layers": 2,
         "dropout": 0.1325209195465166,
@@ -35,6 +43,17 @@
         "momentum": 0.9,
         "scheduler_step_size": 5,
         "scheduler_gamma": 0.6814306191027024,
+=======
+        "hidden_dim": 64,
+        "num_layers": 2,
+        "dropout": 0.15047582384328972,
+        "optimiser": "adam",
+        "lr": 0.00021333345727352158,
+        "criterion": "mse",
+        "momentum": 0.9,
+        "scheduler_step_size": 6,
+        "scheduler_gamma": 0.5850801339669781,
+>>>>>>> Stashed changes
         "early_stopping_patience": 3
     },
     "preprocessing": [

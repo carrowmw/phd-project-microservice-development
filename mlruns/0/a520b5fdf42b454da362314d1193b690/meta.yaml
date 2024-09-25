@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/a520b5fdf42b454da362314d1193b690/artifacts
+end_time: 1727130340435
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a520b5fdf42b454da362314d1193b690
+run_name: Test_PER_PEOPLE_NCLQUAYSIDEUNDERHIGHLEVELBRIDGE_WEST_TO_EAST
+run_uuid: a520b5fdf42b454da362314d1193b690
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727130340155
+status: 3
+tags: []
+user_id: administrator

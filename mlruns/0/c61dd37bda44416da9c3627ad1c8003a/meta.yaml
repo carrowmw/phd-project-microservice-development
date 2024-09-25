@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/c61dd37bda44416da9c3627ad1c8003a/artifacts
+end_time: 1727100900956
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c61dd37bda44416da9c3627ad1c8003a
+run_name: Train_PER_PEOPLE_ELDONSQUARECROSSING_SOUTH_TO_SQUARE
+run_uuid: c61dd37bda44416da9c3627ad1c8003a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727100896893
+status: 3
+tags: []
+user_id: administrator

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/c2c6f3570d894b4a8190424cebe6fcdc/artifacts
+end_time: 1727097522592
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c2c6f3570d894b4a8190424cebe6fcdc
+run_name: Train_PER_PEOPLE_NCLQUAYSIDEWESLEYSQUARE_FROM_WEST_TO_EAST
+run_uuid: c2c6f3570d894b4a8190424cebe6fcdc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727097502396
+status: 3
+tags: []
+user_id: administrator

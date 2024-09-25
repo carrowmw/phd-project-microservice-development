@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/cd062d79a7d0406e8df69ff8259c05f6/artifacts
+end_time: 1727101448751
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: cd062d79a7d0406e8df69ff8259c05f6
+run_name: Test_PER_PEOPLE_THECORESQUARE_WELLINGTONNORTH_TO_JUNCTION
+run_uuid: cd062d79a7d0406e8df69ff8259c05f6
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727101448493
+status: 3
+tags: []
+user_id: administrator

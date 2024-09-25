@@ -1,0 +1,417 @@
+{
+    "n_trials": 100,
+    "optimization_history": [
+        {
+            "trial_number": 0,
+            "value": 0.7958533333333335
+        },
+        {
+            "trial_number": 1,
+            "value": 0.7730930232558139
+        },
+        {
+            "trial_number": 2,
+            "value": 0.7414799999999999
+        },
+        {
+            "trial_number": 3,
+            "value": 0.8730266666666665
+        },
+        {
+            "trial_number": 4,
+            "value": 0.8722400000000001
+        },
+        {
+            "trial_number": 5,
+            "value": 0.3614883720930232
+        },
+        {
+            "trial_number": 6,
+            "value": 0.3632558139534884
+        },
+        {
+            "trial_number": 7,
+            "value": 0.7572133333333334
+        },
+        {
+            "trial_number": 8,
+            "value": 0.7152093023255814
+        },
+        {
+            "trial_number": 9,
+            "value": 0.6320724637681159
+        },
+        {
+            "trial_number": 10,
+            "value": 0.5294262295081967
+        },
+        {
+            "trial_number": 11,
+            "value": 0.373860465116279
+        },
+        {
+            "trial_number": 12,
+            "value": 0.4024651162790698
+        },
+        {
+            "trial_number": 13,
+            "value": 0.5907441860465117
+        },
+        {
+            "trial_number": 14,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 15,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 16,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 17,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 18,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 19,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 20,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 21,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 22,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 23,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 24,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 25,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 26,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 27,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 28,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 29,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 30,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 31,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 32,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 33,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 34,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 35,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 36,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 37,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 38,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 39,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 40,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 41,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 42,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 43,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 44,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 45,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 46,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 47,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 48,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 49,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 50,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 51,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 52,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 53,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 54,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 55,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 56,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 57,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 58,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 59,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 60,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 61,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 62,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 63,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 64,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 65,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 66,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 67,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 68,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 69,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 70,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 71,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 72,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 73,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 74,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 75,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 76,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 77,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 78,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 79,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 80,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 81,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 82,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 83,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 84,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 85,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 86,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 87,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 88,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 89,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 90,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 91,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 92,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 93,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 94,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 95,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 96,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 97,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 98,
+            "value": "Incomplete"
+        },
+        {
+            "trial_number": 99,
+            "value": "Incomplete"
+        }
+    ],
+    "best_params": {
+        "window_size": 48,
+        "batch_size": 32,
+        "lr": 0.0053727433064559155,
+        "hidden_dim": 64,
+        "num_layers": 3,
+        "dropout": 0.17449362875158103,
+        "scheduler_step_size": 3,
+        "scheduler_gamma": 0.7657379697744249
+    },
+    "best_value": 0.3614883720930232,
+    "best_trial_number": 5
+}
