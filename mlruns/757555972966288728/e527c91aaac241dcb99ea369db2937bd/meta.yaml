@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/757555972966288728/e527c91aaac241dcb99ea369db2937bd/artifacts
+end_time: 1727270888389
+entry_point_name: ''
+experiment_id: '757555972966288728'
+lifecycle_stage: active
+run_id: e527c91aaac241dcb99ea369db2937bd
+run_name: Trial_8
+run_uuid: e527c91aaac241dcb99ea369db2937bd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727269954847
+status: 3
+tags: []
+user_id: administrator

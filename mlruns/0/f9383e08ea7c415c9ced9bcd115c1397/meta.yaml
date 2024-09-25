@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/f9383e08ea7c415c9ced9bcd115c1397/artifacts
+end_time: 1727126706963
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f9383e08ea7c415c9ced9bcd115c1397
+run_name: Test_PER_PEOPLE_ELDONSQUAREMID_SQUAREWEST_TO_SQUARENORTH
+run_uuid: f9383e08ea7c415c9ced9bcd115c1397
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727126706666
+status: 3
+tags: []
+user_id: administrator

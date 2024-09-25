@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/77d476c91fac4ef29f751eb492f50671/artifacts
+end_time: 1727261455936
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 77d476c91fac4ef29f751eb492f50671
+run_name: Test_PER_PEOPLE_THECORESQUARE_JUNCTION_TO_BEHINDCYCLEPARKING
+run_uuid: 77d476c91fac4ef29f751eb492f50671
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727261455583
+status: 3
+tags: []
+user_id: administrator

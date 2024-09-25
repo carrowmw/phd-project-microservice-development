@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/fe79a4b22cc64de1b1a9973483f66417/artifacts
+end_time: 1727125076665
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: fe79a4b22cc64de1b1a9973483f66417
+run_name: Train_PER_PEOPLE_NCLNORTHUMBERLANDSTSAVILLEROWEAST_NORTHEAST_TO_SOUTHEAST
+run_uuid: fe79a4b22cc64de1b1a9973483f66417
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727124994331
+status: 3
+tags: []
+user_id: administrator

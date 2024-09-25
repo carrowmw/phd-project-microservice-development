@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/administrator/Code/python/phd-project/mlruns/0/9d28e766e9834795a0e4cefeb59e12e8/artifacts
+end_time: 1727263448523
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9d28e766e9834795a0e4cefeb59e12e8
+run_name: Train_PER_PEOPLE_ELDONSQUAREWEST_SQUARE_MIDBLINDSPOT
+run_uuid: 9d28e766e9834795a0e4cefeb59e12e8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727263429997
+status: 3
+tags: []
+user_id: administrator
