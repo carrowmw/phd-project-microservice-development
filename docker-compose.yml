@@ -1,0 +1,9 @@
+version: '1'
+
+services:
+  database:
+    build:
+      context: .
+      dockerfile: phd_package/database/Dockerfile
+    volumes:
+      - ./phd_package:/app/phd_package
