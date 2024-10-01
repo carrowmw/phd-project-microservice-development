@@ -12,20 +12,11 @@ def handle_api_response(response):
     Handles the API response and returns the JSON data if successful, otherwise raises
     a more specific exception.
     """
-    try:
-        if isinstance(response, requests.Response):
-            response.raise_for_status()
-            return response.json()
-        else:
-            raise ValueError("Invalid response type. Expected requests.Response.")
-    except requests.exceptions.HTTPError as errh:
-        raise ValueError(f"HTTP Error: {errh}") from errh
-    except requests.exceptions.ConnectionError as errc:
-        raise ValueError(f"Error Connecting: {errc}") from errc
-    except requests.exceptions.Timeout as errt:
-        raise ValueError(f"Timeout Error: {errt}") from errt
-    except requests.exceptions.RequestException as err:
-        raise ValueError(f"Request Error: {err}") from err
+    if isinstance(response, requests.Response):
+        response.raise_for_status()
+        return response.json()
+    else:
+        raise ValueError("Invalid response type. Expected requests.Response.")
 
 
 def make_api_request(url, params=None, timeout=1000):
@@ -34,11 +25,12 @@ def make_api_request(url, params=None, timeout=1000):
     """
     try:
         response = requests.get(url, params=params, timeout=timeout)
-        response.raise_for_status()
         return response
     except requests.exceptions.HTTPError as errh:
         raise ValueError(f"HTTP Error: {errh}") from errh
+    except requests.exceptions.ConnectionError as errc:
+        raise ValueError(f"Error Connecting: {errc}") from errc
     except requests.exceptions.Timeout as errt:
         raise ValueError(f"Timeout Error: {errt}") from errt
     except requests.exceptions.RequestException as err:
-        raise ValueError(f"API request failed: {err}") from err
+        raise ValueError(f"Request Error: {err}") from err

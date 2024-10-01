@@ -17,17 +17,17 @@ from phd_package.utils.config_helper import get_database_url
 database_url = "postgresql://test@localhost:5432/testdb"
 engine = create_engine(database_url)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+LocalSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def init_db():
-    from phd_package.database.models import Base
+    from phd_package.database.src.models import Base
 
     Base.metadata.create_all(bind=engine)
 
 
 def get_db():
-    db = SessionLocal()
+    db = LocalSession()
     try:
         yield db
     finally:

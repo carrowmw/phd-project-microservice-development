@@ -2,7 +2,6 @@
 phd_package/data/
 
 # Ignore other service directories if not needed
-phd_package/api/
 phd_package/dashboard/
 phd_package/pipeline/
 

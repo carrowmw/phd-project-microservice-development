@@ -1,7 +1,7 @@
 # phd_package/database/__main__.py
 
 from phd_package.database.src.database import init_db
-from phd_package.api.api_data_processor import APIDataProcessor
+from phd_package.api.src import APIDataProcessor
 
 
 def setup_database():

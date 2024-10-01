@@ -5,6 +5,8 @@ data/artificial/
 
 mlruns/
 
+phd_package/pipeline/tuning_output/
+
 # Ignore virtual environment
 .venv/
 

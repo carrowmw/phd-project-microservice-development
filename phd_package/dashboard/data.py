@@ -152,7 +152,7 @@ class CustomDashboardData:
             min, max = get_query_agnostic_start_and_end_date()
         return daily_counts
 
-    def get_completeness_graph_data(self) -> list:
+    def get_daily_counts_graph_data(self) -> list:
         """
         Retrieves and formats application data for visualization in a missing data app.
 
