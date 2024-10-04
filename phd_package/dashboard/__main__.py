@@ -1,3 +1,5 @@
+# phd_project/dashboard/__main__.py
+
 from .app import SensorDashboardApp
 
 

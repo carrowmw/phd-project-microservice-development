@@ -49,7 +49,7 @@ class PipelineChartCreator:
         self.train_metrics = self.dashboard_data.get_train_metrics()
         self.training_windows = self.dashboard_data.get_training_windows()
         self.sensor_info = self.dashboard_data.get_sensor_info()
-        self.completeness_graph_data = self.dashboard_data.get_completeness_graph_data()
+        self.daily_counts = self.dashboard_data.get_daily_counts()
         self.first_sensor_in_list = self.dashboard_data.active_sensors[0]
         self.xmin, self.xmax = get_query_agnostic_start_and_end_date()
         self.n_days = get_n_days()
@@ -97,11 +97,10 @@ class PipelineChartCreator:
         """
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        # data_list = self.completeness_metrics
-        # print(f"TEST: self.completeness_metrics: {self.completeness_metrics}")
         completeness_value = self.completeness_metrics.loc[
             self.completeness_metrics["sensor_name"] == sensor_name, "string"
         ].values[0]
+        print(f"Debug: Completeness for {sensor_name}: {completeness_value}")
         if completeness_value is None:
             return "No data"
         return completeness_value
@@ -121,6 +120,7 @@ class PipelineChartCreator:
         freshness_value = self.freshness_metrics.loc[
             self.freshness_metrics["sensor_name"] == sensor_name, "string"
         ].values[0]
+        print(f"Debug: Freshness for {sensor_name}: {freshness_value}")
         if freshness_value is None:
             return "No data"
         return freshness_value
@@ -138,7 +138,7 @@ class PipelineChartCreator:
 
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        data = find_tuple_by_first_element(self.completeness_graph_data, sensor_name)
+        data = find_tuple_by_first_element(self.daily_counts, sensor_name)
         if data is None:
             return self.no_data_fig(sensor_name)
 
@@ -365,7 +365,11 @@ class SensorMapFigure:
         ).read()
         self.fig = go.Figure()
 
-    def create_map(self, lat, lon, name, values, colorscale):
+    def create_map(self, lat, lon, hover_texts, values, colorscale):
+        print("Debug: Creating Sensor Map")
+        print(f"Debug: Length of Values for Map: {len(values)}")
+        print(f"Debug: Creating map with {len(hover_texts)} hover texts")
+
         self.fig.add_trace(
             go.Scattermapbox(
                 lat=lat,
@@ -379,11 +383,9 @@ class SensorMapFigure:
                     cmin=0,
                     cmax=1,
                 ),
-                text=name,
+                text=hover_texts,
                 hoverinfo="text",
                 showlegend=False,
-                hovertemplate="<i>%{text}<i><br>"
-                + "<b>Metric</b>: %{marker.color:.2f}",
             )
         )
 
@@ -407,32 +409,58 @@ class SensorMapFigure:
 class SensorMapCreator:
     def __init__(self):
         self.dashboard_data = CustomDashboardData()
-        self.completeness_metrics = self.dashboard_data.get_completeness_metrics()
-        self.freshness_metrics = self.dashboard_data.get_freshness_metrics()
         self.fig = SensorMapFigure()
 
     def create_completeness_sensor_map_fig(self):
-        lat, lon, name = self.dashboard_data.get_sensor_info()
+        lat, lon, names = self.dashboard_data.get_sensor_info()
+        # print(f"Debug: Number of sensors for map: {len(names)}")
+        metrics = self.dashboard_data.get_sensor_metrics("completeness")
+
+        values = []
+        hover_texts = []
+
+        for name in names:
+            if name in metrics:
+                values.append(metrics[name]["float"])
+                hover_texts.append(f"{name}<br>Completeness: {metrics[name]['string']}")
+            else:
+                print(f"Warning: Sensor {name} not found in metrics")
+                values.append(0)
+                hover_texts.append(f"{name}<br>Completeness: No data")
+
+        print(f"Metrics: {metrics}")
 
         fig = self.fig.create_map(
             lat,
             lon,
-            name,
-            values=self.completeness_metrics["float"],
+            hover_texts,
+            values=values,
             colorscale=completeness_color_scale(),
         )
         return fig
 
     def create_freshness_sensor_map_fig(self):
-        lat, lon, name = self.dashboard_data.get_sensor_info()
-        print(
-            f"TEST: self.freshness_metrics['norm_log']: {self.freshness_metrics['norm_log']}"
-        )
+        lat, lon, names = self.dashboard_data.get_sensor_info()
+        # print(f"Debug: Number of sensors for map: {len(names)}")
+        metrics = self.dashboard_data.get_sensor_metrics("freshness")
+
+        values = []
+        hover_texts = []
+
+        for name in names:
+            if name in metrics:
+                values.append(metrics[name]["float"])
+                hover_texts.append(f"{name}<br>Freshness: {metrics[name]['string']}")
+            else:
+                print(f"Warning: Sensor {name} not found in metrics")
+                values.append(0)
+                hover_texts.append(f"{name}<br>Freshness: No data")
+
         fig = self.fig.create_map(
             lat,
             lon,
-            name,
-            values=self.freshness_metrics["norm_log"],
+            hover_texts,
+            values=values,
             colorscale=freshness_color_scale(),
         )
         return fig

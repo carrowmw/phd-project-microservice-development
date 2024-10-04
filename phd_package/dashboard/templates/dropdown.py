@@ -47,9 +47,7 @@ class DropdownTemplate:
             Input(self.dropdown_id, "value"),
         )
         def update_map(selected_layer):
-            print(
-                "DropdownTemplate.setup_callbacks() - Layer selected:", selected_layer
-            )
+            # print("DropdownTemplate.setup_callbacks() - Layer selected:", selected_layer)
             if selected_layer == "completeness":
                 colorscale = completeness_color_scale()
                 legend = plot_color_gradient(selected_layer, colorscale)

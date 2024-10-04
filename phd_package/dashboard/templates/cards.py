@@ -76,11 +76,11 @@ class SensorNameCardTemplate(CardTemplate):
             Input(self.map_id, "clickData"),
         )
         def update_card(map_click_data):
-            print("SensorNameCardTemplate.setup_callbacks()")
+            # print("SensorNameCardTemplate.setup_callbacks()")
             if map_click_data is None:
                 sensor_name = self.random_sensor
             else:
-                sensor_name = map_click_data["points"][0]["text"]
+                sensor_name = map_click_data["points"][0]["text"].split("<br>")[0]
             return f"{sensor_name}"
 
 
@@ -127,21 +127,25 @@ class QualityMetricsCardTemplate(CardTemplate):
             [Input(self.map_id, "clickData"), Input(self.dropdown_id, "value")],
         )
         def update_card(map_click_data, selected_layer):
-            print("QualityMetricsCardTemplate.setup_callbacks()")
+            # print("QualityMetricsCardTemplate.setup_callbacks()")
             if map_click_data is None:
                 sensor_name = self.random_sensor
             else:
-                sensor_name = map_click_data["points"][0]["text"]
+                sensor_name = map_click_data["points"][0]["text"].split("<br>")[0]
 
-            if selected_layer == "completeness":
-                metric_value = self.pipeline_chart_creator.create_completeness_metric(
-                    sensor_name
-                )
-            elif selected_layer == "freshness":
-                metric_value = self.pipeline_chart_creator.create_freshness_metric(
-                    sensor_name
-                )
-            else:
-                None
+            # if selected_layer == "completeness":
+            #     metric_value = self.pipeline_chart_creator.create_completeness_metric(
+            #         sensor_name
+            #     )
+            # elif selected_layer == "freshness":
+            #     metric_value = self.pipeline_chart_creator.create_freshness_metric(
+            #         sensor_name
+            #     )
+            # else:
+            #     None
+
+            metrics = self.data.get_sensor_metrics(selected_layer)
+            metric_value = metrics.get(sensor_name, {}).get("string", "No data")
+            metric_value = metric_value.split("<br>")[0]
 
             return metric_value

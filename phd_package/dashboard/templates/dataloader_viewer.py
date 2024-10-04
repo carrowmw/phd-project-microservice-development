@@ -107,11 +107,11 @@ class TabTemplateDataLoaderViewer:
             frame_counter,
             prev_sensor_name,
         ):
-            print("TabTemplateDataLoaderViewer.setup_callbacks()")
+            # print("TabTemplateDataLoaderViewer.setup_callbacks()")
             if map_click_data is None:
                 sensor_name = self.random_sensor
             else:
-                sensor_name = map_click_data["points"][0]["text"]
+                sensor_name = map_click_data["points"][0]["text"].split("<br>")[0]
 
             if active_tab == self.tab_id:
                 # Get the number of frames from the data

@@ -1,12 +1,9 @@
 # dashboard/utils/templates/dummy.py
-
-import numpy as np
 import pandas as pd
 import dash
-from dash import dcc
 import dash_bootstrap_components as dbc
-
-import plotly.express as px
+from ..data import CustomDashboardData
+from dash import dash_table
 
 
 class TabTemplateMetaData:
@@ -21,22 +18,30 @@ class TabTemplateMetaData:
         self.tabs_id = tabs_id
         self.tab_label = tab_label
         self.tab_id = tab_id
+        self.data = CustomDashboardData()
+        self.metadata = self.data.get_metadata()
 
-    def metadata_table(self):
-        # hyperparameter table logic goes here
-        return None
+    def get_layout(self):
+        metadata_df = pd.DataFrame(
+            list(self.metadata.items()), columns=["Metric", "Value"]
+        )
+        return dbc.Row(
+            id="metadata_row",
+            children=[
+                dash_table.DataTable(
+                    data=metadata_df.to_dict("records"),
+                    columns=[{"name": col, "id": col} for col in metadata_df.columns],
+                    id="metadata_table",
+                ),
+            ],
+            className="row-element",
+        )
 
     def get_tab(self):
         return dbc.Tab(
             label=self.tab_label,
             tab_id=self.tab_id,
-            children=[
-                dcc.Graph(
-                    id="metadata_table",
-                    figure=self.metadata_table(),
-                    className="graph-element",
-                ),
-            ],
+            children=self.get_layout(),
             className="tab-element",
         )
 

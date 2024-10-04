@@ -69,11 +69,11 @@ class TabTemplateDoubleGraph:
             ],
         )
         def update_tab(active_tab, map_click_data):
-            print("TabTemplateDoubleGraph.setup_callbacks()")
+            # print("TabTemplateDoubleGraph.setup_callbacks()")
             if map_click_data is None:
                 sensor_name = self.random_sensor
             else:
-                sensor_name = map_click_data["points"][0]["text"]
+                sensor_name = map_click_data["points"][0]["text"].split("<br>")[0]
 
             if active_tab == self.tab_id:
                 graph_a = self.graph_a(sensor_name)

@@ -71,11 +71,11 @@ class TabTemplateSingleTable:
             [Input(self.tabs_id, "active_tab"), Input(self.map_id, "clickData")],
         )
         def update_tab(active_tab, map_click_data):
-            print("TabTemplateSingleTable.setup_callbacks()")
+            # print("TabTemplateSingleTable.setup_callbacks()")
             if map_click_data is None:
                 sensor_name = self.random_sensor
             else:
-                sensor_name = map_click_data["points"][0]["text"]
+                sensor_name = map_click_data["points"][0]["text"].split("<br>")[0]
 
             if active_tab == self.tab_id:
                 data = self.table_func(sensor_name)
