@@ -2,8 +2,6 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import html
 
-from phd_package.pipeline import Pipeline
-
 from .templates.tables import TabTemplateSingleTable
 from .templates.dataloader_viewer import TabTemplateDataLoaderViewer
 from .templates.dummy import TabTemplateDummy
@@ -15,6 +13,7 @@ from .templates.map import ContainerTemplateMap, ContainerTemplateMapLegend
 from .templates.dropdown import DropdownTemplate
 from .templates.double_graph import TabTemplateDoubleGraph
 from .templates.metadata import TabTemplateMetaData
+from .templates.anomalies import TabTemplateAnomalies
 from .data import CustomDashboardData
 from .graphs import PipelineChartCreator, SensorMapCreator
 
@@ -71,6 +70,18 @@ class SensorDashboardApp:
             PipelineChartCreator().create_latest_data_graph,
             "data_quality_graph_b",
             PipelineChartCreator().create_records_per_day_graph,
+            self.app,
+        )
+
+        self.anomaly_tab = TabTemplateAnomalies(
+            "tabs",
+            "sensor_map",
+            "Anomalies",
+            "anomaly_tab",
+            "anomaly_card",
+            "total-anomalies",
+            "anomaly_graph",
+            PipelineChartCreator().create_anomalies_graph,
             self.app,
         )
 
@@ -191,6 +202,7 @@ class SensorDashboardApp:
                     id="tabs",
                     children=[
                         self.data_quality_tab.get_tab(),
+                        self.anomaly_tab.get_tab(),
                         self.preprocessing_tab.get_tab(),
                         self.engineering_tab.get_tab(),
                         self.dataloader_tab.get_tab(),
@@ -236,6 +248,7 @@ class SensorDashboardApp:
         self.sensor_name_card.setup_callbacks()
         self.quality_metrics_card.setup_callbacks()
         self.data_quality_tab.setup_callbacks()
+        self.anomaly_tab.setup_callbacks()
         self.preprocessing_tab.setup_callbacks()
         self.engineering_tab.setup_callbacks()
         self.dataloader_tab.setup_callbacks()

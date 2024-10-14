@@ -72,6 +72,7 @@ FRESHNESS_METRICS_PATH = DASHBOARD_DATA_DIR / "freshness_metrics"
 TEST_PREDICTIONS_PATH = DASHBOARD_DATA_DIR / "test_predictions"
 TRAIN_METRICS_PATH = DASHBOARD_DATA_DIR / "train_metrics"
 TRAINING_WINDOWS_PATH = DASHBOARD_DATA_DIR / "training_windows"
+ANOMALIES_PATH = DASHBOARD_DATA_DIR / "anomalies"
 
 PIPELINE_DATA_DIR = DATA_DIR / "pipeline"
 SENSOR_DIR = PIPELINE_DATA_DIR / "sensors"
@@ -81,6 +82,8 @@ ENGINEERED_DATA_DIR = PIPELINE_DATA_DIR / "engineered"
 DATALOADER_DIR = PIPELINE_DATA_DIR / "dataloader"
 TRAINED_MODEL_DIR = PIPELINE_DATA_DIR / "trained_models"
 TEST_DIR = PIPELINE_DATA_DIR / "test_metrics"
+
+# Dashboard Data Directories
 
 
 def get_dashboard_data_dir():
@@ -113,6 +116,13 @@ def get_training_windows_path():
 
 def get_pipeline_data_dir():
     return PIPELINE_DATA_DIR
+
+
+def get_anomalies_path():
+    return ANOMALIES_PATH
+
+
+# Pipeline Data Directories
 
 
 def get_sensor_dir():

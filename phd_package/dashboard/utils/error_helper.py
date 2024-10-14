@@ -11,13 +11,11 @@ def handle_errors(default_return: Any = None):
             try:
                 return func(*args, **kwargs)
             except Exception as e:
-                print(f"Error in {func.__name__}: {str(e)}")
+                logging.error(f"Error in {func.__name__}: {str(e)}", exc_info=True)
                 if isinstance(default_return, Callable):
                     return default_return(*args, **kwargs)
                 return default_return
-
         return wrapper
-
     return decorator
 
 
@@ -28,34 +26,26 @@ def handle_data_errors(default_return: Any = None, retry_attempts: int = 1):
             for attempt in range(retry_attempts + 1):
                 try:
                     result = func(*args, **kwargs)
-                    if result is None or (
-                        isinstance(result, (list, dict)) and len(result) == 0
-                    ):
+                    if result is None or (isinstance(result, (list, dict)) and len(result) == 0):
                         raise ValueError(f"Empty result from {func.__name__}")
                     return result
                 except Exception as e:
-
                     logging.error(
                         "Attempt %d/%d failed in %s: %s",
                         attempt + 1,
                         retry_attempts + 1,
                         func.__name__,
                         str(e),
+                        exc_info=True
                     )
-                    if attempt == retry_attempts:
-
-                        logging.error(
-                            "All attempts failed in %s. Returning default value.",
-                            func.__name__,
-                        )
-                        return (
-                            default_return()
-                            if callable(default_return)
-                            else default_return
-                        )
-
+                if attempt == retry_attempts:
+                    logging.error(
+                        "All attempts failed in %s. Returning default value.",
+                        func.__name__,
+                        exc_info=True
+                    )
+                    return default_return() if callable(default_return) else default_return
         return wrapper
-
     return decorator
 
 

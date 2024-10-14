@@ -31,6 +31,10 @@ from .utils.color_helper import (
     freshness_color_scale,
 )
 
+# TEMP
+import numpy as np
+from ..utils.config_helper import get_anomaly_std
+
 
 class PipelineChartCreator:
     """
@@ -50,6 +54,7 @@ class PipelineChartCreator:
         self.training_windows = self.dashboard_data.get_training_windows()
         self.sensor_info = self.dashboard_data.get_sensor_info()
         self.daily_counts = self.dashboard_data.get_daily_counts()
+        self.anomalies = self.dashboard_data.get_anomalies()
         self.first_sensor_in_list = self.dashboard_data.active_sensors[0]
         self.xmin, self.xmax = get_query_agnostic_start_and_end_date()
         self.n_days = get_n_days()
@@ -100,7 +105,7 @@ class PipelineChartCreator:
         completeness_value = self.completeness_metrics.loc[
             self.completeness_metrics["sensor_name"] == sensor_name, "string"
         ].values[0]
-        print(f"Debug: Completeness for {sensor_name}: {completeness_value}")
+        # print(f"Debug: Completeness for {sensor_name}: {completeness_value}")
         if completeness_value is None:
             return "No data"
         return completeness_value
@@ -120,7 +125,7 @@ class PipelineChartCreator:
         freshness_value = self.freshness_metrics.loc[
             self.freshness_metrics["sensor_name"] == sensor_name, "string"
         ].values[0]
-        print(f"Debug: Freshness for {sensor_name}: {freshness_value}")
+        # print(f"Debug: Freshness for {sensor_name}: {freshness_value}")
         if freshness_value is None:
             return "No data"
         return freshness_value
@@ -300,8 +305,8 @@ class PipelineChartCreator:
 
         validation_metrics = data[1]
 
-        test_fig = go.Figure()
-        test_fig.add_trace(
+        train_fig = go.Figure()
+        train_fig.add_trace(
             go.Scatter(
                 x=list(range(len(validation_metrics))),
                 y=[item["Val loss"] for item in validation_metrics],
@@ -310,7 +315,7 @@ class PipelineChartCreator:
                 line=dict(color=self.category_colors[0]),
             )
         )
-        test_fig.add_trace(
+        train_fig.add_trace(
             go.Scatter(
                 x=list(range(len(validation_metrics))),
                 y=[item["Val MAPE"] for item in validation_metrics],
@@ -319,7 +324,7 @@ class PipelineChartCreator:
                 line=dict(color=self.category_colors[1]),
             )
         )
-        test_fig.add_trace(
+        train_fig.add_trace(
             go.Scatter(
                 x=list(range(len(validation_metrics))),
                 y=[item["Val RMSE"] for item in validation_metrics],
@@ -328,7 +333,7 @@ class PipelineChartCreator:
                 line=dict(color=self.category_colors[2]),
             )
         )
-        test_fig.add_trace(
+        train_fig.add_trace(
             go.Scatter(
                 x=list(range(len(validation_metrics))),
                 y=[item["Val R2"] for item in validation_metrics],
@@ -338,7 +343,7 @@ class PipelineChartCreator:
             )
         )
 
-        test_fig.update_layout(
+        train_fig.update_layout(
             title={
                 "text": "Train Metrics",
                 "font": {"size": 20},
@@ -352,7 +357,103 @@ class PipelineChartCreator:
             ),
         )
 
-        return test_fig
+        return train_fig
+
+    def create_anomalies_graph(self, sensor_name=None) -> go.Figure:
+        """
+        Create a graph showing anomalies.
+
+        Args:
+            sensor_name (str): The name of the sensor to create the graph for.
+
+        Returns:
+            Figure: A plotly figure containing the anomalies graph.
+        """
+        print(f"Debug: Creating Anomalies Graph for {sensor_name}")
+        print(f"Debug: Anomalies: {self.anomalies}")
+        if sensor_name is None:
+            sensor_name = self.first_sensor_in_list
+        df = find_tuple_by_first_element(self.anomalies, sensor_name)
+        if df is None or df.empty:
+            print(f"Debug: No data found for {sensor_name}")
+            return self.no_data_fig(sensor_name)
+
+        # print(f"Debug: Anomalies for {sensor_name}: {df}")
+
+        # if sensor_name is None:
+        #     sensor_name = self.first_sensor_in_list
+        # data_tuple = find_tuple_by_first_element(
+        #     self.test_predictions, sensor_name, n_tuples=2
+        # )
+        # if data_tuple is None:
+        #     return self.no_data_fig(sensor_name)
+        # assert isinstance(
+        #     data_tuple, tuple
+        # ), f"Expected data to be a tuple, but got {type(data_tuple)}"
+
+        # predictions = [item for item in data_tuple[0].flatten()]
+        # labels = [item for item in data_tuple[1].flatten()]
+
+        # df = pd.DataFrame(
+        #     {
+        #     "predictions": predictions,
+        #     "labels": labels
+        #     }
+        # )
+
+        # df["errors"] = df["predictions"] - df["labels"]
+        # threshold = df["errors"].mean() + get_anomaly_std() * df["errors"].std()
+        # df["anomaly"] = df["errors"].apply(
+        #         lambda x: True if x > threshold else False
+        #     )
+
+        anomaly_fig = go.Figure()
+        anomaly_fig.add_trace(
+            go.Scatter(
+                x=df.index,
+                y=df["labels"],
+                mode="lines",
+                name="Labels",
+                line=dict(color=self.category_colors[0]),
+            )
+        )
+
+        anomaly_fig.add_trace(
+            go.Scatter(
+                x=df.index,
+                y=df["predictions"],
+                mode="lines",
+                name="Predictions",
+                line=dict(color=self.category_colors[1]),
+            )
+        )
+
+        anomaly_fig.add_trace(
+            go.Scatter(
+                x=df.index[df["anomaly"] == True],
+                y=df["labels"][df["anomaly"] == True],
+                mode="markers",
+                name="Anomalies",
+                line=dict(color=self.category_colors[2]),
+            )
+        )
+
+        anomaly_fig.update_layout(
+            title={
+                "text": "Anomalies",
+                "font": {"size": 20},
+                "x": 0.5,  # Center the title horizontally
+            },
+            xaxis=dict(
+                title="Value",
+            ),
+            yaxis=dict(
+                title="Time",
+                # range=[0, 1],
+            ),
+        )
+
+        return anomaly_fig
 
 
 class SensorMapFigure:
@@ -366,9 +467,9 @@ class SensorMapFigure:
         self.fig = go.Figure()
 
     def create_map(self, lat, lon, hover_texts, values, colorscale):
-        print("Debug: Creating Sensor Map")
-        print(f"Debug: Length of Values for Map: {len(values)}")
-        print(f"Debug: Creating map with {len(hover_texts)} hover texts")
+        # print("Debug: Creating Sensor Map")
+        # print(f"Debug: Length of Values for Map: {len(values)}")
+        # print(f"Debug: Creating map with {len(hover_texts)} hover texts")
 
         self.fig.add_trace(
             go.Scattermapbox(
@@ -428,7 +529,7 @@ class SensorMapCreator:
                 values.append(0)
                 hover_texts.append(f"{name}<br>Completeness: No data")
 
-        print(f"Metrics: {metrics}")
+        # print(f"Metrics: {metrics}")
 
         fig = self.fig.create_map(
             lat,

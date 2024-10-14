@@ -11,7 +11,7 @@ from ..utils.data_helper import *
 from ..utils.config_helper import (
     get_datetime_column,
     get_n_days,
-    get_query_agnostic_start_and_end_date,
+    get_anomaly_std,
 )
 
 
@@ -34,34 +34,34 @@ class CustomDashboardData:
         self._initialize_attributes()
         self._initialized = True
         # self._debug_print_data()
-        self._debug_print_sensor_info()
+        # self._debug_print_sensor_info()
         print("CustomDashboardData.__init__() completed.\n")
 
-    def _debug_print_data(self):
-        print("Debug: Sensor Info")
-        print(self.get_sensor_info())
-        print("\nDebug: Completeness Metrics")
-        print(self.get_completeness_metrics())
-        print("\nDebug: Freshness Metrics")
-        print(self.get_freshness_metrics())
+    # def _debug_print_data(self):
+    #     print("Debug: Sensor Info")
+    #     print(self.get_sensor_info())
+    #     print("\nDebug: Completeness Metrics")
+    #     print(self.get_completeness_metrics())
+    #     print("\nDebug: Freshness Metrics")
+    #     print(self.get_freshness_metrics())
 
-    def _debug_print_sensor_info(self):
-        print("Active sensors:", self.active_sensors)
-        print(
-            "Sensors in completeness metrics:",
-            list(self.sensor_metrics["completeness"].keys()),
-        )
-        print("Sensors in get_sensor_info():", self.get_sensor_info()[2])
+    # def _debug_print_sensor_info(self):
+    #     print("Active sensors:", self.active_sensors)
+    #     print(
+    #         "Sensors in completeness metrics:",
+    #         list(self.sensor_metrics["completeness"].keys()),
+    #     )
+    #     print("Sensors in get_sensor_info():", self.get_sensor_info()[2])
 
-        missing_in_metrics = set(self.active_sensors) - set(
-            self.sensor_metrics["completeness"].keys()
-        )
-        missing_in_info = set(self.active_sensors) - set(self.get_sensor_info()[2])
+    #     missing_in_metrics = set(self.active_sensors) - set(
+    #         self.sensor_metrics["completeness"].keys()
+    #     )
+    #     missing_in_info = set(self.active_sensors) - set(self.get_sensor_info()[2])
 
-        if missing_in_metrics:
-            print("Sensors missing in metrics:", missing_in_metrics)
-        if missing_in_info:
-            print("Sensors missing in get_sensor_info():", missing_in_info)
+    #     if missing_in_metrics:
+    #         print("Sensors missing in metrics:", missing_in_metrics)
+    #     if missing_in_info:
+    #         print("Sensors missing in get_sensor_info():", missing_in_info)
 
     @handle_data_errors(default_return=lambda: None)
     def _load_or_run_pipeline(self):
@@ -72,6 +72,12 @@ class CustomDashboardData:
             self.dataloader = load_dataloader()
             self.trained_models = load_trained_models()
             self.test_metrics = load_test_metrics()
+
+            # Check if any of the required data is empty
+            if not all([self.data, self.preprocessed_data, self.engineered_data, self.dataloader, self.trained_models, self.test_metrics]):
+                raise ValueError("One or more of the required datasets is empty")
+
+            return True # Indicates success
         except Exception as e:
             print(f"Error in _load_or_run_pipeline: {str(e)}")
             # If loading fails, initialize with empty data
@@ -81,19 +87,27 @@ class CustomDashboardData:
             self.dataloader = []
             self.trained_models = []
             self.test_metrics = []
+            return False # Indicates failure
 
     @handle_data_errors(default_return=lambda: None)
     def _initialize_attributes(self):
-        self.latest_data = [(tuple[0], tuple[1][-500:]) for tuple in self.data]
-        self.sensors = load_sensor_list()
-        self.active_sensors = [tuple[0] for tuple in self.data]
-        self.trainable_sensors = [tuple[0] for tuple in self.dataloader]
-        self.datetime_column = get_datetime_column()
-        self.n_days = get_n_days()
+        try:
+            self.latest_data = [(tuple[0], tuple[1][-500:]) for tuple in self.data] if self.data else []
+            self.sensors = load_sensor_list()
+            self.active_sensors = [tuple[0] for tuple in self.data] if self.data else []
+            self.trainable_sensors = [tuple[0] for tuple in self.dataloader] if self.data else []
+            self.datetime_column = get_datetime_column()
+            self.n_days = get_n_days()
+            self.anomaly_std = get_anomaly_std()
 
-        # compute metrics even if data is empty
-        self._compute_completeness_metrics()
-        self._compute_freshness_metrics()
+            # compute metrics even if data is empty
+            self._compute_completeness_metrics()
+            self._compute_freshness_metrics()
+            return True # Indicates successful initialisation
+        except Exception as e:
+            print(f"Error in initialised attributes: {str(e)}")
+            return False # Indicates failed initialisation
+
 
     @handle_data_errors(default_return=lambda: (pd.Series(), pd.Series(), pd.Series()))
     def get_sensor_info(self):
@@ -114,13 +128,30 @@ class CustomDashboardData:
 
     @handle_data_errors(default_return=lambda: [])
     def _read_or_compute_data(self, file_path, compute_func):
+        print(f"Debug: Attempting to read or compute data from {file_path}")
         if os.path.exists(file_path):
+            print(f"Debug: Reading data from {file_path}")
             data = load_data(file_path, "app data")
             if data is not None:
+                print(f"Debug: Data loaded successfully from {file_path}")
                 return data
-        data = compute_func()
-        save_data(data, file_path, "app data")
-        return data
+            else:
+                print(f"Debug: Failed to load data from {file_path}")
+        else:
+            print(f"Debug: File does not exist at {file_path}")
+        try:
+            data = compute_func()
+            if data:
+                print(f"Debug: Data computed successfully, saving to {file_path}")
+                os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                save_data(data, file_path, "app data")
+                print(f"Debug: Data saved to {file_path}")
+            else:
+                print(f"Debug: Compute functions returned no data: {data}")
+            return data
+        except Exception as e:
+            print(f"Error in compute_func: {str(e)}")
+            return []
 
     @handle_data_errors(default_return=pd.DataFrame())
     def get_daily_counts(self):
@@ -149,7 +180,7 @@ class CustomDashboardData:
         metrics = self._read_or_compute_data(
             file_path, self._compute_completeness_metrics
         )
-        print(f"Debug: Completeness metrics sensors: {metrics['sensor_name'].tolist()}")
+        # print(f"Debug: Completeness metrics sensors: {metrics['sensor_name'].tolist()}")
         return metrics
 
     def _compute_completeness_metrics(self):
@@ -190,7 +221,7 @@ class CustomDashboardData:
         )
         metrics = self._read_or_compute_data(file_path, self._compute_freshness_metrics)
 
-        print(f"Debug: Freshness metrics sensors: {metrics['sensor_name'].tolist()}")
+        # print(f"Debug: Freshness metrics sensors: {metrics['sensor_name'].tolist()}")
         return metrics
 
     def _compute_freshness_metrics(self):
@@ -266,6 +297,48 @@ class CustomDashboardData:
             file_path, lambda: [(t[0], t[3]) for t in self.test_metrics]
         )
 
+    @handle_data_errors(default_return=lambda: [])
+    def _compute_anomalies(self):
+        print(f"Debug: Computing anomalies")
+        if not self.test_metrics:
+            print(f"Debug: No test metrics found")
+            return []
+
+        app_data = []
+        for data_tuple in self.test_metrics:
+            sensor_name, predictions, labels = data_tuple[0], data_tuple[1].flatten(), data_tuple[2].flatten()
+            print(f"Debug: Processing anomalies for sensor {sensor_name}")
+
+            df = pd.DataFrame(
+                {
+                    "predictions": predictions,
+                    "labels": labels,
+                }
+            )
+            df["errors"] = df["predictions"] - df["labels"]
+            threshold = df["errors"].mean() + self.anomaly_std * df["errors"].std()
+            df["anomaly"] = df["errors"].apply(
+                lambda x: True if x > threshold else False
+            )
+            app_data.append((sensor_name, df))
+        print(f"Debug: Computed anomalies for {len(app_data)} sensors")
+        return app_data
+
+    @handle_data_errors(default_return=lambda: [])
+    def get_anomalies(self):
+        file_path = create_file_path(get_anomalies_path, pipeline_output_data_filename)
+        print(f"Debug: Getting anomalies from: {file_path}")
+        anomalies = self._read_or_compute_data(file_path, self._compute_anomalies)
+        print(f"Debug: Anomalies retrieved: {anomalies[:5] if anomalies else 'None'}")
+        return anomalies
+
+    @handle_data_errors(default_return=lambda: [])
+    def get_total_anomalies(self, sensor_name):
+        anomalies = find_tuple_by_first_element(self.get_anomalies(), sensor_name)
+        if anomalies is None:
+            return 0
+        return anomalies["anomaly"].sum()
+
     @handle_data_errors(default_return=pd.DataFrame())
     def get_preprocessing_table(self, sensor_name=None):
         sensor_name = sensor_name or self.active_sensors[0]
@@ -298,6 +371,16 @@ class CustomDashboardData:
         return app_data
 
     def get_metadata(self):
+        sample_from_test_metrics = []
+
+        for sensor_name, predictions, labels, _ in self.test_metrics:
+            sample_from_test_metrics.append((sensor_name, predictions, labels))
+            break
+
+        sensor_name = sample_from_test_metrics[0][0]
+        sample_predictions = sample_from_test_metrics[0][1]
+        sample_labels = sample_from_test_metrics[0][2]
+
         metadata = {
             "Number of Sensors": len(self.sensors),
             "Number of Active Sensors": len(self.active_sensors),
@@ -307,10 +390,15 @@ class CustomDashboardData:
             "Length of Completeness Metrics": len(self.get_completeness_metrics()),
             "Length of Freshness Metrics": len(self.get_freshness_metrics()),
             "Length of Daily Counts": len(self.get_daily_counts()),
+            "Length of Test Metrics": len(self.test_metrics),
+            "Length of Sample from Test Metrics": len(sample_from_test_metrics),
+            "Sensor Name from Sample": sensor_name,
+            "Length of Sample Predictions": len(sample_predictions),
+            "Length of Sample Labels": len(sample_labels),
         }
         return metadata
 
     @handle_data_errors(default_return=lambda: "")
     def get_random_sensor(self):
-        # random.seed(42)
+        random.seed(42)
         return random.choice(self.active_sensors)

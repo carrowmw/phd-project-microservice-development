@@ -7,6 +7,7 @@ from ..config.paths import (
     get_api_config_path,
     get_query_config_path,
     get_database_config_path,
+    get_dashboard_config_path,
 )
 
 
@@ -620,3 +621,15 @@ def get_early_stopping_patience():
     pipeline_config_path = get_pipeline_config_path()
     pipeline_config = load_config(pipeline_config_path)
     return get_kwargs(pipeline_config, "early_stopping_patience")
+
+
+def get_anomaly_std():
+    """
+    Retrieves the anomaly standard deviation from the dashboard configuration.
+
+    Returns:
+        float: The anomaly standard deviation.
+    """
+    dashboard_config_path = get_dashboard_config_path()
+    dashboard_config = load_config(dashboard_config_path)
+    return get_kwargs(dashboard_config, "anomaly_std")
