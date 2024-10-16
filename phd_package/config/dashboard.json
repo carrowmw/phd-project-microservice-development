@@ -1,5 +1,5 @@
 {
     "kwargs": {
-        "anomaly_std": 2
+        "anomaly_std": 1.5
     }
 }

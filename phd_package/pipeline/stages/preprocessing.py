@@ -201,6 +201,51 @@ def resample_and_aggregate(df: pd.DataFrame, freq: str) -> pd.DataFrame:
     # check_preprocessing_pipeline(resampled_data)
     return resampled_data
 
+def conditional_interpolation_of_zero_values(df):
+    """
+    Interpolates zero values in the 'Value' column of the input DataFrame if both of the following conditions are met:
+    - The zero value occurs during the night (between 0000 and 0800).
+    - The sequence of missing values is less than 32 records (8 hours).
+
+    """
+    # Ensure the DataFrame is sorted by timestamp
+    df = df.sort_values('Timestamp')
+
+    # Calculate the time difference between consecutive records
+    df['time_diff'] = df['Timestamp'].diff()
+
+    # Identify gaps
+    gap_mask = df['time_diff'] > pd.Timedelta(minutes=15)
+    gap_starts = df[gap_mask].index
+    gap_ends = gap_starts.shift(-1).fillna(len(df))
+
+    for start, end in zip(gap_starts, gap_ends):
+        gap_size = end - start
+        start_time = df.loc[start, 'Timestamp']
+        end_time = df.loc[end, 'Timestamp'] if end < len(df) else df.iloc[-1]['Timestamp']
+
+        # Check if gap is less than 32 records (8 hours)
+        if gap_size <= 32:
+            # Check if gap occurs between 0000 and 0800
+            if (start_time.hour >= 0 and start_time.hour < 8) or \
+               (end_time.hour >= 0 and end_time.hour < 8):
+
+                # Create new index for the gap
+                new_index = pd.date_range(start=start_time, end=end_time,
+                                          freq='15T', closed='right')
+
+                # Create new DataFrame for the gap
+                gap_df = pd.DataFrame({'Timestamp': new_index, 'Value': 0})
+
+                # Insert the gap DataFrame into the original DataFrame
+                df = pd.concat([df.iloc[:start+1], gap_df, df.iloc[end:]]) \
+                       .reset_index(drop=True)
+
+    # Remove the temporary 'time_diff' column
+    df = df.drop('time_diff', axis=1)
+
+    return df
+
 
 def find_consecutive_sequences(df: pd.DataFrame) -> List[pd.DataFrame]:
     """

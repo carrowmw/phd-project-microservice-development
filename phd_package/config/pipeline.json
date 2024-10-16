@@ -13,11 +13,11 @@
         "min_df_length_to_window_size_ratio": 50,
         "frequency": null,
         "scaler": "standard",
-        "input_feature_indices": null,
+        "input_feature_indices": 0,
         "target_feature_index": 0,
         "model_type": "lstm",
-        "batch_size": 128,
-        "window_size": 8,
+        "batch_size": 32,
+        "window_size": 24,
         "horizon": 24,
         "stride": 1,
         "shuffle": false,
@@ -25,16 +25,16 @@
         "train_ratio": 0.7,
         "val_ratio": 0.15,
         "device": "mps",
-        "epochs": 10,
-        "hidden_dim": 256,
-        "num_layers": 3,
-        "dropout": 0.030904544863747743,
+        "epochs": 30,
+        "hidden_dim": 64,
+        "num_layers": 1,
+        "dropout": 0.0721,
         "optimiser": "adam",
-        "lr": 0.0011818687153493542,
+        "lr": 0.00382,
         "criterion": "mse",
         "momentum": 0.9,
         "scheduler_step_size": 4,
-        "scheduler_gamma": 0.6068314502659611,
+        "scheduler_gamma": 0.440,
         "early_stopping_patience": 3
     },
     "preprocessing": [
@@ -49,6 +49,10 @@
         {
             "name": "phd_package.pipeline.stages.preprocessing.aggregate_on_datetime",
             "execute_step": true
+        },
+        {
+            "name": "phd_package.pipeline.stages.preprocessing.conditional_interpolation_of_zero_values",
+            "execute_step": false
         },
         {
             "name": "phd_package.pipeline.stages.preprocessing.get_consecutive_sequences",

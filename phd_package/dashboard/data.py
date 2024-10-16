@@ -28,40 +28,40 @@ class CustomDashboardData:
         if self._initialized:
             return
         print("CustomDashboardData.__init__() started...")
-        self.sensor_metrics = {"completeness": {}, "freshness": {}}
+        self.sensor_metrics = {"completeness": {}, "freshness": {}, "anomalies": {}}
         self.active_sensors = []
         self._load_or_run_pipeline()
         self._initialize_attributes()
         self._initialized = True
-        # self._debug_print_data()
+        self._debug_print_data()
         # self._debug_print_sensor_info()
         print("CustomDashboardData.__init__() completed.\n")
 
-    # def _debug_print_data(self):
-    #     print("Debug: Sensor Info")
-    #     print(self.get_sensor_info())
-    #     print("\nDebug: Completeness Metrics")
-    #     print(self.get_completeness_metrics())
-    #     print("\nDebug: Freshness Metrics")
-    #     print(self.get_freshness_metrics())
+    def _debug_print_data(self):
+        print("Debug: Sensor Info")
+        print(self.get_sensor_info())
+        print("\nDebug: Completeness Metrics")
+        print(self.get_completeness_metrics())
+        print("\nDebug: Freshness Metrics")
+        print(self.get_freshness_metrics())
 
-    # def _debug_print_sensor_info(self):
-    #     print("Active sensors:", self.active_sensors)
-    #     print(
-    #         "Sensors in completeness metrics:",
-    #         list(self.sensor_metrics["completeness"].keys()),
-    #     )
-    #     print("Sensors in get_sensor_info():", self.get_sensor_info()[2])
+    def _debug_print_sensor_info(self):
+        print("Active sensors:", self.active_sensors)
+        print(
+            "Sensors in completeness metrics:",
+            list(self.sensor_metrics["completeness"].keys()),
+        )
+        print("Sensors in get_sensor_info():", self.get_sensor_info()[2])
 
-    #     missing_in_metrics = set(self.active_sensors) - set(
-    #         self.sensor_metrics["completeness"].keys()
-    #     )
-    #     missing_in_info = set(self.active_sensors) - set(self.get_sensor_info()[2])
+        missing_in_metrics = set(self.active_sensors) - set(
+            self.sensor_metrics["completeness"].keys()
+        )
+        missing_in_info = set(self.active_sensors) - set(self.get_sensor_info()[2])
 
-    #     if missing_in_metrics:
-    #         print("Sensors missing in metrics:", missing_in_metrics)
-    #     if missing_in_info:
-    #         print("Sensors missing in get_sensor_info():", missing_in_info)
+        if missing_in_metrics:
+            print("Sensors missing in metrics:", missing_in_metrics)
+        if missing_in_info:
+            print("Sensors missing in get_sensor_info():", missing_in_info)
 
     @handle_data_errors(default_return=lambda: None)
     def _load_or_run_pipeline(self):
@@ -329,7 +329,7 @@ class CustomDashboardData:
         file_path = create_file_path(get_anomalies_path, pipeline_output_data_filename)
         print(f"Debug: Getting anomalies from: {file_path}")
         anomalies = self._read_or_compute_data(file_path, self._compute_anomalies)
-        print(f"Debug: Anomalies retrieved: {anomalies[:5] if anomalies else 'None'}")
+        # print(f"Debug: Anomalies retrieved: {anomalies[:5] if anomalies else 'None'}")
         return anomalies
 
     @handle_data_errors(default_return=lambda: [])
