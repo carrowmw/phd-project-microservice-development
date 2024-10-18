@@ -46,16 +46,10 @@ class PipelineChartCreator:
 
     def __init__(self):
         self.dashboard_data = CustomDashboardData()
-        self.completeness_metrics = self.dashboard_data.get_completeness_metrics()
-        self.freshness_metrics = self.dashboard_data.get_freshness_metrics()
-        self.latest_sensor_data = self.dashboard_data.latest_data
-        self.test_predictions = self.dashboard_data.get_test_predictions()
-        self.train_metrics = self.dashboard_data.get_train_metrics()
-        self.training_windows = self.dashboard_data.get_training_windows()
-        self.sensor_info = self.dashboard_data.get_sensor_info()
-        self.daily_counts = self.dashboard_data.get_daily_counts()
-        self.anomalies = self.dashboard_data.get_anomalies()
-        self.first_sensor_in_list = self.dashboard_data.active_sensors[0]
+        self.data = self.dashboard_data.data
+        self.processed_data = self.dashboard_data.processed_data
+        self.sensor_metrics = self.dashboard_data.sensor_metrics
+        self.first_sensor_in_list = self.processed_data["trainable_sensors"][0]
         self.xmin, self.xmax = get_query_agnostic_start_and_end_date()
         self.n_days = get_n_days()
         self.test_dummy = load_test_metrics()
@@ -102,9 +96,7 @@ class PipelineChartCreator:
         """
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        completeness_value = self.completeness_metrics.loc[
-            self.completeness_metrics["sensor_name"] == sensor_name, "string"
-        ].values[0]
+        completeness_value = self.sensor_metrics["completeness"][sensor_name]["string"]
         # print(f"Debug: Completeness for {sensor_name}: {completeness_value}")
         if completeness_value is None:
             return "No data"
@@ -122,9 +114,7 @@ class PipelineChartCreator:
         """
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        freshness_value = self.freshness_metrics.loc[
-            self.freshness_metrics["sensor_name"] == sensor_name, "string"
-        ].values[0]
+        freshness_value = self.sensor_metrics["freshness"][sensor_name]["string"]
         # print(f"Debug: Freshness for {sensor_name}: {freshness_value}")
         if freshness_value is None:
             return "No data"
@@ -143,7 +133,7 @@ class PipelineChartCreator:
 
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        data = find_tuple_by_first_element(self.daily_counts, sensor_name)
+        data = self.sensor_metrics["daily_counts"][sensor_name]
         if data is None:
             return self.no_data_fig(sensor_name)
 
@@ -189,7 +179,7 @@ class PipelineChartCreator:
 
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        data = find_tuple_by_first_element(self.latest_sensor_data, sensor_name)
+        data = self.processed_data["latest_data"][sensor_name]
         if data is None:
             return self.no_data_fig(sensor_name)
 
@@ -235,9 +225,7 @@ class PipelineChartCreator:
         """
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        data = find_tuple_by_first_element(
-            self.test_predictions, sensor_name, n_tuples=2
-        )
+        data = self.sensor_metrics["test_predictions"][sensor_name]
         if data is None:
             return self.no_data_fig(sensor_name)
         assert isinstance(
@@ -296,7 +284,7 @@ class PipelineChartCreator:
         """
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        data = find_tuple_by_first_element(self.train_metrics, sensor_name, n_tuples=2)
+        data = self.sensor_metrics["train_metrics"][sensor_name]
         if data is None:
             return self.no_data_fig(sensor_name)
         assert isinstance(
@@ -370,42 +358,14 @@ class PipelineChartCreator:
             Figure: A plotly figure containing the anomalies graph.
         """
         print(f"Debug: Creating Anomalies Graph for {sensor_name}")
-        print(f"Debug: Anomalies: {self.anomalies}")
+        # print(f"Debug: Anomalies: {self.sensor_metrics['anomalies']}")
         if sensor_name is None:
             sensor_name = self.first_sensor_in_list
-        df = find_tuple_by_first_element(self.anomalies, sensor_name)
+        df = self.sensor_metrics["anomalies"][sensor_name]
         if df is None or df.empty:
             print(f"Debug: No data found for {sensor_name}")
             return self.no_data_fig(sensor_name)
 
-        # print(f"Debug: Anomalies for {sensor_name}: {df}")
-
-        # if sensor_name is None:
-        #     sensor_name = self.first_sensor_in_list
-        # data_tuple = find_tuple_by_first_element(
-        #     self.test_predictions, sensor_name, n_tuples=2
-        # )
-        # if data_tuple is None:
-        #     return self.no_data_fig(sensor_name)
-        # assert isinstance(
-        #     data_tuple, tuple
-        # ), f"Expected data to be a tuple, but got {type(data_tuple)}"
-
-        # predictions = [item for item in data_tuple[0].flatten()]
-        # labels = [item for item in data_tuple[1].flatten()]
-
-        # df = pd.DataFrame(
-        #     {
-        #     "predictions": predictions,
-        #     "labels": labels
-        #     }
-        # )
-
-        # df["errors"] = df["predictions"] - df["labels"]
-        # threshold = df["errors"].mean() + get_anomaly_std() * df["errors"].std()
-        # df["anomaly"] = df["errors"].apply(
-        #         lambda x: True if x > threshold else False
-        #     )
 
         anomaly_fig = go.Figure()
         anomaly_fig.add_trace(
@@ -510,12 +470,13 @@ class SensorMapFigure:
 class SensorMapCreator:
     def __init__(self):
         self.dashboard_data = CustomDashboardData()
+        self.sensor_metrics = self.dashboard_data.sensor_metrics
         self.fig = SensorMapFigure()
 
     def create_completeness_sensor_map_fig(self):
         lat, lon, names = self.dashboard_data.get_sensor_info()
         # print(f"Debug: Number of sensors for map: {len(names)}")
-        metrics = self.dashboard_data.get_sensor_metrics("completeness")
+        metrics = self.sensor_metrics["completeness"]
 
         values = []
         hover_texts = []
@@ -543,7 +504,7 @@ class SensorMapCreator:
     def create_freshness_sensor_map_fig(self):
         lat, lon, names = self.dashboard_data.get_sensor_info()
         # print(f"Debug: Number of sensors for map: {len(names)}")
-        metrics = self.dashboard_data.get_sensor_metrics("freshness")
+        metrics = self.sensor_metrics["freshness"]
 
         values = []
         hover_texts = []

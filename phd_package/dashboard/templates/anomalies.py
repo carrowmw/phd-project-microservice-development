@@ -90,7 +90,7 @@ class TabTemplateAnomalies:
                 sensor_name = map_click_data["points"][0]["text"].split("<br>")[0]
 
             if active_tab == self.tab_id:
-                total_anomalies = self.data.get_total_anomalies(sensor_name)
+                total_anomalies = self.data.sensor_metrics["anomalies"][sensor_name]["anomaly"].sum()
                 card_text = f"Total anomalies: {total_anomalies}"
                 graph = self.graph(sensor_name)
                 return card_text, graph

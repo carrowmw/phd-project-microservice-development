@@ -83,7 +83,7 @@ class Pipeline:
             logging.error("Error creating/getting experiment: %s", str(e))
             self.experiment_id = None
 
-    def read_or_download_sensors(self) -> SensorListItem:
+    def load_sensors(self) -> SensorListItem:
         """
         Downloads the list of sensors from the API.
         """
@@ -108,7 +108,7 @@ class Pipeline:
 
         return sensors_df
 
-    def read_or_download_data(self) -> RawDataItem:
+    def load_raw_data(self) -> RawDataItem:
         """
         Reads in from local storage if available or downloads raw sensor data from the API.
         """
@@ -135,7 +135,7 @@ class Pipeline:
 
         return raw_dfs
 
-    def preprocess_data(self, raw_dfs) -> PreprocessedItem:
+    def load_preprocessed_data(self, raw_dfs) -> PreprocessedItem:
         """
         Preprocess the raw data.
         """
@@ -177,7 +177,7 @@ class Pipeline:
 
         return preprocessed_dfs
 
-    def apply_feature_engineering(self, preprocessed_dfs) -> EngineeredItem:
+    def load_engineered_data(self, preprocessed_dfs) -> EngineeredItem:
         """
         Apply feature engineering to preprocessed data.
         """
@@ -271,7 +271,7 @@ class Pipeline:
 
         return list_of_dataloaders
 
-    def train_model(self, dataloaders_list) -> TrainedModelItem:
+    def load_trained_models(self, dataloaders_list) -> TrainedModelItem:
         """
         Train models.
         """
@@ -335,7 +335,7 @@ class Pipeline:
             load_trained_models,
             process_trained_models,
             save_trained_models,
-            "train_model",
+            "load_trained_models",
         )
 
         assert isinstance(
@@ -346,7 +346,7 @@ class Pipeline:
 
         return trained_models_and_metrics_list
 
-    def test_model(self, trained_models_list) -> TestItem:
+    def load_test_metrics(self, trained_models_list) -> TestItem:
         """
         Test models.
         """
@@ -427,13 +427,14 @@ class Pipeline:
                 experiment_id=self.experiment_id,
                 nested=True,
             ):
-                sensors_df = self.read_or_download_sensors()
-                raw_dfs = self.read_or_download_data()
-                preprocessed_dfs = self.preprocess_data(raw_dfs)
-                engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
+                sensors_df = self.load_sensors()
+                raw_dfs = self.load_raw_data()
+                preprocessed_dfs = self.load_preprocessed_data(raw_dfs)
+                engineered_dfs = self.load_engineered_data(preprocessed_dfs)
                 dataloaders_list = self.load_dataloader(engineered_dfs)
-                trained_models_list = self.train_model(dataloaders_list)
-                test_metrics_list = self.test_model(trained_models_list)
+                trained_models_list = self.load_trained_models(dataloaders_list)
+                test_metrics_list = self.load_test_metrics(trained_models_list)
+
             return test_metrics_list
         except mlflow.exceptions.MlflowException as e:
             logging.error("MLflow error: %s", str(e))
@@ -442,12 +443,12 @@ class Pipeline:
     def _run_pipeline_without_mlflow(self):
         logging.error("Running pipeline without MLflow tracking...")
 
-        sensors_df = self.read_or_download_sensors()
-        raw_dfs = self.read_or_download_data()
-        preprocessed_dfs = self.preprocess_data(raw_dfs)
-        engineered_dfs = self.apply_feature_engineering(preprocessed_dfs)
+        sensors_df = self.load_sensors()
+        raw_dfs = self.load_raw_data()
+        preprocessed_dfs = self.load_preprocessed_data(raw_dfs)
+        engineered_dfs = self.load_engineered_data(preprocessed_dfs)
         dataloaders_list = self.load_dataloader(engineered_dfs)
-        trained_models_list = self.train_model(dataloaders_list)
-        test_metrics_list = self.test_model(trained_models_list)
+        trained_models_list = self.load_trained_models(dataloaders_list)
+        test_metrics_list = self.load_test_metrics(trained_models_list)
 
         return test_metrics_list

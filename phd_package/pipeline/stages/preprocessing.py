@@ -206,7 +206,6 @@ def conditional_interpolation_of_zero_values(df):
     Interpolates zero values in the 'Value' column of the input DataFrame if both of the following conditions are met:
     - The zero value occurs during the night (between 0000 and 0800).
     - The sequence of missing values is less than 32 records (8 hours).
-
     """
     # Ensure the DataFrame is sorted by timestamp
     df = df.sort_values('Timestamp')
