@@ -53,6 +53,7 @@ from ..utils.data_helper import (
     save_test_metrics,
 )
 from ..utils.config_helper import get_window_size, get_horizon
+from .conformal_prediction import ConformalPredictor, prepare_calibration_data
 
 
 class Pipeline:
@@ -62,6 +63,10 @@ class Pipeline:
         self.experiment_id = experiment_id or generate_random_string(12)
         self.trial_number = trial_number or 0
         self.get_or_create_experiment()
+
+        self.train_dataloader = None
+        self.model = None
+        self.test_dataloader = None
 
         # self.experiment_tracker = ExperimentTracker(experiment_name)
         # Initialize logging

@@ -30,6 +30,7 @@ from .config_helper import (
     get_dropout,
     get_scheduler_step_size,
     get_scheduler_gamma,
+    get_input_feature_indices,
 )
 
 
@@ -166,12 +167,13 @@ def pipeline_processed_data_filename() -> str:
         str: The file path for storing or retrieving the sensor data.
     """
     prefix = pipeline_input_data_filename().rstrip(".pkl")
+    input_feature_indices = get_input_feature_indices()
     window_size = get_window_size()
     horizon = get_horizon()
     stride = get_stride()
 
     file_path = (
-        f"{prefix}-window_size={window_size}-horizon={horizon}-stride={stride}.pkl"
+        f"{prefix}-window_size={window_size}-horizon={horizon}-stride={stride}-input_feature_indices={input_feature_indices}.pkl"
     )
 
     return file_path
@@ -193,6 +195,7 @@ def pipeline_output_data_filename() -> str:
     hidden_dim = get_hidden_dim()
     num_layers = get_num_layers()
     dropout = get_dropout()
+
 
     file_path = f"{prefix}-batch_size={batch_size}-model_type={model_type}-epochs={epochs}-hidden_dim={hidden_dim}-num_layers={num_layers}-dropout={dropout}-scheduler_step_size={scheduler_step_size}-scheduler_gamma={scheduler_gamma}.pkl"
 

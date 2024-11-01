@@ -209,7 +209,6 @@ class Trainer:
             X, y = map_tensor_to_mps(X, **self.kwargs), map_tensor_to_mps(
                 y, **self.kwargs
             )
-
             self.optimiser.zero_grad()
             predictions = self.model(X)
             loss = self.criterion(predictions, y)

@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from sklearn.metrics import mean_absolute_percentage_error, mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_percentage_error, root_mean_squared_error, mean_absolute_error, r2_score
 import mlflow
 from ...utils.config_helper import (
     get_optimiser,
@@ -196,7 +196,7 @@ def evaluate_model(model, dataloader, criterion, stage, **kwargs):
                MAE, RMSE, and R2 score.
     """
     model.eval()  # Set model to evaluation mode
-    total_loss, total_mape, total_rmse, total_r2_score, total_count = 0, 0, 0, 0, 0
+    total_loss, total_mape, total_mae, total_rmse, total_r2_score, total_count = 0, 0, 0, 0, 0, 0
 
     predictions_list = []
     labels_list = []
@@ -223,9 +223,8 @@ def evaluate_model(model, dataloader, criterion, stage, **kwargs):
             total_mape += mean_absolute_percentage_error(
                 labels_np, predictions_np
             ) * X.size(0)
-            total_rmse += np.sqrt(
-                mean_squared_error(labels_np, predictions_np)
-            ) * X.size(0)
+            total_mae += mean_absolute_error(labels_np, predictions_np) * X.size(0)
+            total_rmse += root_mean_squared_error(labels_np, predictions_np) * X.size(0)
             if X.size(0) > 1:  # Avoid error when batch size is 1
                 total_r2_score += r2_score(labels_np, predictions_np) * X.size(0)
             total_count += X.size(0)
@@ -233,15 +232,17 @@ def evaluate_model(model, dataloader, criterion, stage, **kwargs):
     # Calculate average metrics
     avg_loss = total_loss / total_count
     avg_mape = total_mape / total_count
+    avg_mae = total_mae / total_count
     avg_rmse = total_rmse / total_count
     avg_r2_score = total_r2_score / total_count
 
     mlflow.log_metric(f"avg_{stage}_loss", f"{avg_loss:2f}")
     mlflow.log_metric(f"avg_{stage}_mape", f"{avg_mape:2f}")
+    mlflow.log_metric(f"avg_{stage}_mae", f"{avg_mae:2f}")
     mlflow.log_metric(f"avg_{stage}_rmse", f"{avg_rmse:2f}")
     mlflow.log_metric(f"avg_{stage}_r2_score", f"{avg_r2_score:2}")
 
     predictions_array = np.array(predictions_list)
     labels_array = np.array(labels_list)
 
-    return predictions_array, labels_array, avg_loss, avg_mape, avg_rmse, avg_r2_score
+    return predictions_array, labels_array, avg_loss, avg_mape, avg_mae, avg_rmse, avg_r2_score

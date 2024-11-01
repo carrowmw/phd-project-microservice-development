@@ -10,14 +10,14 @@
         "datetime_column": "Timestamp",
         "value_column": "Value",
         "min_df_length": 10000,
-        "min_df_length_to_window_size_ratio": 50,
+        "min_df_length_to_window_size_ratio": 10,
         "frequency": null,
         "scaler": "standard",
         "input_feature_indices": 0,
         "target_feature_index": 0,
         "model_type": "lstm",
         "batch_size": 32,
-        "window_size": 24,
+        "window_size": 22,
         "horizon": 24,
         "stride": 1,
         "shuffle": false,
@@ -52,7 +52,7 @@
         },
         {
             "name": "phd_package.pipeline.stages.preprocessing.conditional_interpolation_of_zero_values",
-            "execute_step": false
+            "execute_step": true
         },
         {
             "name": "phd_package.pipeline.stages.preprocessing.get_consecutive_sequences",

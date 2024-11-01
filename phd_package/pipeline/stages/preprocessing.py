@@ -7,6 +7,7 @@ This module contains functions for preprocessing time-series data.
 import logging
 from typing import List
 import pandas as pd
+import numpy as np
 from ...utils.config_helper import (
     get_window_size,
     get_horizon,
@@ -76,11 +77,11 @@ def terminate_preprocessing_pipeline(df: pd.DataFrame) -> pd.DataFrame:
             "Additional columns added during preprocessing: %s", additional_columns
         )
     check_preprocessing_pipeline(df)
+    print(f"DEBUG: DataFrame shape: {df.shape}")
     return df
 
 
 def check_preprocessing_pipeline(df: pd.DataFrame) -> pd.DataFrame:
-    print("CHECKPOINT: check_preprocessing_pipeline")
     datetime_column = get_datetime_column()
     value_column = get_value_column()
     # print(f"TEST: columns and dtypes{df.columns, df.dtypes}")
@@ -93,6 +94,7 @@ def check_preprocessing_pipeline(df: pd.DataFrame) -> pd.DataFrame:
     assert isinstance(
         df.index, pd.RangeIndex
     ), f"Pipeline check failed on index: {df.columns, df.dtypes} index should be pd.RangeIndex"
+    # print(f"DEBUG: length of df after check_preprocessing_pipeline: {len(df)}")
 
 
 def remove_directionality_feature(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
@@ -110,7 +112,6 @@ def remove_directionality_feature(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
         pd.DataFrame: DataFrame with directionality removed, indexed by 'Timestamp' with summed
         'value'.
     """
-    print("CHECKPOINT: remove_directionality_feature")
     agg_dict = {"Value": "sum"}
     features = kwargs.get("features_to_include_on_aggregation", [])
     datetime_column = get_datetime_column()
@@ -139,7 +140,6 @@ def aggregate_on_datetime(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
     Returns:
     - pd.DataFrame: The aggregated DataFrame.
     """
-    print("CHECKPOINT: aggregate_on_datetime")
     # print(f"TEST: columns and dtypes: {df.columns, df.dtypes}")
     datetime_column = get_datetime_column()
     freq = kwargs.get("aggregation_frequency_mins", "15min")
@@ -187,7 +187,6 @@ def resample_and_aggregate(df: pd.DataFrame, freq: str) -> pd.DataFrame:
     Returns:
     - pd.DataFrame: The resampled and aggregated DataFrame.
     """
-    print("CHECKPOINT: resample_and_aggregate")
     value_column = get_value_column()
     # Calculate the number of expected timestamps within the frequency
     # print(f"TEST: columns and dtypes: {df.columns, df.dtypes}")
@@ -201,47 +200,89 @@ def resample_and_aggregate(df: pd.DataFrame, freq: str) -> pd.DataFrame:
     # check_preprocessing_pipeline(resampled_data)
     return resampled_data
 
+
 def conditional_interpolation_of_zero_values(df):
     """
-    Interpolates zero values in the 'Value' column of the input DataFrame if both of the following conditions are met:
-    - The zero value occurs during the night (between 0000 and 0800).
-    - The sequence of missing values is less than 32 records (8 hours).
+    Interpolates zero values in the 'Value' column of the input DataFrame if both conditions are met:
+    - The zero value occurs during the night (between 0000 and 0800)
+    - The sequence of missing values is less than 32 records (8 hours)
+
+    Ensures all interpolated timestamps maintain the correct 15-minute intervals.
     """
-    # Ensure the DataFrame is sorted by timestamp
-    df = df.sort_values('Timestamp')
 
-    # Calculate the time difference between consecutive records
-    df['time_diff'] = df['Timestamp'].diff()
+    # Ensure the DataFrame is sorted by timestamp and reset index
+    df = df.sort_values("Timestamp").reset_index(drop=True)
 
-    # Identify gaps
-    gap_mask = df['time_diff'] > pd.Timedelta(minutes=15)
-    gap_starts = df[gap_mask].index
-    gap_ends = gap_starts.shift(-1).fillna(len(df))
+    # Find gaps in the time series
+    time_diff = df["Timestamp"].diff()
+    gaps = []
 
-    for start, end in zip(gap_starts, gap_ends):
-        gap_size = end - start
-        start_time = df.loc[start, 'Timestamp']
-        end_time = df.loc[end, 'Timestamp'] if end < len(df) else df.iloc[-1]['Timestamp']
+    for i in range(len(time_diff)):
+        if i > 0:  # Skip the first row since diff will be NaT
+            diff = time_diff.iloc[i]
+            if diff > pd.Timedelta(minutes=15):
+                start_time = df.iloc[i - 1]["Timestamp"]
+                end_time = df.iloc[i]["Timestamp"]
 
-        # Check if gap is less than 32 records (8 hours)
-        if gap_size <= 32:
-            # Check if gap occurs between 0000 and 0800
-            if (start_time.hour >= 0 and start_time.hour < 8) or \
-               (end_time.hour >= 0 and end_time.hour < 8):
+                # Check if gap occurs during night hours (0000-0800)
+                start_hour = start_time.hour
+                end_hour = end_time.hour
+                is_night_gap = (start_hour >= 0 and start_hour < 8) or (
+                    end_hour >= 0 and end_hour < 8
+                )
 
-                # Create new index for the gap
-                new_index = pd.date_range(start=start_time, end=end_time,
-                                          freq='15T', closed='right')
+                # Calculate gap size in 15-minute intervals
+                gap_size = (end_time - start_time) / pd.Timedelta(minutes=15) - 1
 
-                # Create new DataFrame for the gap
-                gap_df = pd.DataFrame({'Timestamp': new_index, 'Value': 0})
+                if gap_size <= 32 and is_night_gap:
+                    gaps.append((start_time, end_time))
 
-                # Insert the gap DataFrame into the original DataFrame
-                df = pd.concat([df.iloc[:start+1], gap_df, df.iloc[end:]]) \
-                       .reset_index(drop=True)
+    # If no gaps to fill, return original DataFrame
+    if not gaps:
+        return df
 
-    # Remove the temporary 'time_diff' column
-    df = df.drop('time_diff', axis=1)
+    # Create new rows for each gap
+    new_rows = []
+    for start_time, end_time in gaps:
+        # Generate timestamps at 15-minute intervals within the gap
+        new_timestamps = pd.date_range(
+            start=start_time + pd.Timedelta(minutes=15),
+            end=end_time - pd.Timedelta(minutes=15),
+            freq="15min",
+        )
+
+        # Create new rows with interpolated values
+        for timestamp in new_timestamps:
+            new_rows.append(
+                {
+                    "Timestamp": timestamp,
+                    "Value": 0,  # or you could implement more sophisticated interpolation here
+                }
+            )
+
+    # Add new rows to DataFrame
+    if new_rows:
+        new_df = pd.DataFrame(new_rows)
+        df = pd.concat([df, new_df], ignore_index=True)
+
+        # Sort and reset index
+        df = df.sort_values("Timestamp").reset_index(drop=True)
+
+    # Verify no zero-minute intervals exist
+    time_diffs = df["Timestamp"].diff().dropna()
+    min_diff = time_diffs.min()
+    if min_diff < pd.Timedelta(minutes=15):
+        print(
+            f"WARNING: Found time interval of {min_diff} which is smaller than 15 minutes"
+        )
+        print("Removing duplicate timestamps...")
+        df = (
+            df.drop_duplicates(subset=["Timestamp"])
+            .sort_values("Timestamp")
+            .reset_index(drop=True)
+        )
+
+    check_preprocessing_pipeline(df)
 
     return df
 
@@ -258,7 +299,6 @@ def find_consecutive_sequences(df: pd.DataFrame) -> List[pd.DataFrame]:
     - List[pd.DataFrame]: A list of DataFrames, each representing a consecutive
     sequence longer than the window size.
     """
-    print("CHECKPOINT: find_consecutive_sequences")
     datetime_column = get_datetime_column()
     window_size = get_window_size()
     horizon = get_horizon()
@@ -271,10 +311,11 @@ def find_consecutive_sequences(df: pd.DataFrame) -> List[pd.DataFrame]:
             f"Minimum time delta between timestamps is not a multiple of the aggregation frequency: {min_time_delta}"
         )
 
-    print(f"min_time_delta: {min_time_delta}")
+    print(f"DEBUG: min_time_delta: {min_time_delta}")
 
     sequences = []
     current_sequence = pd.DataFrame()
+    sequence_lengths = []  # Track lengths of all found sequences
 
     for _, row in df.iterrows():
         if (
@@ -297,16 +338,22 @@ def find_consecutive_sequences(df: pd.DataFrame) -> List[pd.DataFrame]:
             pd.to_datetime(current_sequence[datetime_column]), drop=False
         )
         sequences.append(current_sequence)
+        sequence_lengths.append(len(current_sequence))
+
     check_preprocessing_pipeline(df)
+
     return sequences
 
 
 def assign_sequence_numbers(sequences: List[pd.DataFrame]) -> pd.DataFrame:
-    print("CHECKPOINT: assign_sequence_numbers")
     datetime_column = get_datetime_column()
     value_column = get_value_column()
 
+    print(f"Number of sequences received: {len(sequences)}")
+
     if not sequences:
+        print("WARNING: No sequences provided to assign_sequence_numbers")
+        print("This will result in an empty DataFrame")
         # Return an empty DataFrame with the expected columns
         df = pd.DataFrame(columns=[datetime_column, value_column, "Sequence"])
 
@@ -348,7 +395,6 @@ def get_consecutive_sequences(df: pd.DataFrame) -> pd.DataFrame:
     than the window size,
                     with assigned sequence numbers.
     """
-    print("CHECKPOINT: get_consecutive_sequences")
     sequences = find_consecutive_sequences(df)
     df = assign_sequence_numbers(sequences)
     logging.info(
@@ -374,7 +420,6 @@ def remove_specified_fields(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
     Returns:
     - pd.DataFrame: A DataFrame with the specified columns removed.
     """
-    print("CHECKPOINT: remove_specified_fields")
     columns_to_drop = kwargs.get("columns_to_drop", [])
     if not columns_to_drop:
         print("No columns specified for removal.")
