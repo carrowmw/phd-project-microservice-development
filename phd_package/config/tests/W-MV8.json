@@ -13,12 +13,12 @@
         "min_df_length_to_window_size_ratio": 10,
         "frequency": null,
         "scaler": "standard",
-        "input_feature_indices": 0,
+        "input_feature_indices": null,
         "target_feature_index": 0,
         "model_type": "lstm",
         "batch_size": 32,
         "window_size": 24,
-        "horizon": 24,
+        "horizon": 8,
         "stride": 1,
         "shuffle": false,
         "num_workers": 0,
@@ -26,15 +26,15 @@
         "val_ratio": 0.15,
         "device": "mps",
         "epochs": 30,
-        "hidden_dim": 256,
+        "hidden_dim": 64,
         "num_layers": 2,
-        "dropout": 0.064,
+        "dropout": 0.173,
         "optimiser": "adam",
         "lr": 0.0001,
         "criterion": "mse",
         "momentum": 0.9,
-        "scheduler_step_size": 7,
-        "scheduler_gamma": 0.518,
+        "scheduler_step_size": 3,
+        "scheduler_gamma": 0.802,
         "early_stopping_patience": 3
     },
     "preprocessing": [
@@ -52,7 +52,7 @@
         },
         {
             "name": "phd_package.pipeline.stages.preprocessing.conditional_interpolation_of_zero_values",
-            "execute_step": false
+            "execute_step": true
         },
         {
             "name": "phd_package.pipeline.stages.preprocessing.get_consecutive_sequences",

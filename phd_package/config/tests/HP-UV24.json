@@ -1,0 +1,417 @@
+{
+    "n_trials": 100,
+    "optimization_history": [
+        {
+            "trial_number": 0,
+            "value": 0.6315833333333333
+        },
+        {
+            "trial_number": 1,
+            "value": 0.8906666666666667
+        },
+        {
+            "trial_number": 2,
+            "value": 0.6865
+        },
+        {
+            "trial_number": 3,
+            "value": 0.9915833333333333
+        },
+        {
+            "trial_number": 4,
+            "value": 1.0011666666666665
+        },
+        {
+            "trial_number": 5,
+            "value": 0.9626666666666667
+        },
+        {
+            "trial_number": 6,
+            "value": 0.9516666666666665
+        },
+        {
+            "trial_number": 7,
+            "value": 0.8823333333333333
+        },
+        {
+            "trial_number": 8,
+            "value": 0.7895833333333333
+        },
+        {
+            "trial_number": 9,
+            "value": 0.8641666666666667
+        },
+        {
+            "trial_number": 10,
+            "value": 0.6398333333333333
+        },
+        {
+            "trial_number": 11,
+            "value": 0.6417499999999999
+        },
+        {
+            "trial_number": 12,
+            "value": 0.6345833333333334
+        },
+        {
+            "trial_number": 13,
+            "value": 0.6346666666666666
+        },
+        {
+            "trial_number": 14,
+            "value": 0.64875
+        },
+        {
+            "trial_number": 15,
+            "value": 0.83975
+        },
+        {
+            "trial_number": 16,
+            "value": 0.63325
+        },
+        {
+            "trial_number": 17,
+            "value": 0.6455000000000001
+        },
+        {
+            "trial_number": 18,
+            "value": 0.7595833333333334
+        },
+        {
+            "trial_number": 19,
+            "value": 1.023583333333333
+        },
+        {
+            "trial_number": 20,
+            "value": 0.7301666666666667
+        },
+        {
+            "trial_number": 21,
+            "value": 0.6391666666666665
+        },
+        {
+            "trial_number": 22,
+            "value": 0.6823333333333333
+        },
+        {
+            "trial_number": 23,
+            "value": 0.6477499999999999
+        },
+        {
+            "trial_number": 24,
+            "value": 0.6745833333333334
+        },
+        {
+            "trial_number": 25,
+            "value": 0.8348333333333332
+        },
+        {
+            "trial_number": 26,
+            "value": 0.8324166666666667
+        },
+        {
+            "trial_number": 27,
+            "value": 0.654
+        },
+        {
+            "trial_number": 28,
+            "value": 0.6709166666666667
+        },
+        {
+            "trial_number": 29,
+            "value": 1.0399166666666666
+        },
+        {
+            "trial_number": 30,
+            "value": 0.9477500000000001
+        },
+        {
+            "trial_number": 31,
+            "value": 0.6344166666666666
+        },
+        {
+            "trial_number": 32,
+            "value": 0.6341666666666667
+        },
+        {
+            "trial_number": 33,
+            "value": 0.6353333333333334
+        },
+        {
+            "trial_number": 34,
+            "value": 0.6529166666666667
+        },
+        {
+            "trial_number": 35,
+            "value": 0.9094999999999999
+        },
+        {
+            "trial_number": 36,
+            "value": 0.9549166666666666
+        },
+        {
+            "trial_number": 37,
+            "value": 1.00725
+        },
+        {
+            "trial_number": 38,
+            "value": 0.9144166666666668
+        },
+        {
+            "trial_number": 39,
+            "value": 0.6758333333333333
+        },
+        {
+            "trial_number": 40,
+            "value": 0.8406666666666668
+        },
+        {
+            "trial_number": 41,
+            "value": 0.6375833333333334
+        },
+        {
+            "trial_number": 42,
+            "value": 0.6414166666666665
+        },
+        {
+            "trial_number": 43,
+            "value": 0.6263333333333335
+        },
+        {
+            "trial_number": 44,
+            "value": 0.8032499999999999
+        },
+        {
+            "trial_number": 45,
+            "value": 0.6295000000000001
+        },
+        {
+            "trial_number": 46,
+            "value": 0.8733333333333334
+        },
+        {
+            "trial_number": 47,
+            "value": 0.6465833333333333
+        },
+        {
+            "trial_number": 48,
+            "value": 0.7484166666666665
+        },
+        {
+            "trial_number": 49,
+            "value": 0.78625
+        },
+        {
+            "trial_number": 50,
+            "value": 0.97275
+        },
+        {
+            "trial_number": 51,
+            "value": 0.6361666666666667
+        },
+        {
+            "trial_number": 52,
+            "value": 0.6331666666666667
+        },
+        {
+            "trial_number": 53,
+            "value": 0.6517499999999999
+        },
+        {
+            "trial_number": 54,
+            "value": 0.6356666666666667
+        },
+        {
+            "trial_number": 55,
+            "value": 0.639
+        },
+        {
+            "trial_number": 56,
+            "value": 0.6833333333333335
+        },
+        {
+            "trial_number": 57,
+            "value": 0.77625
+        },
+        {
+            "trial_number": 58,
+            "value": 0.63425
+        },
+        {
+            "trial_number": 59,
+            "value": 0.8994999999999997
+        },
+        {
+            "trial_number": 60,
+            "value": 0.63075
+        },
+        {
+            "trial_number": 61,
+            "value": 0.6383333333333333
+        },
+        {
+            "trial_number": 62,
+            "value": 0.6395000000000001
+        },
+        {
+            "trial_number": 63,
+            "value": 0.6445
+        },
+        {
+            "trial_number": 64,
+            "value": 0.6377499999999999
+        },
+        {
+            "trial_number": 65,
+            "value": 0.6404166666666666
+        },
+        {
+            "trial_number": 66,
+            "value": 0.8623333333333335
+        },
+        {
+            "trial_number": 67,
+            "value": 0.7702499999999999
+        },
+        {
+            "trial_number": 68,
+            "value": 0.6903333333333332
+        },
+        {
+            "trial_number": 69,
+            "value": 0.9350833333333334
+        },
+        {
+            "trial_number": 70,
+            "value": 0.6958333333333333
+        },
+        {
+            "trial_number": 71,
+            "value": 0.6471666666666668
+        },
+        {
+            "trial_number": 72,
+            "value": 0.6271666666666667
+        },
+        {
+            "trial_number": 73,
+            "value": 0.63275
+        },
+        {
+            "trial_number": 74,
+            "value": 0.6455833333333334
+        },
+        {
+            "trial_number": 75,
+            "value": 0.6438333333333334
+        },
+        {
+            "trial_number": 76,
+            "value": 0.7170000000000001
+        },
+        {
+            "trial_number": 77,
+            "value": 0.8035000000000001
+        },
+        {
+            "trial_number": 78,
+            "value": 0.80475
+        },
+        {
+            "trial_number": 79,
+            "value": 0.7195833333333334
+        },
+        {
+            "trial_number": 80,
+            "value": 0.8560833333333333
+        },
+        {
+            "trial_number": 81,
+            "value": 0.6264166666666667
+        },
+        {
+            "trial_number": 82,
+            "value": 0.6331666666666668
+        },
+        {
+            "trial_number": 83,
+            "value": 0.6254166666666665
+        },
+        {
+            "trial_number": 84,
+            "value": 0.635
+        },
+        {
+            "trial_number": 85,
+            "value": 0.6334166666666666
+        },
+        {
+            "trial_number": 86,
+            "value": 0.67625
+        },
+        {
+            "trial_number": 87,
+            "value": 0.7385833333333333
+        },
+        {
+            "trial_number": 88,
+            "value": 0.6350833333333333
+        },
+        {
+            "trial_number": 89,
+            "value": 0.9382499999999999
+        },
+        {
+            "trial_number": 90,
+            "value": 0.6295
+        },
+        {
+            "trial_number": 91,
+            "value": 0.6399166666666666
+        },
+        {
+            "trial_number": 92,
+            "value": 0.631
+        },
+        {
+            "trial_number": 93,
+            "value": 0.6230833333333333
+        },
+        {
+            "trial_number": 94,
+            "value": 0.6288333333333335
+        },
+        {
+            "trial_number": 95,
+            "value": 0.6285
+        },
+        {
+            "trial_number": 96,
+            "value": 0.6316666666666667
+        },
+        {
+            "trial_number": 97,
+            "value": 0.62675
+        },
+        {
+            "trial_number": 98,
+            "value": 0.7134166666666667
+        },
+        {
+            "trial_number": 99,
+            "value": 0.6289166666666667
+        }
+    ],
+    "best_params": {
+        "window_size": 24,
+        "batch_size": 32,
+        "lr": 0.00010749648463347287,
+        "hidden_dim": 256,
+        "num_layers": 2,
+        "dropout": 0.06420732369817188,
+        "scheduler_step_size": 7,
+        "scheduler_gamma": 0.5181272949048431
+    },
+    "best_value": 0.6230833333333333,
+    "best_trial_number": 93
+}

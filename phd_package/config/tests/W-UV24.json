@@ -52,7 +52,7 @@
         },
         {
             "name": "phd_package.pipeline.stages.preprocessing.conditional_interpolation_of_zero_values",
-            "execute_step": false
+            "execute_step": true
         },
         {
             "name": "phd_package.pipeline.stages.preprocessing.get_consecutive_sequences",

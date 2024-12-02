@@ -237,10 +237,10 @@ class Trainer:
             mlflow.log_metric("batch_train_mape_score", f"{mape_score:2f}", step=step)
 
     def evaluate(self) -> Tuple[Dict[str, float], Dict[str, float]]:
-        _, _, train_loss, train_mape, train_rmse, _ = evaluate_model(
+        _, _, train_loss, train_mape, train_mae, train_rmse, _ = evaluate_model(
             self.model, self.train_dataloader, self.criterion, "train"
         )
-        _, _, val_loss, val_mape, val_rmse, val_r2 = evaluate_model(
+        _, _, val_loss, val_mape, val_mae, val_rmse, val_r2 = evaluate_model(
             self.model, self.val_dataloader, self.criterion, "val"
         )
 
@@ -248,6 +248,7 @@ class Trainer:
             "Epoch": int(self.current_epoch + 1),
             "Train loss": np.round(train_loss, 3),
             "Train MAPE": np.round(train_mape, 3),
+            "Train MAE": np.round(train_mae, 3),
             "Train RMSE": np.round(train_rmse, 3),
         }
 
@@ -255,6 +256,7 @@ class Trainer:
             "Epoch": int(self.current_epoch + 1),
             "Val loss": np.round(val_loss, 3),
             "Val MAPE": np.round(val_mape, 3),
+            "Val MAE": np.round(val_mae, 3),
             "Val RMSE": np.round(val_rmse, 3),
             "Val R2": np.round(val_r2, 3),
         }

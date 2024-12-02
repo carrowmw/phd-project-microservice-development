@@ -4,6 +4,7 @@ import os
 import sys
 import logging
 import pandas as pd
+import numpy as np
 import mlflow
 import mlflow.pytorch
 from ..config.paths import (
@@ -53,6 +54,7 @@ from ..utils.data_helper import (
     save_test_metrics,
 )
 from ..utils.config_helper import get_window_size, get_horizon
+from .utils.training_helper import check_mps_availability
 from .conformal_prediction import ConformalPredictor, prepare_calibration_data
 
 
@@ -419,6 +421,103 @@ class Pipeline:
 
         return test_metrics_list
 
+    def load_conformal_predictions(self, trained_models_list) -> TestItem:
+        """
+        Generate conformal prediction intervals for the test predictions.
+        """
+
+        def process_conformal_predictions(models):
+            print(f"\n\nGenerating conformal predictions for {len(models)} models...\n")
+            logging.info(
+                "\n\nGenerating conformal predictions for %d models...\n", len(models)
+            )
+
+            predictions_with_intervals = []
+            for i, model_data in enumerate(models, start=1):
+                try:
+                    if not isinstance(model_data, tuple) or len(model_data) != 4:
+                        logging.error("Unexpected model data structure: %s", model_data)
+                        continue
+
+                    model_name, predictions, labels, metrics = model_data
+                    print(
+                        f"\nProcessing conformal predictions for model {i}/{len(models)} - {model_name}"
+                    )
+
+                    with mlflow.start_run(
+                        run_name=f"Conformal_{model_name}", nested=True
+                    ):
+                        # Get the corresponding model and dataloaders from trained_models_list
+                        model_info = next(
+                            m for m in trained_models_list if m[0] == model_name
+                        )
+                        model = model_info[1]
+                        test_loader = model_info[2]
+
+                        # Setup conformal predictor
+                        device = check_mps_availability()
+                        predictor = ConformalPredictor(significance_level=0.1)
+
+                        # Get training data from the pipeline
+                        new_train_loader, cal_loader = prepare_calibration_data(
+                            self.train_dataloader, cal_ratio=0.2
+                        )
+
+                        # Calibrate and predict
+                        predictor.calibrate(model, cal_loader, device)
+                        pred, lower, upper = predictor.predict(
+                            model, test_loader, device
+                        )
+
+                        # Calculate coverage and average interval width
+                        coverage = np.mean((labels >= lower) & (labels <= upper))
+                        interval_width = np.mean(upper - lower)
+
+                        # Add conformal metrics to the existing metrics
+                        metrics.update(
+                            {
+                                "conformal_coverage": coverage,
+                                "avg_interval_width": interval_width,
+                                "prediction_intervals": {
+                                    "lower": lower,
+                                    "upper": upper,
+                                },
+                            }
+                        )
+
+                        # Log metrics to MLflow
+                        mlflow.log_metrics(
+                            {
+                                f"{model_name}_conformal_coverage": coverage,
+                                f"{model_name}_avg_interval_width": interval_width,
+                            }
+                        )
+
+                        predictions_with_intervals.append(
+                            (model_name, predictions, labels, metrics)
+                        )
+
+                except Exception as e:
+                    logging.error(
+                        "Error in conformal prediction for model %s: %s",
+                        model_name,
+                        str(e),
+                    )
+                    logging.error("Exception type: %s", type(e).__name__)
+
+            return predictions_with_intervals
+
+        predictions_with_intervals = load_or_process_data(
+            trained_models_list,
+            create_file_path(get_test_dir, pipeline_output_data_filename),
+            load_test_metrics,
+            process_conformal_predictions,
+            save_test_metrics,
+            "conformal_prediction",
+        )
+
+        return predictions_with_intervals
+
     def run_pipeline(self):
         """
         Run the pipeline.
@@ -439,8 +538,11 @@ class Pipeline:
                 dataloaders_list = self.load_dataloader(engineered_dfs)
                 trained_models_list = self.load_trained_models(dataloaders_list)
                 test_metrics_list = self.load_test_metrics(trained_models_list)
+                predictions_with_intervals = self.load_conformal_predictions(
+                    test_metrics_list
+                )
 
-            return test_metrics_list
+            return predictions_with_intervals
         except mlflow.exceptions.MlflowException as e:
             logging.error("MLflow error: %s", str(e))
             return self._run_pipeline_without_mlflow()
@@ -455,5 +557,6 @@ class Pipeline:
         dataloaders_list = self.load_dataloader(engineered_dfs)
         trained_models_list = self.load_trained_models(dataloaders_list)
         test_metrics_list = self.load_test_metrics(trained_models_list)
+        predictions_with_intervals = self.load_conformal_predictions(test_metrics_list)
 
-        return test_metrics_list
+        return predictions_with_intervals

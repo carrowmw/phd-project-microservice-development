@@ -29,9 +29,15 @@ def test_model(pipeline: List[TrainedModelItem], **kwargs) -> TestItem:
     criterion = create_criterion()
     validate_dataloader(test_dataloader)
 
-    test_predictions, test_labels, test_loss, test_mape, test_rmse, test_r2 = (
-        evaluate_model(model, test_dataloader, criterion, "test", **kwargs)
-    )
+    (
+        test_predictions,
+        test_labels,
+        test_loss,
+        test_mape,
+        test_mae,
+        test_rmse,
+        test_r2,
+    ) = evaluate_model(model, test_dataloader, criterion, "test", **kwargs)
     test_metrics = {
         "Test loss": np.round(test_loss, 3),
         "Test MAPE": np.round(test_mape, 3),
